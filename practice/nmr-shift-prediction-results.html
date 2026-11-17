@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="C10 v3 的三家模型试跑，含基线参考分、分核种误差、区间覆盖率和计时。">
+  <meta name="description" content="C10 v3 的三家模型试跑，含点位预测主分、分核种区间质量和计时。">
   <title>C10 核磁位移预测 v3 试跑结果 | 每日出题实践</title>
   <link rel="stylesheet" href="../styles.css">
   <link rel="stylesheet" href="./challenge.css">
@@ -14,6 +14,8 @@
     #reference-score .result-table { min-width: 0; }
     #reference-score :is(th, td) { padding-inline: .35rem; }
     #reference-score thead th { white-space: normal; }
+    .direction-details { margin-block: 1.25rem; }
+    .direction-details summary { cursor: pointer; }
   </style>
 </head>
 <body>
@@ -37,65 +39,83 @@
       <p>在 10 个测试母分子上比较三家模型的点预测、区间质量与作答耗时。¹H 和 ¹³C 各有 40 个评分位点，公开样例不计分。</p>
     </header>
     <nav class="challenge-nav" aria-label="结果页内容">
-      <a href="#reference-score">参考分</a>
-      <a href="#results">逐项结果</a>
+      <a href="#reference-score">点位主分</a>
+      <a href="#results">95% 区间质量</a>
       <a href="#protocol">试跑口径与计时</a>
       <a href="#prediction-interval">95% 区间逻辑</a>
     </nav>
 
     <article class="topic-content challenge-content" aria-label="C10 三模型试跑">
       <section class="topic-section" id="reference-score" aria-labelledby="reference-score-heading">
-        <h2 id="reference-score-heading">参考分</h2>
-        <p>把只按局部化学环境估计位移的基线定为 <strong>25 分</strong>。先把 ¹H、¹³C 各自的 MAE 和 Winkler 损失除以对应的基线值，再把四个损失比等权平均为 <var>r</var>。</p>
-        <pre><code>综合参考分 = 100 / (1 + 3r)
-r = 平均(¹H MAE 比, ¹³C MAE 比, ¹H Winkler 比, ¹³C Winkler 比)</code></pre>
-        <p>与基线持平得 25 分，平均损失降到基线的一半得 40 分，升到两倍得 14.3 分，四项损失为零得 100 分。点预测分只平均两个 MAE 比，区间分只平均两个 Winkler 比。本轮参考分在试跑后计算，用于解读结果，正式指标见下表。</p>
-        <div class="table-scroll" tabindex="0" aria-label="参考分与基线">
+        <h2 id="reference-score-heading">点位预测主分</h2>
+        <p>主分衡量模型把信号中心估得有多准。先对每种核的 MAE 按母分子等权汇总，再除以该核种的局部化学环境基线 MAE。两个比值等权平均为 <var>r</var>。氢和碳的基线分别为 0.36475 和 5.30875 ppm。</p>
+        <pre><code>r = (¹H MAE / 0.36475 + ¹³C MAE / 5.30875) / 2
+点位主分 = 100 / (1 + 3r)</code></pre>
+        <p>主分越高，点位越准。基线是 <strong>25 分</strong>，两种核的相对损失平均降到基线的一半时得 40 分，两种核的误差都为零时得 100 分。95% 区间质量见下一节。</p>
+        <div class="table-scroll" tabindex="0" aria-label="点位主分 · 同一批 10 个母分子">
           <table class="result-table">
-            <caption>参考分与基线</caption>
-            <thead><tr><th scope="col">模型或基线</th><th scope="col">综合参考分</th><th scope="col">点预测分</th><th scope="col">区间分</th></tr></thead>
+            <caption>点位主分 · 同一批 10 个母分子</caption>
+            <thead><tr><th scope="col">模型或基线</th><th scope="col">点位主分</th><th scope="col">¹H MAE（ppm）</th><th scope="col">¹³C MAE（ppm）</th></tr></thead>
             <tbody>
-              <tr><th scope="row">deepseek-v4-pro</th><td>11.6</td><td>24.7</td><td>7.6</td></tr>
-              <tr><th scope="row">GLM-5.3</th><td>13.7</td><td>25.3</td><td>9.4</td></tr>
-              <tr><th scope="row">kimi-3.1-pro</th><td>14.7</td><td>28.6</td><td>9.9</td></tr>
-              <tr><th scope="row">局部化学环境基线</th><td>25.0</td><td>25.0</td><td>25.0</td></tr>
-              <tr><th scope="row">位点对取均值基线</th><td>24.2</td><td>24.8</td><td>23.6</td></tr>
+              <tr><th scope="row">kimi-3.1-pro</th><td>28.58</td><td>0.266</td><td>4.981</td></tr>
+              <tr><th scope="row">GLM-5.3</th><td>25.31</td><td>0.364</td><td>5.144</td></tr>
+              <tr><th scope="row">局部化学环境基线</th><td>25.00</td><td>0.365</td><td>5.309</td></tr>
+              <tr><th scope="row">位点对取均值基线</th><td>24.76</td><td>0.365</td><td>5.439</td></tr>
+              <tr><th scope="row">deepseek-v4-pro</th><td>24.73</td><td>0.292</td><td>6.526</td></tr>
             </tbody>
           </table>
         </div>
-        <p>GLM-5.3 与 kimi-3.1-pro 的点预测分超过 25。三家的区间分均低于基线，综合分也随之下降。</p>
+        <p>kimi-3.1-pro 在这批分子上两种核的 MAE 均最低。GLM-5.3 的氢 MAE 接近局部化学环境基线，碳 MAE 略低，主分为 25.31。</p>
+        <details class="direction-details">
+          <summary>查看位点对的方向正确率</summary>
+          <p>比较同一分子里两处信号的先后顺序。¹H 有 20 对、¹³C 有 19 对可判方向。方向正确率先在分子内平均，再对母分子等权平均。位点对取均值基线给每对位点相同的点预测，因此每对预测差为零。</p>
+          <div class="table-scroll" tabindex="0" aria-label="位点对方向正确率">
+            <table class="result-table">
+              <caption>位点对方向正确率</caption>
+              <thead><tr><th scope="col">模型或基线</th><th scope="col">¹H</th><th scope="col">¹³C</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">kimi-3.1-pro</th><td>60%</td><td>65%</td></tr>
+                <tr><th scope="row">GLM-5.3</th><td>60%</td><td>65%</td></tr>
+                <tr><th scope="row">局部化学环境基线</th><td>25%</td><td>25%</td></tr>
+                <tr><th scope="row">位点对取均值基线</th><td>0%</td><td>0%</td></tr>
+                <tr><th scope="row">deepseek-v4-pro</th><td>70%</td><td>60%</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
       </section>
 
       <section class="topic-section" id="results" aria-labelledby="results-heading">
-        <h2 id="results-heading">逐项结果</h2>
+        <h2 id="results-heading">95% 区间质量</h2>
+        <p>区间单独比较 Winkler 损失、覆盖率和宽度。Winkler 越低越好。两种核分别报告，每种核有 40 个评分位点。</p>
         <div class="table-scroll" tabindex="0" aria-label="¹H · 40 个测试位点">
           <table class="result-table">
             <caption>¹H · 40 个测试位点</caption>
-            <thead><tr><th scope="col">模型或基线</th><th scope="col">MAE（ppm）</th><th scope="col">Winkler（ppm）</th><th scope="col">实测覆盖率</th><th scope="col">平均宽度（ppm）</th><th scope="col">低于下界 / 高于上界</th><th scope="col">方向正确率</th></tr></thead>
+            <thead><tr><th scope="col">模型或基线</th><th scope="col">Winkler（ppm）</th><th scope="col">实测覆盖率</th><th scope="col">平均宽度（ppm）</th><th scope="col">低于下界 / 高于上界</th></tr></thead>
             <tbody>
-              <tr><th scope="row">deepseek-v4-pro</th><td>0.292</td><td>6.760</td><td>23/40（57.5%）</td><td>0.390</td><td>8 / 9</td><td>70%</td></tr>
-              <tr><th scope="row">GLM-5.3</th><td>0.364</td><td>7.614</td><td>23/40（57.5%）</td><td>0.564</td><td>6 / 11</td><td>60%</td></tr>
-              <tr><th scope="row">kimi-3.1-pro</th><td>0.266</td><td>5.441</td><td>25/40（62.5%）</td><td>0.420</td><td>8 / 7</td><td>60%</td></tr>
-              <tr><th scope="row">局部化学环境基线</th><td>0.365</td><td>2.340</td><td>37/40（92.5%）</td><td>2.000</td><td>0 / 3</td><td>25%</td></tr>
-              <tr><th scope="row">位点对取均值基线</th><td>0.365</td><td>2.750</td><td>36/40（90.0%）</td><td>2.000</td><td>1 / 3</td><td>0%</td></tr>
+              <tr><th scope="row">kimi-3.1-pro</th><td>5.441</td><td>25/40（62.5%）</td><td>0.420</td><td>8 / 7</td></tr>
+              <tr><th scope="row">GLM-5.3</th><td>7.614</td><td>23/40（57.5%）</td><td>0.564</td><td>6 / 11</td></tr>
+              <tr><th scope="row">局部化学环境基线</th><td>2.340</td><td>37/40（92.5%）</td><td>2.000</td><td>0 / 3</td></tr>
+              <tr><th scope="row">位点对取均值基线</th><td>2.750</td><td>36/40（90.0%）</td><td>2.000</td><td>1 / 3</td></tr>
+              <tr><th scope="row">deepseek-v4-pro</th><td>6.760</td><td>23/40（57.5%）</td><td>0.390</td><td>8 / 9</td></tr>
             </tbody>
           </table>
         </div>
         <div class="table-scroll" tabindex="0" aria-label="¹³C · 40 个测试位点">
           <table class="result-table">
             <caption>¹³C · 40 个测试位点</caption>
-            <thead><tr><th scope="col">模型或基线</th><th scope="col">MAE（ppm）</th><th scope="col">Winkler（ppm）</th><th scope="col">实测覆盖率</th><th scope="col">平均宽度（ppm）</th><th scope="col">低于下界 / 高于上界</th><th scope="col">方向正确率</th></tr></thead>
+            <thead><tr><th scope="col">模型或基线</th><th scope="col">Winkler（ppm）</th><th scope="col">实测覆盖率</th><th scope="col">平均宽度（ppm）</th><th scope="col">低于下界 / 高于上界</th></tr></thead>
             <tbody>
-              <tr><th scope="row">deepseek-v4-pro</th><td>6.526</td><td>178.530</td><td>12/40（30.0%）</td><td>5.480</td><td>16 / 12</td><td>60%</td></tr>
-              <tr><th scope="row">GLM-5.3</th><td>5.144</td><td>108.360</td><td>16/40（40.0%）</td><td>6.710</td><td>19 / 5</td><td>65%</td></tr>
-              <tr><th scope="row">kimi-3.1-pro</th><td>4.981</td><td>127.250</td><td>13/40（32.5%）</td><td>4.900</td><td>16 / 11</td><td>65%</td></tr>
-              <tr><th scope="row">局部化学环境基线</th><td>5.309</td><td>34.200</td><td>38/40（95.0%）</td><td>30.000</td><td>1 / 1</td><td>25%</td></tr>
-              <tr><th scope="row">位点对取均值基线</th><td>5.439</td><td>33.700</td><td>38/40（95.0%）</td><td>30.000</td><td>1 / 1</td><td>0%</td></tr>
+              <tr><th scope="row">kimi-3.1-pro</th><td>127.250</td><td>13/40（32.5%）</td><td>4.900</td><td>16 / 11</td></tr>
+              <tr><th scope="row">GLM-5.3</th><td>108.360</td><td>16/40（40.0%）</td><td>6.710</td><td>19 / 5</td></tr>
+              <tr><th scope="row">局部化学环境基线</th><td>34.200</td><td>38/40（95.0%）</td><td>30.000</td><td>1 / 1</td></tr>
+              <tr><th scope="row">位点对取均值基线</th><td>33.700</td><td>38/40（95.0%）</td><td>30.000</td><td>1 / 1</td></tr>
+              <tr><th scope="row">deepseek-v4-pro</th><td>178.530</td><td>12/40（30.0%）</td><td>5.480</td><td>16 / 12</td></tr>
             </tbody>
           </table>
         </div>
-        <p>方向正确率按母分子等权汇总。可判方向的位点对为 ¹H 20 对、¹³C 19 对。两条基线都使用固定区间宽度，¹H 为 2.0 ppm，¹³C 为 30.0 ppm。位点对取均值基线给每对位点相同的预测中心，因此每对预测差为零。</p>
-        <p>模型显示名按页面约定。试跑的 API ID 分别为 <code>deepseek-v4-pro</code>、<code>glm-5.3</code>、<code>kimi-k3.1-pro</code>。</p>
+        <p>两条基线都使用固定区间宽度，¹H 为 2.0 ppm，¹³C 为 30.0 ppm。这批试跑中，三家模型报的区间更窄，实测覆盖率和 Winkler 损失均逊于两条基线。</p>
+        <p>试跑的 API ID 分别为 <code>deepseek-v4-pro</code>、<code>glm-5.3</code>、<code>kimi-k3.1-pro</code>。</p>
       </section>
 
       <section class="topic-section" id="protocol" aria-labelledby="protocol-heading">
