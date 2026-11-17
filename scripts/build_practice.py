@@ -27,6 +27,16 @@ def safe_href(value):
     return escape(value)
 
 
+def read_links(entry, key):
+    links = entry.get(key, [])
+    if not isinstance(links, list):
+        raise ValueError(f"{key} 须为数组")
+    return [
+        (escape(text_field(link, "label")), safe_href(text_field(link, "href")))
+        for link in links
+    ]
+
+
 def read_entry(path):
     try:
         day = date.fromisoformat(path.stem)
@@ -43,17 +53,12 @@ def read_entry(path):
             (escape(text_field(section, "heading")), escape(text_field(section, "text")))
             for section in entry["sections"]
         ]
-        raw_links = entry.get("links", [])
-        if not isinstance(raw_links, list):
-            raise ValueError("links 须为数组")
-        links = [
-            (escape(text_field(link, "label")), safe_href(text_field(link, "href")))
-            for link in raw_links
-        ]
+        links = read_links(entry, "links")
+        challenges = read_links(entry, "challenges")
     except (ValueError, KeyError, TypeError) as error:
         raise ValueError(f"{path.name}：{error}") from error
 
-    return dict(fields, day=day.isoformat(), sections=sections, links=links)
+    return dict(fields, day=day.isoformat(), sections=sections, links=links, challenges=challenges)
 
 
 def entry_meta(entry):
@@ -64,12 +69,19 @@ def entry_meta(entry):
     )
 
 
+def challenge_links(entry, padding):
+    if not entry["challenges"]:
+        return ""
+    links = " · ".join(f'<a href="{href}">{label}</a>' for label, href in entry["challenges"])
+    return f'{padding}<p class="case-links">挑战题面 · {links}</p>\n'
+
+
 def archive_item(entry):
     return f"""<li id="practice-{entry['day']}">
   <p class="meta">{entry_meta(entry)}</p>
   <h3><a href="./{entry['day']}.html">{entry['title']}</a></h3>
   <p>{entry['summary']}</p>
-</li>"""
+{challenge_links(entry, '  ')}</li>"""
 
 
 def update_items(page, marker, items):
@@ -134,7 +146,7 @@ def render_day(entry):
       <h1>{title}</h1>
       <p class="meta">{entry_meta(entry)}</p>
       <p>{summary}</p>
-    </div>
+{challenge_links(entry, '      ')}    </div>
     <article class="topic-content">
 {body}
       <p class="case-links">{related}</p>
