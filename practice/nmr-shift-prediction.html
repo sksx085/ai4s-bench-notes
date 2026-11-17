@@ -38,6 +38,7 @@
 
     <nav class="challenge-nav" aria-label="题目内容">
       <a href="#overview">概述</a>
+      <a href="#prediction-v3">v3 预测 Demo</a>
       <a href="#revision">v2 改题</a>
       <a href="#problem">题面</a>
       <a href="#resources">资源</a>
@@ -65,6 +66,22 @@
 
         <p><strong>为什么值得做。</strong> 把两个相似位置的峰互换，预测的绝对位移可能仍然很接近，但组间差的正负会翻转。这个 Demo 用同一批数据分别检查位点误差、组间差和方向，观察模型能否把相似位置区分开。</p>
         <p><strong>你要交什么。</strong> 在空白表中填入 54 个 ppm 数值。十个评分分项合成满分 100 分。只按峰窗中位数填表的基线得 14.38 分，官能团经验基线得 43.82 分。</p>
+      </section>
+
+      <section class="topic-section" id="prediction-v3" aria-labelledby="prediction-v3-heading">
+        <h2 id="prediction-v3-heading">v3 从分子结构预测核磁位移</h2>
+        <p>同一张核磁谱中，两个很像的化学位置也可能给出不同的信号。已知带编号的分子结构、采集条件和少量参考位移，请预测其余位置的实测信号中心以及 95% 预测区间。</p>
+        <dl class="challenge-stats">
+          <div><dt>公开样例</dt><dd>1</dd></div>
+          <div><dt>独立测试母分子</dt><dd>10</dd></div>
+          <div><dt>预测位点</dt><dd>80</dd></div>
+        </dl>
+        <h3>输入与输出</h3>
+        <p>每个测试分子各有 4 个 ¹H 和 4 个 ¹³C 留出位点，两个核种各有两组配对。作答包提供编号结构、带映射的 SMILES、条件和参考位移。提交 <code>prediction.csv</code>，每个位点填中位数与区间上下界，单位 ppm。公开样例可用来检查格式。</p>
+        <h3>判分与完成条件</h3>
+        <p>各核种分别计算 MAE、Winkler 区间分数、覆盖率、区间宽度、上下侧漏报、组间差误差和方向正确率。分子内先平均，再对母分子等权汇总。离线作答，只使用作答包与已有知识。填齐 80 个测试位点并通过格式检查即可提交。</p>
+        <p>参考值逐点回到原始 SI。原文只给多重峰窗口、重叠归属或未编号碳峰时，留作资料复核。首批尚无足以估计重复测量误差的配对读数。</p>
+        <p class="case-links"><a href="./resources/nmr-shift-prediction/c10-nmr-demo-v3.zip" download>下载 v3 作答包</a> · <a href="../bench/nmr-demo-v3.md">v3 数据、评分与计时实现</a> · <a href="../bench/workflow.html#nmr-uncertainty">设计依据</a></p>
       </section>
 
       <section class="topic-section" id="revision" aria-labelledby="revision-heading">
