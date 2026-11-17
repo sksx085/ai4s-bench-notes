@@ -5,7 +5,7 @@
   "summary": "用 600 MHz 的模拟重测，区分两种都能解释 400 MHz 谱线的模型。",
   "challenges": [
     {
-      "label": "从粗峰窗恢复核磁共振位移与归属",
+      "label": "C10 核磁位移预测 Demo",
       "href": "./nmr-shift-prediction.html"
     }
   ],

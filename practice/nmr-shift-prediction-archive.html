@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="给定分子结构、部分已归属峰和打乱的粗峰窗，恢复指定位置的氢、碳化学位移。含一个公开样例、十个测试和三模型试跑结果。">
+  <title>核磁位移预测 Demo 历史版本 | 每日出题实践</title>
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="./challenge.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="wordmark" href="../index.html" aria-label="AI4S Bench 笔记首页">AI4S <span>Bench Notes</span></a>
+      <nav aria-label="栏目">
+        <a href="../bench.html">Bench 指标</a>
+        <a href="./index.html" aria-current="location">每日出题实践</a>
+        <a href="../papers.html">论文更新</a>
+        <a href="../skills.html">Skills 与插件</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap" id="main" tabindex="-1">
+    <header class="intro intro-topic challenge-intro">
+      <a class="page-back" href="./nmr-shift-prediction.html"><span aria-hidden="true">←</span> 返回当前 Demo</a>
+      <p class="meta"><time datetime="2026-11-17">2026.11.17</time><span>C10 核磁共振 · 历史版本</span></p>
+      <h1>从粗峰窗恢复核磁共振位移与归属</h1>
+      <p>这里归档 C10 核磁位移预测 Demo 的 v1 和 v2。</p>
+      <p>给定分子结构、少量已编号的峰和一批无编号的峰窗，预测指定位置的 ¹H 和 ¹³C 化学位移。</p>
+      <dl class="challenge-stats">
+        <div><dt>公开样例</dt><dd>1</dd></div>
+        <div><dt>测试题</dt><dd>10</dd></div>
+        <div><dt>待预测数值</dt><dd>54</dd></div>
+      </dl>
+      <a class="challenge-download" href="./resources/nmr-shift-prediction/c10-nmr-demo-v2.zip" download>下载 v2 作答包 <span aria-hidden="true">↓</span></a>
+    </header>
+
+    <nav class="challenge-nav" aria-label="题目内容">
+      <a href="#overview">概述</a>
+      <a href="#revision">v2 改题</a>
+      <a href="#problem">题面</a>
+      <a href="#resources">资源</a>
+      <a href="#metadata">元信息</a>
+      <a href="#results">评分</a>
+    </nav>
+
+    <article class="topic-content challenge-content" aria-label="核磁共振挑战题">
+      <section class="topic-section" id="overview" aria-labelledby="overview-heading">
+        <h2 id="overview-heading">这道题在做什么</h2>
+        <p><strong>一句话说明。</strong> 一张核磁共振谱里有许多氢和碳的信号，需要判断它们各自来自哪个原子。这里给你分子图和一批去掉标签的粗峰窗，请把信号配回正确的原子，并估计每个信号在谱上的位置。</p>
+
+        <div class="table-scroll">
+          <table>
+            <caption>读题所需的四个概念</caption>
+            <thead><tr><th scope="col">术语</th><th scope="col">通俗解释</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">化学位移（ppm）</th><td>信号在谱轴上的位置。相同元素的原子处于不同化学环境时，信号可能落在不同位置。</td></tr>
+              <tr><th scope="row">归属</th><td>判断一条信号来自分子里哪一个原子，或哪一组给出同一条信号的原子。</td></tr>
+              <tr><th scope="row">峰窗</th><td>一个信号所在的大致范围。多个信号可能共用一个窗口，窗内的先后顺序仍需判断。</td></tr>
+              <tr><th scope="row">峰包</th><td>本题按原档案的归属把同一位置的一条或两条氢线放在一起，只去掉位置标签。氢、碳峰包独立编号。</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p><strong>为什么值得做。</strong> 把两个相似位置的峰互换，预测的绝对位移可能仍然很接近，但组间差的正负会翻转。这个 Demo 用同一批数据分别检查位点误差、组间差和方向，观察模型能否把相似位置区分开。</p>
+        <p><strong>你要交什么。</strong> 在空白表中填入 54 个 ppm 数值。十个评分分项合成满分 100 分。只按峰窗中位数填表的基线得 14.38 分，官能团经验基线得 43.82 分。</p>
+      </section>
+
+      <section class="topic-section" id="revision" aria-labelledby="revision-heading">
+        <h2 id="revision-heading">v2 改题</h2>
+        <p>T02、T03、T09 的目标位置改用 A、B 编号。每个核种有四个候选峰，其中有外观和真峰相近的模拟杂峰。面积、候选相关与干扰由模拟生成，目标位移沿用 C10 档案。</p>
+        <div class="table-scroll">
+          <table>
+            <caption>改题后的三个判断</caption>
+            <thead><tr><th scope="col">题号</th><th scope="col">需要区分什么</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">T02</th><td>四个 2H 双峰各自都近似线性。用稀释对照筛出共用增益的信号，再沿匿名碳图确定两组等价位点的顺序。</td></tr>
+              <tr><th scope="row">T03</th><td>一个长程锚可同时解释链段两端。需用另一个锚定方向，并核对叠峰产生的错误氢碳配对。</td></tr>
+              <tr><th scope="row">T09</th><td>杂峰能给出相近的位移，同时把碳差方向翻转。还要提交选中的氢峰号和碳峰号。</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>本地枚举中，每题合用稀释、HSQC 和 HMBC 后各剩 1 个可行归属；去掉任一类证据后至少有 2 个。新版保留 54 个数值的计分规则，三个改题额外报告 12 个峰号的命中数。v2 尚待三家模型重跑。</p>
+        <p class="case-links"><a href="./resources/nmr-shift-prediction/c10-nmr-demo-v2.zip" download>下载 v2 完整题册、数据和提交模板</a></p>
+      </section>
+
+      <section class="topic-section" id="problem" aria-labelledby="problem-heading">
+        <h2 id="problem-heading">v1 技术题面</h2>
+
+        <h3>目标</h3>
+        <p>预测 T01–T10 指定位置的 ¹H 和 ¹³C 化学位移。每题含 2–4 组位点。氢只有一条归属时填 <code>single</code>。同一碳有两条分列的氢线时，按该碳内的 ppm 从低到高填 <code>low</code> 和 <code>high</code>。同一组等价原子共填一条归属。</p>
+
+        <h3>背景与数据</h3>
+        <p>数据来自原 C10 核磁数据库的四个样例分子，使用 CDCl₃ 条件下的档案归属。一个母分子用于公开样例，三个母分子用于测试，分别出 3、3、4 题。每个测试分子的所有目标值先一起遮盖，再生成该分子的公共控制表。公开的峰窗由档案位移分箱得到，积分、峰形和表观耦合常数 <var>J</var> 来自档案字段。</p>
+
+        <h3>输入</h3>
+        <p>每个分子给编号结构、采集条件、部分已归属的控制位点，以及无位置标签的 ¹H 和 ¹³C 峰包。位移窗左闭右开。同一序号的氢、碳峰包彼此独立。公开的分子图、带原子编号的 SMILES 和机器可读数据随包提供。</p>
+        <div class="table-scroll">
+          <table>
+            <caption>测试清单</caption>
+            <thead><tr><th scope="col">题号</th><th scope="col">母分子</th><th scope="col">预测对象</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">T01</th><td>P02</td><td>同一分子里的两个酯乙氧基</td></tr>
+              <tr><th scope="row">T02</th><td>P02</td><td>两组对称的芳环氢及相连碳</td></tr>
+              <tr><th scope="row">T03</th><td>P02</td><td>同一条侧链上的两个亚甲基</td></tr>
+              <tr><th scope="row">T04</th><td>P03</td><td>有甲基取代的一侧芳环</td></tr>
+              <tr><th scope="row">T05</th><td>P03</td><td>另一侧稠合芳环的四个位点</td></tr>
+              <tr><th scope="row">T06</th><td>P03</td><td>螺环中三个 CH₂ 的氢、碳归属</td></tr>
+              <tr><th scope="row">T07</th><td>P04</td><td>外烯的两条氢线和内烯 CH</td></tr>
+              <tr><th scope="row">T08</th><td>P04</td><td>两类含氧环境的次甲基</td></tr>
+              <tr><th scope="row">T09</th><td>P04</td><td>碳位移接近的两个甲基</td></tr>
+              <tr><th scope="row">T10</th><td>P04</td><td>相邻 CH₂ 各自的成对氢线</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>输出</h3>
+        <p>将 <code>test/prediction-template.csv</code> 另存为 <code>prediction.csv</code>，逐行填写 <code>delta_ppm</code>，保持前四列不变。每个键只填一行。可另附 150 字以内的简答，说明一条归属证据和一个无法由粗窗确定的量。简答用于复盘。</p>
+        <pre><code>case_id,group_id,nucleus,slot,delta_ppm
+D00,C1,1H,single,1.47
+D00,C1,13C,single,14.4
+D00,C2,1H,single,4.49
+D00,C2,13C,single,61.5</code></pre>
+
+        <h3>评分</h3>
+        <p>¹H 与 ¹³C 各计五项，各占 50 分。组间差按题面指定的第二组减第一组。双氢组先取同碳两条氢线的算术平均。每个母分子内部先平均题分，再对三个母分子等权汇总。D00 只用于检查接口。</p>
+        <div class="table-scroll">
+          <table>
+            <caption>每个核种的五项分数</caption>
+            <thead><tr><th scope="col">分项</th><th scope="col">分值</th><th scope="col">计分方法</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">位点</th><td>16</td><td>各线的绝对位移误差，计分后平均。</td></tr>
+              <tr><th scope="row">组间差</th><td>15</td><td>预测差与档案差的绝对误差，计分后平均。</td></tr>
+              <tr><th scope="row">方向</th><td>8</td><td>正、负、近并三个方向分类的正确率。</td></tr>
+              <tr><th scope="row">系统偏移</th><td>4</td><td>同题同核种的有符号误差取均值，再计绝对误差。</td></tr>
+              <tr><th scope="row">整组命中</th><td>7</td><td>同题同核种所有位点均在命中界内得满项分。</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>位点、组间差、系统偏移的得分率为 <code>max(0, 1 − 绝对误差 / 标尺)</code>。下列数值以 ppm 为单位，近并界和命中界均包含边界。</p>
+        <div class="table-scroll" tabindex="0">
+          <table>
+            <caption>计分标尺</caption>
+            <thead><tr><th scope="col">核种</th><th scope="col">位点</th><th scope="col">组间差</th><th scope="col">近并界</th><th scope="col">系统偏移</th><th scope="col">整组命中界</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">¹H</th><td>0.25</td><td>0.30</td><td>0.03</td><td>0.20</td><td>0.12</td></tr>
+              <tr><th scope="row">¹³C</th><td>2.5</td><td>2.8</td><td>0.25</td><td>2.0</td><td>1.25</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>约束</h3>
+        <p>使用作答包内的数据、自身已有知识和本地算术。提交不超过 64 KiB，每行一个范围在 ±1000 ppm 内的有限数值。缺行、重复、未知键、带单位的数值，或同一碳的 <code>high</code> 小于 <code>low</code>，都会导致格式拒收。超出粗峰窗的有效预测仍按误差计分。</p>
+
+        <h3>完成条件</h3>
+        <p>提交表包含 T01–T10 的 54 行预测并通过格式检查。将作答包解压后，在 <code>public</code> 目录运行以下命令。</p>
+        <pre><code>python3 check.py --inputs test/inputs.jsonl --predictions prediction.csv</code></pre>
+      </section>
+
+      <section class="topic-section" id="resources" aria-labelledby="resources-heading">
+        <h2 id="resources-heading">资源</h2>
+        <ul>
+          <li><a href="./resources/nmr-shift-prediction/c10-nmr-demo-v2.zip" download>v2 离线作答包（ZIP）</a>。含图文题册、编号分子结构、已填样例、模拟观测、提交模板和格式检查器。</li>
+          <li><a href="./resources/nmr-shift-prediction/c10-nmr-demo.zip" download>v1 作答包（ZIP）</a>。与下方的模型试跑成绩对应。</li>
+          <li>解压后可打开 <code>public/题册.html</code> 查看每题的控制表、峰包和位点定义。</li>
+        </ul>
+        <figure class="case-figure">
+          <img src="./resources/nmr-shift-prediction/sample-structure.png" width="900" height="530" loading="lazy" alt="D00 的编号结构图，乙氧基甲基为 C1，连氧亚甲基为 C2">
+          <figcaption>D00 公开样例。C1 对应 3H 三重峰，C2 对应 2H 四重峰。</figcaption>
+        </figure>
+      </section>
+
+      <section class="topic-section" id="metadata" aria-labelledby="metadata-heading">
+        <h2 id="metadata-heading">元信息</h2>
+        <dl class="case-facts">
+          <dt>领域</dt><dd>化学 · 核磁共振谱学</dd>
+          <dt>任务</dt><dd>位移预测 · 信号归属</dd>
+          <dt>来源</dt><dd>C10 有机分子核磁数据库样例</dd>
+          <dt>验证范围</dt><dd>三个独立测试母分子。以数据库归属计分，试题标尺属于 Demo 规则。三家模型各有一份按相同协议拼合的完整答卷。</dd>
+        </dl>
+        <p class="case-links"><a href="https://play.bohrium.com/challenge/predict-crispri-perturbation-effects-in-h1-hesc-fr-c772ce91">Bohrium 题面结构参考</a></p>
+      </section>
+
+      <section class="topic-section" id="results" aria-labelledby="results-heading">
+        <h2 id="results-heading">v1 试跑评分</h2>
+        <p>整卷首轮发生输出截断。最终三家采用相同的分批口径，P02、P04 按分子作答，P03 逐题作答。模型只接收对应的公共题面、编号结构和模板。截断轮次不计入下表。</p>
+        <div class="table-scroll" tabindex="0">
+          <table>
+            <caption>十道测试的汇总成绩</caption>
+            <thead><tr><th scope="col">模型</th><th scope="col">总分 /100</th><th scope="col">¹H MAE（ppm）</th><th scope="col">¹³C MAE（ppm）</th><th scope="col">¹H 方向</th><th scope="col">¹³C 方向</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">DeepSeek</th><td>59.17</td><td>0.099</td><td>3.369</td><td>9/15</td><td>8/15</td></tr>
+              <tr><th scope="row">GLM</th><td>51.77</td><td>0.179</td><td>2.839</td><td>10/15</td><td>6/15</td></tr>
+              <tr><th scope="row">Kimi</th><td>58.83</td><td>0.227</td><td>1.962</td><td>10/15</td><td>12/15</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="table-scroll">
+          <table>
+            <caption>逐题得分</caption>
+            <thead><tr><th scope="col">题号</th><th scope="col">DeepSeek</th><th scope="col">GLM</th><th scope="col">Kimi</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">T01</th><td>95.37</td><td>97.17</td><td>97.36</td></tr>
+              <tr><th scope="row">T02</th><td>95.44</td><td>85.47</td><td>95.57</td></tr>
+              <tr><th scope="row">T03</th><td>48.80</td><td>49.20</td><td>50.02</td></tr>
+              <tr><th scope="row">T04</th><td>70.57</td><td>22.03</td><td>25.89</td></tr>
+              <tr><th scope="row">T05</th><td>17.21</td><td>30.12</td><td>39.28</td></tr>
+              <tr><th scope="row">T06</th><td>44.94</td><td>23.79</td><td>51.71</td></tr>
+              <tr><th scope="row">T07</th><td>43.51</td><td>63.79</td><td>67.07</td></tr>
+              <tr><th scope="row">T08</th><td>71.36</td><td>71.36</td><td>55.19</td></tr>
+              <tr><th scope="row">T09</th><td>50.04</td><td>43.73</td><td>60.73</td></tr>
+              <tr><th scope="row">T10</th><td>48.72</td><td>32.01</td><td>43.13</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h3>读分数</h3>
+        <ul>
+          <li>T02 的官能团经验基线为 86.82 分。靠芳酰基和靠饱和链的两组环境已拉开距离。</li>
+          <li>T03、T09 都出现三家答对氢方向、答反碳方向的情况。T10 三家均未能同时判对两个核种。</li>
+          <li>T05 三家均低于 40 分。T04 拉开了最大的分差，同一题的碳位点误差是主要区别之一。</li>
+        </ul>
+      </section>
+    </article>
+  </main>
+</body>
+</html>

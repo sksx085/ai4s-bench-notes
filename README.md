@@ -16,6 +16,10 @@
 
 日期页的内容由 JSON 决定。更新正文时编辑源文件后重跑脚本。[出题思路和提示词](practice/ideas.html)在独立页面编辑。
 
+## 更新 C10 出题 Demo
+
+[Demo 固定入口](practice/nmr-shift-prediction.html)展示当前发布版。每日实践目录和日期页都链接到这个地址。发布下一版时，把被替换的题面、下载和结果移入[历史版本](practice/nmr-shift-prediction-archive.html)，然后更新固定入口。旧版作答包保留原下载路径。
+
 ## GitHub Pages
 
 将此目录的内容（包括 `.nojekyll` 和 `downloads/`）放到网站仓库的根目录。在仓库的 **Settings → Pages** 中选择 **Deploy from a branch**，将发布来源设为 **main → /(root)**。推送更新后，对应的 Pages 工作流会重新部署页面。
