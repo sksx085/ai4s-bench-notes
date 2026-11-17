@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="比较两个用于 AI4S 科研评测的 Codex Skills，查看输入材料、预期交付、安装方法和调用示例。">
+  <meta name="description" content="查看用于 AI4S 科研评测的 Codex Skills，查看输入材料、预期交付、安装方法和调用示例。">
   <title>Skills 与插件 | AI4S Bench 笔记</title>
   <link rel="stylesheet" href="./styles.css">
 </head>
@@ -29,6 +29,29 @@
     </div>
     <div class="topic-content">
       <div class="entries">
+        <article class="entry skill" id="ai4s-chem-dataset" aria-labelledby="chem-dataset-title">
+          <div>
+            <h2 id="chem-dataset-title">AI4S_chem_dataset</h2>
+            <p class="meta"><code>ai4s-chem-dataset</code><span>v0.1.0</span></p>
+            <p>把化学论文、补充材料、数据库或计算记录整理成可留出、可自动评分的数据集。</p>
+            <dl class="skill-facts">
+              <dt>适用场景</dt>
+              <dd>需要制定采样和切分规则、核查真值，或为预测任务设计提交格式和打分细则。</dd>
+              <dt>预期交付</dt>
+              <dd>数据集规格，包含来源与归属、独立留出组、误差与区间评分、基线和复核记录。包内含规格模板。</dd>
+            </dl>
+            <details class="install">
+              <summary>安装说明</summary>
+              <p>核对 ZIP 的 SHA-256。完整解压后，把 <code>ai4s-chem-dataset/</code> 文件夹放进 Codex 的 Skills 目录。开启新会话，在消息中调用 <code>$ai4s-chem-dataset</code>。</p>
+              <a href="./downloads/ai4s-chem-dataset-0.1.0.zip.sha256" download>下载 SHA-256 校验文件</a>
+            </details>
+            <details class="install">
+              <summary>调用示例</summary>
+              <p>请用 <code>$ai4s-chem-dataset</code> 审阅这批谱图的归属证据，定义整组留出、点值与区间的入组条件，并写出主分和分母。</p>
+            </details>
+          </div>
+          <a class="action download" href="./downloads/ai4s-chem-dataset-0.1.0.zip" download aria-label="下载 AI4S_chem_dataset ZIP">下载 ZIP <span aria-hidden="true">↓</span></a>
+        </article>
         <article class="entry skill" id="ai4s-challenge-design" aria-labelledby="challenge-skill-title">
           <div>
             <h2 id="challenge-skill-title">AI4S 科研挑战设计</h2>
