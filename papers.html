@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="AI4S 评测基准与科研推理论文的阅读记录。">
+  <title>论文更新 | AI4S Bench 笔记</title>
+  <link rel="stylesheet" href="./styles.css">
+  <script src="./paper-search.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="wordmark" href="./index.html" aria-label="AI4S Bench 笔记首页">AI4S <span>Bench Notes</span></a>
+      <nav aria-label="栏目">
+        <a href="./bench.html">Bench 指标</a>
+        <a href="./practice/index.html">每日出题实践</a>
+        <a href="./papers.html" aria-current="page">论文更新</a>
+        <a href="./skills.html">Skills 与插件</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap" id="main" tabindex="-1">
+    <div class="intro intro-topic">
+      <a class="page-back" href="./index.html#papers"><span aria-hidden="true">←</span> 返回首页</a>
+      <h1>论文更新</h1>
+      <p>每篇记录评测对象和可借鉴的做法。预印本记首版日期，期刊文章记上线日期，按日期倒序。</p>
+    </div>
+    <div class="topic-content">
+      <div class="paper-search" data-paper-search hidden>
+        <label for="paper-query">搜索论文</label>
+        <input id="paper-query" type="search" placeholder="化学、复现、SciCode" autocomplete="off">
+        <p class="search-status" role="status"></p>
+      </div>
+      <div class="entries">
+        <!-- 按所列日期倒序插入条目，为每篇论文保留唯一 ID。 -->
+        <article class="entry paper" id="scicode-verified">
+          <div>
+            <p class="meta"><time datetime="2026-08-05">2026.08.05</time><span>arXiv 预印本</span><span>评测审计</span></p>
+            <h2 lang="en">SciCode-Verified</h2>
+            <p>逐题复核 SciCode，修正参考答案无法复现、数值容差不当和题面矛盾等问题。</p>
+            <p class="paper-takeaway"><strong>设计笔记</strong> 收集被判错的合理作答，请第二位审题者确认失败出在解法、题面还是测试。</p>
+          </div>
+          <a class="action" href="https://arxiv.org/abs/2608.04975" aria-label="阅读 SciCode-Verified 原文">读原文 <span aria-hidden="true">↗</span></a>
+        </article>
+        <article class="entry paper" id="automat">
+          <div>
+            <p class="meta"><time datetime="2026-05-01">2026.05.01</time><span>arXiv 预印本</span><span>科研复现</span></p>
+            <h2 lang="en">AutoMat</h2>
+            <p>从计算材料科学论文提取具体主张，评估编码 Agent 能否重建工作流程，并判断运行结果是否支持主张。</p>
+            <p class="paper-takeaway"><strong>设计笔记</strong> 将流程重建、成功运行和证据支持分开记录，便于定位复现在哪一步失败。</p>
+          </div>
+          <a class="action" href="https://arxiv.org/abs/2605.00803" aria-label="阅读 AutoMat 原文">读原文 <span aria-hidden="true">↗</span></a>
+        </article>
+        <article class="entry paper" id="superchem">
+          <div>
+            <p class="meta"><time datetime="2025-12-01">2025.12.01</time><span>arXiv 预印本</span><span>化学推理</span></p>
+            <h2 lang="en">SUPERChem</h2>
+            <p>提供多模态和纯文本两种化学题版本，并用专家解题路径评估推理过程。</p>
+            <p class="paper-takeaway"><strong>设计笔记</strong> 制作同一题的图文和纯文本版本时，先核对两种输入提供的证据是否等价。</p>
+          </div>
+          <a class="action" href="https://arxiv.org/abs/2512.01274" aria-label="阅读 SUPERChem 原文">读原文 <span aria-hidden="true">↗</span></a>
+        </article>
+        <article class="entry paper" id="chembench">
+          <div>
+            <p class="meta"><time datetime="2025-05-20">2025.05.20</time><span lang="en">Nature Chemistry</span><span>化学推理</span><a href="https://arxiv.org/abs/2404.01475" aria-label="阅读 ChemBench 预印本">预印本</a></p>
+            <h2 lang="en">ChemBench</h2>
+            <p>用不同化学子领域的题目比较语言模型与化学专业人员的知识和推理表现。</p>
+            <p class="paper-takeaway"><strong>设计笔记</strong> 记录人类与模型实际作答的共同题集，报告各子领域成绩时一并给出题量。</p>
+          </div>
+          <a class="action" href="https://doi.org/10.1038/s41557-025-01815-x" aria-label="阅读 ChemBench 原文">读原文 <span aria-hidden="true">↗</span></a>
+        </article>
+        <article class="entry paper" id="paperbench">
+          <div>
+            <p class="meta"><time datetime="2025-04-02">2025.04.02</time><span>arXiv 预印本</span><span>科研复现</span></p>
+            <h2 lang="en">PaperBench</h2>
+            <p>将复现机器学习论文的工作拆成分层评分项，并用独立任务验证自动判分器。</p>
+            <p class="paper-takeaway"><strong>设计笔记</strong> 先写出每项得分要求提交的证据，再用人工已评分的复现结果校验自动评分。</p>
+          </div>
+          <a class="action" href="https://arxiv.org/abs/2504.01848" aria-label="阅读 PaperBench 原文">读原文 <span aria-hidden="true">↗</span></a>
+        </article>
+        <article class="entry paper" id="scienceagentbench">
+          <div>
+            <p class="meta"><time datetime="2024-10-07">2024.10.07</time><span>arXiv 首发 · ICLR 2025</span><span>科研数据分析</span></p>
+            <h2 lang="en">ScienceAgentBench</h2>
+            <p>从同行评议论文提取数据分析任务，以可独立运行的 Python 程序为提交物，检查程序、执行结果和成本。</p>
+            <p class="paper-takeaway"><strong>设计笔记</strong> 为每题指定统一的提交格式和运行环境，并记录依赖错误、运行失败和结果偏差。</p>
+          </div>
+          <a class="action" href="https://arxiv.org/abs/2410.05080" aria-label="阅读 ScienceAgentBench 原文">读原文 <span aria-hidden="true">↗</span></a>
+        </article>
+        <article class="entry paper" id="scicode">
+          <div>
+            <p class="meta"><time datetime="2024-07-18">2024.07.18</time><span>arXiv 首发 · NeurIPS 2024</span><span>科研编程</span></p>
+            <h2 lang="en">SciCode</h2>
+            <p>将科研编程问题拆成相互衔接的子题，为各子题配套领域专家编写的参考解与测试。</p>
+            <p class="paper-takeaway"><strong>设计笔记</strong> 固定子题之间的接口及依赖，分别检查局部结果和端到端的结果。</p>
+          </div>
+          <a class="action" href="https://arxiv.org/abs/2407.13168" aria-label="阅读 SciCode 原文">读原文 <span aria-hidden="true">↗</span></a>
+        </article>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

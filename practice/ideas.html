@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="构造判别观测、检验证据、加入预算和测试判分的 AI4S 出题方法。">
+  <title>出题思路与提示词 | 每日出题实践</title>
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="wordmark" href="../index.html" aria-label="AI4S Bench 笔记首页">AI4S <span>Bench Notes</span></a>
+      <nav aria-label="栏目">
+        <a href="../bench.html">Bench 指标</a>
+        <a href="./index.html" aria-current="location">每日出题实践</a>
+        <a href="../papers.html">论文更新</a>
+        <a href="../skills.html">Skills 与插件</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap" id="main" tabindex="-1">
+    <div class="intro intro-topic">
+      <a class="page-back" href="./index.html#authoring-ideas"><span aria-hidden="true">←</span> 返回每日出题实践</a>
+      <h1>出题思路与提示词</h1>
+      <p>设计题目时可以逐项复核的四种做法。</p>
+    </div>
+    <div class="topic-content practice-ideas">
+        <ul class="entries" role="list">
+          <li>
+            <h2>设计能区分两种解释的观测</h2>
+            <p>先让两个候选模型重放同一组数据，再比较它们对新场强、温度或标签条件的预测。把测量误差算进去，检查预期结果还能否区分模型。</p>
+          </li>
+          <li>
+            <h2>删掉一条证据，重解一次</h2>
+            <p>拿走一条谱峰归属或一组对照，再用剩下的数据独立作答。记录哪些结论仍然成立，哪些只能给出范围，哪些需要补测。</p>
+          </li>
+          <li>
+            <h2>把实验预算写进题面</h2>
+            <p>限定采样次数、标签用量或计算成本，让作答者提交一套可执行的方案，并按最不利的参数和误差条件检验它。<a href="../bench/catalysis.html">查看催化脉冲设计样例</a>。</p>
+          </li>
+          <li>
+            <h2>用反例测试判分</h2>
+            <p>先固定字段、单位、容差和等价作答规则。用标准值、边界值、超界值、缺字段和可复算的替代解分别跑一次。</p>
+          </li>
+        </ul>
+        <details class="bench-note">
+          <summary>可复用的 AI 出题提示词</summary>
+          <div class="note-body">
+            <pre><code>请基于我提供的材料，草拟一道可独立复核的 AI4S 题。
+
+1. 写清要评测的科研判断，标注证据是实测、文献转录还是模拟。
+2. 给出当前证据仍支持的解释，以及能区分它们的观测。如果证据只支持一个范围，就把范围作为交付。
+3. 写明公开输入、允许工具、必填字段、单位、等价答案和判分容差。
+4. 给出独立复算步骤，并列出标准答案、等价解、容差边界和错误提交的核验用例。</code></pre>
+          </div>
+        </details>
+    </div>
+  </main>
+</body>
+</html>

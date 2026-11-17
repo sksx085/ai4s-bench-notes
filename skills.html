@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="比较两个用于 AI4S 科研评测的 Codex Skills，查看输入材料、预期交付、安装方法和调用示例。">
+  <title>Skills 与插件 | AI4S Bench 笔记</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="wordmark" href="./index.html" aria-label="AI4S Bench 笔记首页">AI4S <span>Bench Notes</span></a>
+      <nav aria-label="栏目">
+        <a href="./bench.html">Bench 指标</a>
+        <a href="./practice/index.html">每日出题实践</a>
+        <a href="./papers.html">论文更新</a>
+        <a href="./skills.html" aria-current="page">Skills 与插件</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap" id="main" tabindex="-1">
+    <div class="intro intro-topic">
+      <a class="page-back" href="./index.html#skills"><span aria-hidden="true">←</span> 返回首页</a>
+      <h1>Skills 与插件</h1>
+      <p>按手头的科研材料和要验证的判断，选择适用的 Codex Skill。</p>
+    </div>
+    <div class="topic-content">
+      <div class="entries">
+        <article class="entry skill" id="ai4s-challenge-design" aria-labelledby="challenge-skill-title">
+          <div>
+            <h2 id="challenge-skill-title">AI4S 科研挑战设计</h2>
+            <p class="meta"><code>ai4s-challenge-design</code><span>v0.1.0</span></p>
+            <p>把论文或科研数据整理成逆问题、逆向设计或优化任务，也可用来审阅已有题目。</p>
+            <dl class="skill-facts">
+              <dt>适用场景</dt>
+              <dd>有论文图表、数据文件或出题初稿，需要判断现有证据支持哪些问题。</dd>
+              <dt>预期交付</dt>
+              <dd>题面草案、允许的等价解、判分规则和独立试做清单。包内含题面与作者记录模板。</dd>
+            </dl>
+            <details class="install">
+              <summary>安装说明</summary>
+              <p>需要 Python 3.11 或更新版本。完整解压后，在包目录运行 <code>python3 install.py --check</code> 校验。校验通过后运行 <code>python3 install.py</code>，然后在新的 Codex 会话中调用 <code>$ai4s-challenge-design</code>。</p>
+              <p>安装目录、Windows 命令和版本替换说明见包内的 <code>INSTALL.txt</code>。</p>
+              <a href="./downloads/ai4s-challenge-design-0.1.0.zip.sha256" download>下载 SHA-256 校验文件</a>
+            </details>
+            <details class="install">
+              <summary>调用示例</summary>
+              <p>请用 <code>$ai4s-challenge-design</code> 审阅我提供的位移与时间数据，判断能稳定辨识哪些参数。给出一道题的可见输入、允许的等价作答和判分测试用例。</p>
+            </details>
+          </div>
+          <a class="action download" href="./downloads/ai4s-challenge-design-0.1.0.zip" download aria-label="下载 AI4S 科研挑战设计 ZIP">下载 ZIP <span aria-hidden="true">↓</span></a>
+        </article>
+        <article class="entry skill" id="catalysis-inverse-bench" aria-labelledby="catalysis-skill-title">
+          <div>
+            <h2 id="catalysis-skill-title">催化机制反演出题</h2>
+            <p class="meta"><code>catalysis-inverse-bench</code><span>v0.1.0</span></p>
+            <p>用动力学、原位表征和对照实验约束候选机制，设计可判分的干预选择或盲测预测任务。</p>
+            <dl class="skill-facts">
+              <dt>适用场景</dt>
+              <dd>多个机制能解释已有观测，需要设计判别实验，或已有独立留出的实测结果可供检验。</dd>
+              <dt>预期交付</dt>
+              <dd>候选机制与观测的对应关系、拟议干预的判别依据，以及按现有证据可写到的题面。</dd>
+            </dl>
+            <details class="install">
+              <summary>安装说明</summary>
+              <p>把解压后的 <code>catalysis-inverse-bench/</code> 整个文件夹放进当前 Codex 会话可用的 Skills 目录，保留其中的 <code>SKILL.md</code>、模板和参考资料。开启新的会话后调用 <code>$catalysis-inverse-bench</code>。</p>
+              <a href="./downloads/catalysis-inverse-bench-0.1.0.zip.sha256" download>下载 SHA-256 校验文件</a>
+            </details>
+            <details class="install">
+              <summary>调用示例</summary>
+              <p>请用 <code>$catalysis-inverse-bench</code> 检查这两组初速和一组对照数据，列出仍与全部观测相容的候选机制，并说明哪项附加观测能区分它们。</p>
+            </details>
+            <p><a href="./bench/catalysis.html">查看催化 Bench 样例分析</a></p>
+          </div>
+          <a class="action download" href="./downloads/catalysis-inverse-bench-0.1.0.zip" download aria-label="下载催化机制反演出题 ZIP">下载 ZIP <span aria-hidden="true">↓</span></a>
+        </article>
+      </div>
+      <section class="topic-section" aria-labelledby="skill-workflow-title">
+        <h2 id="skill-workflow-title">从材料到可复核的任务</h2>
+        <ol class="checklist">
+          <li><strong>提供原始依据。</strong> 随材料注明图表编号、数据文件、实验条件和单位。机制比较附上可见对照，并说明哪些记录用于留出验证。</li>
+          <li><strong>检查产物。</strong> 核对题面能否独立作答、等价解是否受理，以及评分规则能否识别一种实质错解。<a href="./bench/metrics.html#quality">查看 Bench 质量指标</a>。</li>
+          <li><strong>将已有题目续接到项目。</strong> 已安装 TaskFoundry 时，可在现有项目中提供题面、参考解和核验记录，再指定出题、复盘或重设计阶段。</li>
+        </ol>
+      </section>
+    </div>
+  </main>
+</body>
+</html>

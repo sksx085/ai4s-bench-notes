@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="用已发表的同位素观测约束碳来源、构造竞争解释，并设计能区分这两种解释的测量。">
+  <title>乙烯的两个碳从哪里来？ | AI4S Bench 笔记</title>
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="wordmark" href="../index.html" aria-label="AI4S Bench 笔记首页">AI4S <span>Bench Notes</span></a>
+      <nav aria-label="栏目">
+        <a href="../bench.html" aria-current="location">Bench 指标</a>
+        <a href="../practice/index.html">每日出题实践</a>
+        <a href="../papers.html">论文更新</a>
+        <a href="../skills.html">Skills 与插件</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap" id="main" tabindex="-1">
+    <div class="intro intro-topic" id="demo-catalysis">
+      <a class="page-back" href="./cases.html#catalysis"><span aria-hidden="true">←</span> 返回样例目录</a>
+      <h1 id="demo-catalysis-title">乙烯的两个碳从哪里来？</h1>
+      <p>用已发表的同位素观测约束碳来源、构造竞争解释，并设计能区分这两种解释的测量。</p>
+    </div>
+    <div class="topic-content">
+      <article aria-labelledby="demo-catalysis-title">
+        <p class="meta">Chemconsis v0.10 · 铜电催化</p>
+        <dl class="case-facts">
+          <dt>已有证据</dt>
+          <dd>题包使用裸铜与 P4VP 修饰铜生成的乙烯中含 0、1、2 个 <sup>13</sup>C 的报告量。修饰铜的相对量为 1 : 0.0784 : 0.01717，以未标记乙烯为基准。后续脉冲、气路与测量误差是题目设定的计算条件。</dd>
+          <dt>任务设计</dt>
+          <dd>先求富 CO₂ 来源环境所贡献产物份额的可达到下界，并提交证书。再分别构造成键前的前体滞留与成键后的产物滞留，重放同一组校准观测。最后在标签用量限制下选择脉冲和采样窗，最大化弱、强跨库存成键两类解释在最不利情形下的信号间隔。</dd>
+          <dt>交付与核验</dt>
+          <dd>三段各交一份 JSON 和方法说明。程序检查正向重放、下界证书和区分余量，接受等价见证与同值最优方案。独立复算覆盖 12,555 个可行安排，三个工作包的复算提交均通过数值核验。</dd>
+        </dl>
+        <p class="case-analysis"><strong>设计取舍。</strong> 两种滞留位置都能重放校准观测，所以最终安排要同时覆盖两类滞留位置。只用稳态数据时，给定预算内找不到保证分离的安排。加入校准后，方案能在题设的参数域和误差范围内区分弱、强跨库存成键。</p>
+        <p class="case-links"><a href="./workflow.html">Bench 制作流程</a> · <a href="../skills.html#catalysis-inverse-bench">催化机制反演 Skill</a> · <a href="https://doi.org/10.1038/s41467-025-66673-0">实测数据来源</a></p>
+      </article>
+    </div>
+  </main>
+</body>
+</html>

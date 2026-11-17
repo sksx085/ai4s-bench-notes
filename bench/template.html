@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="可复制的 Bench 公开题面与作者核验单，附提交契约和判分测试表。">
+  <title>最小任务模板 | AI4S Bench 笔记</title>
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="wordmark" href="../index.html" aria-label="AI4S Bench 笔记首页">AI4S <span>Bench Notes</span></a>
+      <nav aria-label="栏目">
+        <a href="../bench.html" aria-current="location">Bench 指标</a>
+        <a href="../practice/index.html">每日出题实践</a>
+        <a href="../papers.html">论文更新</a>
+        <a href="../skills.html">Skills 与插件</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap" id="main" tabindex="-1">
+    <div class="intro intro-topic" id="task-template">
+      <a class="page-back" href="../bench.html#task-template"><span aria-hidden="true">←</span> 返回 Bench 指标</a>
+      <h1>最小任务模板</h1>
+      <p>用一页题面约定任务，用一份作者核验单记录证据和判分。</p>
+    </div>
+    <div class="topic-content">
+      <section class="topic-section" aria-labelledby="public-brief">
+        <h2 id="public-brief">公开题面</h2>
+        <p>复制下方文本，替换方括号里的占位内容。按作答顺序列出输入与交付物。</p>
+        <pre><code>题名与版本  [题名 / 题目版本]
+科研判断    [在什么条件下，推断、比较或预测什么？]
+对象与条件  [样品、批次或计算任务，以及温度、场强等相关条件]
+可见输入    [文件或图表编号、来源、版本、单位、测量误差，注明实测、转录或模拟]
+适用假设    [允许使用的模型或近似，以及按题设固定的条件]
+工具与预算  [允许调用的工具、数据范围与时间或计算预算]
+提交契约    [文件名与格式、必填字段的类型、单位与范围、编号顺序和证据要求]
+评分口径    [可接受的等价形式、数值误差公式与容差、部分分规则、格式错误和缺交的处理]</code></pre>
+      </section>
+
+      <section class="topic-section" aria-labelledby="author-check">
+        <h2 id="author-check">作者侧核验单</h2>
+        <p>每道题保留一份独立记录。公开题面与作者核验单分别管理，留出观测和参考值保留在作者侧。</p>
+        <pre><code>证据索引    [每条结论对应的数据行、文件、图号与采集条件，标记同源证据]
+可辨识性    [仍与证据相容的替代解释、能排除它的观测、剩余可恢复的范围]
+留出清单    [留出单位是样品、批次还是条件，分别记录公开输入和留出观测的位置]
+参考核验    [参考解或等价解集合、独立复算命令或适用的正向模型、可对照的观测]
+判分记录    [逐项规则、权重、误差与边界、测试用例的预期状态、评分器版本]
+运行状态    [区分缺交、格式不符、科学不符、运行失败和待复核，注明各状态进入哪个分母]
+独立审题    [仅用公开材料试做的结果、争议、修订与复测记录]
+版本留档    [题面、题包、留出数据、评分器版本及运行环境]</code></pre>
+      </section>
+
+      <section class="topic-section" aria-labelledby="contract-example">
+        <h2 id="contract-example">提交契约示例</h2>
+        <p>某任务要求通过 <code>prediction.json</code> 为每个请求编号提交一个归一化预测值。下面的编号和数值用于说明格式。</p>
+        <pre><code>[
+  {"request_id": "example-01", "prediction": 0.42}
+]</code></pre>
+        <p>每个公开编号恰好出现一次，顺序任意。<code>prediction</code> 为 0–1 范围内的有限数值，无量纲。格式预检通过后，逐条按题面公布的绝对容差核对，边界值计入容差。</p>
+      </section>
+
+      <section class="topic-section" aria-labelledby="grading-cases">
+        <h2 id="grading-cases">判分测试表</h2>
+        <p>把每一行换成这道题的具体用例，保存期望状态与实际运行结果。</p>
+        <div class="table-scroll">
+          <table>
+            <caption>交付前应复核的输入和预期结果</caption>
+            <thead>
+              <tr><th scope="col">用例</th><th scope="col">期望结果</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">参考解与合法替代解</th><td>都能通过。编号顺序等允许的变化不影响结果。</td></tr>
+              <tr><th scope="row">恰好在容差边界</th><td>按题面公布的含边界规则判定。</td></tr>
+              <tr><th scope="row">超出容差的有效提交</th><td>按科学不符记分，保留失败项。</td></tr>
+              <tr><th scope="row">字段缺失、重复编号或类型错误</th><td>报告格式问题并指明字段或编号。</td></tr>
+              <tr><th scope="row">无提交、评分器报错或证据待核</th><td>分别记录缺交、运行失败或待复核状态。</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="case-links"><a href="./workflow.html">查看制作流程</a> · <a href="./metrics.html">查看指标与统计口径</a></p>
+      </section>
+    </div>
+  </main>
+</body>
+</html>

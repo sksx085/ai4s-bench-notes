@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="AI4S Bench 的题目质量、评分器测试、试测统计和任务诊断指标。">
+  <title>指标与统计口径 | AI4S Bench 笔记</title>
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="wordmark" href="../index.html" aria-label="AI4S Bench 笔记首页">AI4S <span>Bench Notes</span></a>
+      <nav aria-label="栏目">
+        <a href="../bench.html" aria-current="location">Bench 指标</a>
+        <a href="../practice/index.html">每日出题实践</a>
+        <a href="../papers.html">论文更新</a>
+        <a href="../skills.html">Skills 与插件</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap" id="main" tabindex="-1">
+    <div class="intro intro-topic">
+      <a class="page-back" href="../bench.html#metrics"><span aria-hidden="true">←</span> 返回 Bench 指标</a>
+      <h1>指标与统计口径</h1>
+      <p>出题时核验题目和判分器，试测时记录完成、得分和故障。每项比率都写清分子、分母和适用范围。</p>
+    </div>
+    <div class="topic-content">
+      <section class="topic-section" id="quality" aria-labelledby="quality-title">
+        <h2 id="quality-title">题目与判分质量</h2>
+        <dl class="case-facts">
+          <dt>证据追溯覆盖率</dt>
+          <dd>能定位到原数据、实验条件和处理版本的证据条数 ÷ 应记录来源的证据条数。把实测、文献转录、派生值和模拟分别标明。</dd>
+          <dt>独立试做覆盖率</dt>
+          <dd>至少有一份非作者仅凭公开材料完成的提交的题数 ÷ 当版题数。另记试做者类型、发现的歧义和回修后的复核结果。</dd>
+          <dt>判分用例通过率</dt>
+          <dd>与预期判定一致的测试用例数 ÷ 已执行用例数。另报未执行数，并分列误拒的等价解和误给分的错解。</dd>
+          <dt>人工判定一致率</dt>
+          <dd>两位审阅者独立判定一致的提交数 ÷ 被双审的提交数。同时报告样本数、分歧类别和最终裁决规则。</dd>
+        </dl>
+        <p class="case-analysis">做留出检查时，按科研主张选择分组单位，例如分子家族、实验批次或整篇论文。记录跨组重叠组数，并把同一条曲线派生出的多个观测留在同组。</p>
+      </section>
+
+      <section class="topic-section" id="trial" aria-labelledby="trial-title">
+        <h2 id="trial-title">试测与计分</h2>
+        <p>比较模型前先冻结任务版本、评测单位、工具和预算。逐条记录完全通过、有效但未通过、无效提交、缺交、运行故障、待复核或未启动。每条记录只归入一个状态。</p>
+        <dl class="case-facts">
+          <dt>交付有效率</dt>
+          <dd>满足提交契约的任务数 ÷ 计划评测任务数。已提交且等待人工复核的有效产物计入分子。单列缺交、技术故障和未启动数量。</dd>
+          <dt>全量通过率</dt>
+          <dd>已确认完全通过的任务数 ÷ 计划评测任务数。标明任务版本和尝试规则。待复核任务解决前将该比率标为暂定值。</dd>
+          <dt>已判分通过率</dt>
+          <dd>已确认完全通过的任务数 ÷ 已有效判分的任务数。和全量通过率一起报告，便于看清故障、格式或未决复核造成的覆盖差异。</dd>
+          <dt>部分分</dt>
+          <dd>按冻结的权重合计已确认得分，并注明对应满分。另列待复核任务可贡献的满分，避免把暂定得分用作最终模型排名。</dd>
+        </dl>
+        <p>若按首份提交计分，同时记录重试原因和次数。分母为零时标明「无可计算样本」，保留原始计数。</p>
+      </section>
+
+      <section class="topic-section" id="diagnostics" aria-labelledby="diagnostics-title">
+        <h2 id="diagnostics-title">按科研任务看误差</h2>
+        <dl class="case-facts">
+          <dt>结构与机制</dt>
+          <dd>报告满足独立验证条件的提交比例。结构同构、立体或同位素约定，以及观测下等价的机制，按题面约定处理。</dd>
+          <dt>连续值预测</dt>
+          <dd>报告容差内通过率和绝对误差，并注明单位、有效样本数和缺失量。跨单位汇总前写清归一化方式。</dd>
+          <dt>区间预测</dt>
+          <dd>同时检查独立观测落在区间内的比例和区间宽度。宽度与覆盖率一起解释，避免宽区间自动得高分。</dd>
+          <dt>实验设计与优化</dt>
+          <dd>先算硬约束满足率，再比较同预算内的最坏情形区分余量或目标值。另报无可行解、超预算和并列情况。</dd>
+        </dl>
+      </section>
+
+      <section class="topic-section" id="reporting" aria-labelledby="reporting-title">
+        <h2 id="reporting-title">记录口径示例</h2>
+        <p>NMR-bench C10 v4 的数值题有 20 题完成参考解独立复算，可记为「参考解复算覆盖 20/20」。把这个数字放在作者核验记录里。模型成绩由独立试测产物和对应的计分口径给出。</p>
+        <p class="case-links"><a href="./nmr.html">查看 NMR 样例</a> · <a href="./workflow.html">制作流程</a> · <a href="./template.html">任务模板</a></p>
+      </section>
+    </div>
+  </main>
+</body>
+</html>

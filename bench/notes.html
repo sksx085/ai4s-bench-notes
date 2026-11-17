@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="结合 NMR、镧系分子和铜电催化样例，核查证据、竞争解释、实验设计和判分。">
+  <title>设计笔记 | AI4S Bench 笔记</title>
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="wordmark" href="../index.html" aria-label="AI4S Bench 笔记首页">AI4S <span>Bench Notes</span></a>
+      <nav aria-label="栏目">
+        <a href="../bench.html" aria-current="location">Bench 指标</a>
+        <a href="../practice/index.html">每日出题实践</a>
+        <a href="../papers.html">论文更新</a>
+        <a href="../skills.html">Skills 与插件</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap" id="main" tabindex="-1">
+    <div class="intro intro-topic" id="design-notes">
+      <a class="page-back" href="../bench.html#design-notes"><span aria-hidden="true">←</span> 返回 Bench 指标</a>
+      <h1>设计笔记</h1>
+      <p>用三个已有样例说明怎样检验题目中的科学判断、证据与判分规则。</p>
+    </div>
+    <div class="topic-content">
+      <article class="topic-section">
+        <h2>先用反例检验结论是否唯一</h2>
+        <p>NMR 题 N4-030 中，两种自旋模型都能重现同一组 400 MHz 谱线位置。题面加入 600 MHz 模拟重测，要求分别预测内侧两线间距，再用测量区间判断哪些解释仍成立。</p>
+        <p>给审题者同一组初始输入，要求独立构造两个相容解释，并复算它们在新条件下的预测。若给定误差范围内仍有多个相容解释，题目可以要求提交相容集合、可保证的界限或下一次判别观测。</p>
+        <p class="case-links"><a href="./nmr.html">NMR 样例</a> · <a href="../practice/2026-11-17.html">换场判别的出题复盘</a></p>
+      </article>
+      <article class="topic-section" id="evidence-note">
+        <h2>让每个答案能追溯到证据</h2>
+        <p>给每个决定答案的量记录原图或原表位置、数据版本、单位、前处理和适用条件。标明它来自实测、文献转录、计算还是题内模拟，并记录派生量和原始观测的关系。</p>
+        <p>DyAC 样例中的弛豫时间和扫频拟合存在来源依赖。复核时，先从原图复查取点和单位，再把同源观测及其派生量作为一组移除，检查余下证据还能支持哪些结论。分别改变氧和碳贡献的模拟扰动，可以用于检验题设模型对新条件的不同响应。</p>
+        <p class="case-links"><a href="./lanthanides.html">DyAC 样例</a> · <a href="./template.html">填写证据来源与假设</a></p>
+      </article>
+      <article class="topic-section">
+        <h2>按最不利情形选择测量方案</h2>
+        <p>催化题里，成键前和成键后的滞留模型都能重现校准观测。题面据此要求在标签与采样预算内选择脉冲和采样窗，比较两类解释在最不利候选组合下的测量差距。</p>
+        <p>先核验提交方案满足预算和仪器档位，再重放给出最小区分余量的候选组合，把双方的测量误差计入。记录候选参数域、校准条件和误差范围，作为题内结论的适用边界。真实装置上的区分能力需另行测量。</p>
+        <p class="case-links"><a href="./catalysis.html">催化脉冲设计样例</a></p>
+      </article>
+      <article class="topic-section">
+        <h2>用反例测试判分器</h2>
+        <p>先写清容差的依据、是否包含端点，以及允许哪些等价表示。开放题可以用观测重放和约束核验检查替代答案，或要求提交能独立核查的证书。</p>
+        <p>至少测试参考解、等价解、恰好在容差边界的值、刚超界的值、缺字段，以及格式正确但违反科学约束的提交。记录每个用例的预期判定，再运行判分器逐项对照。</p>
+        <p class="case-links"><a href="./template.html">任务模板与判分用例</a></p>
+      </article>
+      <article class="topic-section">
+        <h2>给每个数字注明分母和版本</h2>
+        <p>公开核验结果时，写清核对的是题目、参考解、判分用例还是模型运行，并列出对应分母。模型试测还要记下题包与判分版本、模型配置、工具和运行预算，以及缺交、运行故障和待复核的数量。</p>
+        <p>复跑前检查新旧结果使用的任务清单和归类规则。若两轮条件不同，随结果注明变化和有效比较范围。</p>
+        <p class="case-links"><a href="./metrics.html">指标与统计口径</a> · <a href="./workflow.html">制作流程与版本交付</a></p>
+      </article>
+    </div>
+  </main>
+</body>
+</html>

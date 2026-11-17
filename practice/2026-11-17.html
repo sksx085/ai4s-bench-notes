@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="用 600 MHz 的模拟重测，区分两种都能解释 400 MHz 谱线的模型。">
+  <title>换一个场强，让两种解释做出不同预测 | 每日出题实践</title>
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="wordmark" href="../index.html" aria-label="AI4S Bench 笔记首页">AI4S <span>Bench Notes</span></a>
+      <nav aria-label="栏目">
+        <a href="../bench.html">Bench 指标</a>
+        <a href="./index.html" aria-current="location">每日出题实践</a>
+        <a href="../papers.html">论文更新</a>
+        <a href="../skills.html">Skills 与插件</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap" id="main" tabindex="-1">
+    <div class="intro intro-topic">
+      <a class="page-back" href="./index.html#practice-2026-11-17"><span aria-hidden="true">←</span> 返回每日出题实践</a>
+      <h1>换一个场强，让两种解释做出不同预测</h1>
+      <p class="meta"><time datetime="2026-11-17">2026.11.17</time><span>NMR-bench · 出题复盘</span></p>
+      <p>用 600 MHz 的模拟重测，区分两种都能解释 400 MHz 谱线的模型。</p>
+    </div>
+    <article class="topic-content">
+        <section class="topic-section" aria-labelledby="practice-section-1">
+          <h2 id="practice-section-1">题面设计</h2>
+          <p>C10 v4 的 N4-030 中，一对 AB 自旋和两个独立的一阶双峰都能解释 400 MHz 下的四条理想谱线。题面加入 600 MHz 的模拟重测，要求分别预测中间两线的间距，再依据给定的观测误差区间判断能排除哪种模型。</p>
+        </section>
+        <section class="topic-section" aria-labelledby="practice-section-2">
+          <h2 id="practice-section-2">给 AI 的任务</h2>
+          <p>让 AI 用同一组 400 MHz 线位分别拟合两个模型，写出换场所用的假设，给出两个可复算的 600 MHz 预测。</p>
+        </section>
+        <section class="topic-section" aria-labelledby="practice-section-3">
+          <h2 id="practice-section-3">作者核验</h2>
+          <p>分别复算预测值，再和重测误差区间比较。如果区间同时包含两个预测，结论就保留两种解释。</p>
+        </section>
+      <p class="case-links"><a href="../bench/nmr.html">查看 NMR 样例分析</a> · <a href="../bench/template.html">查看最小任务模板</a> · <a href="./ideas.html">查看出题思路</a></p>
+    </article>
+  </main>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="为了减少自旋–声子耦合的位移计算，评估省略配体碳骨架后对预测的磁弛豫有何影响。">
+  <title>DyAC 的配位球够用吗？ | AI4S Bench 笔记</title>
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="wordmark" href="../index.html" aria-label="AI4S Bench 笔记首页">AI4S <span>Bench Notes</span></a>
+      <nav aria-label="栏目">
+        <a href="../bench.html" aria-current="location">Bench 指标</a>
+        <a href="../practice/index.html">每日出题实践</a>
+        <a href="../papers.html">论文更新</a>
+        <a href="../skills.html">Skills 与插件</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap" id="main" tabindex="-1">
+    <div class="intro intro-topic" id="demo-lanthanides">
+      <a class="page-back" href="./cases.html#lanthanides"><span aria-hidden="true">←</span> 返回样例目录</a>
+      <h1 id="demo-lanthanides-title">DyAC 的配位球够用吗？</h1>
+      <p>为了减少自旋–声子耦合的位移计算，评估省略配体碳骨架后对预测的磁弛豫有何影响。</p>
+    </div>
+    <div class="topic-content">
+      <article aria-labelledby="demo-lanthanides-title">
+        <p class="meta">Chemconsis v0.10 · DyAC · 三个开放任务</p>
+        <dl class="case-facts">
+          <dt>可见证据</dt>
+          <dd>本地计算簇的坐标和静态双重态数据、Dy 稀释晶体的 13 个快过程时间常数与 68 个 χ″ 扫频点，以及单独标注的理想化扰动模拟。实验时间常数与扫频拟合有来源依赖。</dd>
+          <dt>任务与交付</dt>
+          <dd>先核对计算簇与文献化学式、重建配位环境并比较位移预算；再拟合实验扫频并提交两套相容的动力学模型；最后用成对控制约束模型，提交新条件下的 χ′、χ″、弛豫时间与第一配位球截断预测。结构与模型用 JSON，逐点预测用 CSV。</dd>
+          <dt>核验与进度</dt>
+          <dd>程序核对配位结构与位移预算、实测曲线重放、竞争模型的干预分歧及模拟留出预测。17 项离线检查通过，TaskFoundry 独立复算找到一条可行短解。模型区分度和真人试做仍待验证。</dd>
+        </dl>
+        <div class="case-analysis">
+          <p><strong>为什么要设计成对扰动？</strong> 在题设模型中，未扰动扫描只约束每个振动通道内氧与碳耦合振幅之和的大小。两套模型可重放同一组扫描，却对只改变碳贡献的条件给出不同弛豫时间。分别改变氧和碳贡献的模拟对照提供了区分依据。</p>
+        </div>
+        <p class="case-links"><a href="./workflow.html">证据与核验流程</a> · <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8414553/">实验来源（Briganti 等）</a> · <a href="https://arxiv.org/html/2609.14371v1">空间截断研究（Deng 等）</a></p>
+      </article>
+    </div>
+  </main>
+</body>
+</html>

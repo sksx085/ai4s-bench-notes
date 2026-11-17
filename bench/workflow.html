@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="确定科研判断，准备公开证据，并用独立试做和评分测试核验题目。">
+  <title>从选题到交付 | AI4S Bench 笔记</title>
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="wordmark" href="../index.html" aria-label="AI4S Bench 笔记首页">AI4S <span>Bench Notes</span></a>
+      <nav aria-label="栏目">
+        <a href="../bench.html" aria-current="location">Bench 指标</a>
+        <a href="../practice/index.html">每日出题实践</a>
+        <a href="../papers.html">论文更新</a>
+        <a href="../skills.html">Skills 与插件</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap" id="main" tabindex="-1">
+    <div class="intro intro-topic" id="workflow">
+      <a class="page-back" href="../bench.html#workflow"><span aria-hidden="true">←</span> 返回 Bench 指标</a>
+      <h1>从选题到交付</h1>
+      <p>从一项科研判断出发，确定选手交什么、证据能支持什么，以及第三方如何复验结果。</p>
+    </div>
+    <div class="topic-content">
+      <ol class="checklist">
+        <li>
+          <h2>把科研判断写成交付物</h2>
+          <p>从一份谱表、一组实验或一次计算复核中选出会影响后续工作的判断。写明选手需要恢复哪个量、区分哪类解释，或在什么预算内选择下一项测量。<a href="./catalysis.html">催化样例</a>把机制判断落到了有限标签用量下的脉冲与采样窗设计。</p>
+          <p><strong>产出</strong>　一句话任务定义，列明对象、公开观测、可用资源和交付物。</p>
+          <p><strong>验收</strong>　能指出交付物会改变哪项科研决定，以及用什么观测或计算来核验它。</p>
+        </li>
+        <li>
+          <h2>按对象对齐证据，划分公开与留出</h2>
+          <p>为每项输入记录样品或实验编号、来源位置、版本、条件、单位、误差和前处理。标注实测、转录、计算或模拟，把同一原始信号派生的材料归为一组。<a href="./lanthanides.html">镧系样例</a>分别列出坐标与双重态数据、扫频观测和理想化扰动模拟。</p>
+          <p><strong>产出</strong>　证据清单、供选手使用的题包，以及单独保存的参考材料和留出观测。</p>
+          <p><strong>验收</strong>　审题者可以从题面任取一项观察追溯到原始材料，并仅凭公开题包复原作答条件。检查文件名、样品编号和近重复数据是否透露留出答案。</p>
+        </li>
+        <li>
+          <h2>用反例确定证据能辨识什么</h2>
+          <p>先尝试构造另一套同样符合公开观测和物理约束的解释，再比较它们在新条件下的预测。把测量与模型误差带进比较。<a href="./nmr.html">NMR 样例</a>中的两种模型都能重放 400 MHz 线位，换场后的线距可以用来比较它们。若原有证据只支持区间、等价候选或共同预测，按证据支持的范围设定交付。</p>
+          <p><strong>产出</strong>　参考结论、竞争解释，以及一项能区分它们的观测或说明它们仍相容的依据。</p>
+          <p><strong>验收</strong>　能独立复算竞争解释对公开数据的重放。题面要求唯一判断时，现有证据在约定误差下足以排除竞争解释。</p>
+        </li>
+        <li>
+          <h2>把作答约定和判分写成可执行的测试</h2>
+          <p>在题面列出提交字段、单位、允许工具、预算、有效范围和等价表示。先检查格式，再用预定的公式、正向重放或逐项量表核验科学结果。记录容差来自读图精度、实测误差还是数值求解，并写明边界是否计入。</p>
+          <p><strong>产出</strong>　提交样式、独立复算的参考解、判分器，以及每个测试输入的预期结果。</p>
+          <p><strong>验收</strong>　用参考解、合法替代解、容差内外的边界用例、缺字段、单位错误和能骗过简化指标的错解跑一轮，逐项核对判分。</p>
+        </li>
+        <li>
+          <h2>独立盲解，按证据来源分组留出</h2>
+          <p>让未参与写题的审题者按参赛条件提交原始答案，记录耗时、最短解法、歧义和运行问题。用开发组试做来调题。按论文、样品族或实验批次划分开发与验证，把近重复题及同一信号的派生题放在同组。</p>
+          <p><strong>产出</strong>　盲解记录、问题与修订清单、分组划分表。</p>
+          <p><strong>验收</strong>　题面和评分争议在验证前处理。验证组保持隔离，同一来源的近重复样本不会跨到开发组。</p>
+        </li>
+        <li>
+          <h2>冻结版本，交付可复跑的评测</h2>
+          <p>固定题目、数据、判分器、模型配置、运行环境和资源预算，再按约定运行验证组。保留原始提交，分开记录科学未通过、无效提交、缺交、运行故障和待复核任务。报告各项指标的任务范围、计数和分母。</p>
+          <p><strong>产出</strong>　版本清单、复跑说明、评测记录和结果表。</p>
+          <p><strong>验收</strong>　第三方能用同一版本重跑判分，并由逐题记录复算汇总指标。交付前核对材料引用与分发范围。</p>
+        </li>
+      </ol>
+      <p class="case-links"><a href="./template.html">最小任务模板</a> · <a href="./notes.html">设计笔记</a> · <a href="./metrics.html">指标与统计口径</a></p>
+    </div>
+  </main>
+</body>
+</html>
