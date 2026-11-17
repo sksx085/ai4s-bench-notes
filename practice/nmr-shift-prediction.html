@@ -33,11 +33,12 @@
         <div><dt>测试题</dt><dd>10</dd></div>
         <div><dt>待预测数值</dt><dd>54</dd></div>
       </dl>
-      <a class="challenge-download" href="./resources/nmr-shift-prediction/c10-nmr-demo.zip" download>下载作答包 <span aria-hidden="true">↓</span></a>
+      <a class="challenge-download" href="./resources/nmr-shift-prediction/c10-nmr-demo-v2.zip" download>下载 v2 作答包 <span aria-hidden="true">↓</span></a>
     </header>
 
     <nav class="challenge-nav" aria-label="题目内容">
       <a href="#overview">概述</a>
+      <a href="#revision">v2 改题</a>
       <a href="#problem">题面</a>
       <a href="#resources">资源</a>
       <a href="#metadata">元信息</a>
@@ -66,8 +67,26 @@
         <p><strong>你要交什么。</strong> 在空白表中填入 54 个 ppm 数值。十个评分分项合成满分 100 分。只按峰窗中位数填表的基线得 14.38 分，官能团经验基线得 43.82 分。</p>
       </section>
 
+      <section class="topic-section" id="revision" aria-labelledby="revision-heading">
+        <h2 id="revision-heading">v2 改题</h2>
+        <p>T02、T03、T09 的目标位置改用 A、B 编号。每个核种有四个候选峰，其中有外观和真峰相近的模拟杂峰。面积、候选相关与干扰由模拟生成，目标位移沿用 C10 档案。</p>
+        <div class="table-scroll">
+          <table>
+            <caption>改题后的三个判断</caption>
+            <thead><tr><th scope="col">题号</th><th scope="col">需要区分什么</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">T02</th><td>四个 2H 双峰各自都近似线性。用稀释对照筛出共用增益的信号，再沿匿名碳图确定两组等价位点的顺序。</td></tr>
+              <tr><th scope="row">T03</th><td>一个长程锚可同时解释链段两端。需用另一个锚定方向，并核对叠峰产生的错误氢碳配对。</td></tr>
+              <tr><th scope="row">T09</th><td>杂峰能给出相近的位移，同时把碳差方向翻转。还要提交选中的氢峰号和碳峰号。</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>本地枚举中，每题合用稀释、HSQC 和 HMBC 后各剩 1 个可行归属；去掉任一类证据后至少有 2 个。新版保留 54 个数值的计分规则，三个改题额外报告 12 个峰号的命中数。v2 尚待三家模型重跑。</p>
+        <p class="case-links"><a href="./resources/nmr-shift-prediction/c10-nmr-demo-v2.zip" download>下载 v2 完整题册、数据和提交模板</a></p>
+      </section>
+
       <section class="topic-section" id="problem" aria-labelledby="problem-heading">
-        <h2 id="problem-heading">技术题面</h2>
+        <h2 id="problem-heading">v1 技术题面</h2>
 
         <h3>目标</h3>
         <p>预测 T01–T10 指定位置的 ¹H 和 ¹³C 化学位移。每题含 2–4 组位点。氢只有一条归属时填 <code>single</code>。同一碳有两条分列的氢线时，按该碳内的 ppm 从低到高填 <code>low</code> 和 <code>high</code>。同一组等价原子共填一条归属。</p>
@@ -142,7 +161,8 @@ D00,C2,13C,single,61.5</code></pre>
       <section class="topic-section" id="resources" aria-labelledby="resources-heading">
         <h2 id="resources-heading">资源</h2>
         <ul>
-          <li><a href="./resources/nmr-shift-prediction/c10-nmr-demo.zip" download>离线作答包（ZIP）</a>。含图文题册、编号分子结构、已填样例、测试数据、提交模板和格式检查器。</li>
+          <li><a href="./resources/nmr-shift-prediction/c10-nmr-demo-v2.zip" download>v2 离线作答包（ZIP）</a>。含图文题册、编号分子结构、已填样例、模拟观测、提交模板和格式检查器。</li>
+          <li><a href="./resources/nmr-shift-prediction/c10-nmr-demo.zip" download>v1 作答包（ZIP）</a>。与下方的模型试跑成绩对应。</li>
           <li>解压后可打开 <code>public/题册.html</code> 查看每题的控制表、峰包和位点定义。</li>
         </ul>
         <figure class="case-figure">
@@ -163,7 +183,7 @@ D00,C2,13C,single,61.5</code></pre>
       </section>
 
       <section class="topic-section" id="results" aria-labelledby="results-heading">
-        <h2 id="results-heading">试跑评分</h2>
+        <h2 id="results-heading">v1 试跑评分</h2>
         <p>整卷首轮发生输出截断。最终三家采用相同的分批口径，P02、P04 按分子作答，P03 逐题作答。模型只接收对应的公共题面、编号结构和模板。截断轮次不计入下表。</p>
         <div class="table-scroll" tabindex="0">
           <table>
