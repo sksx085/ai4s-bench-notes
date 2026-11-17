@@ -26,6 +26,7 @@
       <a class="page-back" href="../bench.html#workflow"><span aria-hidden="true">←</span> 返回 Bench 指标</a>
       <h1>从选题到交付</h1>
       <p>从一项科研判断出发，确定选手交什么、证据能支持什么，以及第三方如何复验结果。</p>
+      <p class="case-links"><a href="#nmr-uncertainty">NMR 位移预测与不确定度</a></p>
     </div>
     <div class="topic-content">
       <ol class="checklist">
@@ -66,6 +67,22 @@
           <p><strong>验收</strong>　第三方能用同一版本重跑判分，并由逐题记录复算汇总指标。交付前核对材料引用与分发范围。</p>
         </li>
       </ol>
+      <section class="topic-section" id="nmr-uncertainty" aria-labelledby="nmr-uncertainty-heading">
+        <h2 id="nmr-uncertainty-heading">NMR 位移预测与不确定度</h2>
+        <p>预测指定采集条件下、已归属信号的化学位移中心。每个位点提交中位数和等尾 95% 预测区间。主指标采用 Winkler 区间分数，同时报告点值 MAE、实际覆盖率、区间宽度和两类耗时。</p>
+
+        <h3>按母分子采样，逐位点核对真值</h3>
+        <p>首批至少 10 个独立母分子，尽量覆盖不同环系、官能团与含卤结构。优先从 11 月 1 日后首发的 ChemRxiv 论文 SI 选样，规模不足时用公开实测数据补充。按母分子划分开发、校准和测试。每条留出位移都对应明确的结构、位点和条件。</p>
+        <p>原作者给出的明确点值直接使用。只有能确认是一组归属清楚、分辨开的标准峰型窗口才取中点。氢谱的 <code>m</code> 窗口、重叠峰和合并报告保留原区间，暂不计入点值 MAE 或主区间评分。</p>
+
+        <h3>用同条件复测估计可达精度</h3>
+        <p>分别记录舍入、对同一 FID 的重复拾峰、同管重采和独立制样复测。对匹配的复测先报告绝对差分布。若两次误差独立同方差且近似中心正态，可由差值标准差除以 √2 估计单次测量噪声，再估计已知真实中心时的期望 MAE。缺少匹配复测时标为待估。<a href="https://www.nist.gov/pml/nist-technical-note-1297">NIST 测量不确定度指南</a></p>
+
+        <h3>提交区间、评分与计时</h3>
+        <p>作答表的三个数值字段为 <code>point_ppm</code>、<code>lower95_ppm</code>、<code>upper95_ppm</code>。三者分别对应观测的第 50、2.5、97.5 百分位数。区间分数从宽度开始，观测出界时加上到最近边界距离的 40 倍，越低越好。这个设计允许预测区间偏斜，同时对高估和低估使用相同的 ppm 代价。<a href="https://sites.stat.washington.edu/raftery/Research/PDF/Gneiting2007jasa.pdf">区间分数原论文</a></p>
+        <p>¹H 和 ¹³C 分别先算分子内均值，再对母分子等权汇总。区间分数和 MAE 与解题、评分耗时分别列出。报告各核种的分子数和位点数，区间覆盖率由留出观测检验。</p>
+        <p class="case-links"><a href="./nmr-uncertainty.md">查看完整设计与实现细节（Markdown）</a></p>
+      </section>
       <p class="case-links"><a href="./template.html">逆问题与预测题模板</a> · <a href="./notes.html">设计笔记</a> · <a href="./metrics.html">指标与统计口径</a></p>
     </div>
   </main>
