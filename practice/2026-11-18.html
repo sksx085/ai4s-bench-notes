@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="保留首批 10 个分子，加入 10 个有实验归属的分子。预测 160 个信号中心及各自的 95% 预测区间。">
+  <title>把核磁位移填空扩到 20 个分子 | 每日出题实践</title>
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="wordmark" href="../index.html" aria-label="AI4S Bench 笔记首页">AI4S <span>Bench Notes</span></a>
+      <nav aria-label="栏目">
+        <a href="../bench.html">Bench 指标</a>
+        <a href="./index.html" aria-current="location">每日出题实践</a>
+        <a href="../papers.html">论文更新</a>
+        <a href="../skills.html">Skills 与插件</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap" id="main" tabindex="-1">
+    <div class="intro intro-topic">
+      <a class="page-back" href="./index.html#practice-2026-11-18"><span aria-hidden="true">←</span> 返回每日出题实践</a>
+      <h1>把核磁位移填空扩到 20 个分子</h1>
+      <p class="meta"><time datetime="2026-11-18">2026.11.18</time><span>NMR-bench · Demo 封存</span></p>
+      <p>保留首批 10 个分子，加入 10 个有实验归属的分子。预测 160 个信号中心及各自的 95% 预测区间。</p>
+      <p class="case-links">挑战题面 · <a href="./nmr-shift-prediction.html">C10 核磁位移预测 Demo v4</a></p>
+    </div>
+    <article class="topic-content">
+        <section class="topic-section" aria-labelledby="practice-section-1">
+          <h2 id="practice-section-1">题面设计</h2>
+          <p>每个分子提供编号结构、可确认的采集条件和少量参考位移。每种核留出四个位点，组成两对。扩充批包含桥环、芳香杂环和含卤螺环等不同结构。</p>
+        </section>
+        <section class="topic-section" aria-labelledby="practice-section-2">
+          <h2 id="practice-section-2">给 AI 的任务</h2>
+          <p>为每个留出位置填预测中位数和等尾 95% 预测区间的两端。点位主分使用冻结的两核归一化 MAE。方向正确率先在分子内算，再对母分子等权平均。</p>
+        </section>
+        <section class="topic-section" aria-labelledby="practice-section-3">
+          <h2 id="practice-section-3">作者核验</h2>
+          <p>完成来源与编号复核、切分检查、格式自查和评分复算。20 个分子的两条基线已重算，三家模型的试跑成绩仍对应原批 10 个分子。</p>
+        </section>
+      <p class="case-links"><a href="./nmr-shift-prediction-results.html">查看 v4 基线与 v3 试跑</a> · <a href="./nmr-shift-prediction-archive.html">查看历史题面</a> · <a href="./ideas.html">查看出题思路</a></p>
+    </article>
+  </main>
+</body>
+</html>
