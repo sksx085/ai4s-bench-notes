@@ -25,7 +25,7 @@
   <main class="wrap" id="main" tabindex="-1">
     <header class="intro intro-topic challenge-intro">
       <a class="page-back" href="./nmr-shift-prediction.html"><span aria-hidden="true">←</span> 返回当前题面</a>
-      <p class="meta"><time datetime="2026-11-17">2026.11.17</time><span>C10 核磁共振 · 历史版本</span></p>
+      <p class="meta"><time datetime="2026-11-17">2026.11.17</time><span>核磁共振 · 历史版本</span></p>
       <h1>核磁位移预测 历史版本</h1>
       <p>v3 使用 10 个测试母分子、80 个位点，要求填写点预测和 95% 预测区间。</p>
       <p class="case-links"><a href="./nmr-shift-prediction-v3.html#prediction-v3">v3 题面</a> · <a href="./resources/nmr-shift-prediction/c10-nmr-demo-v3.zip" download>v3 作答包</a> · <a href="./nmr-shift-prediction-results.html#reference-score">v3 三家模型试跑</a></p>
@@ -72,7 +72,7 @@
 
       <section class="topic-section" id="revision" aria-labelledby="revision-heading">
         <h2 id="revision-heading">v2 改题</h2>
-        <p>T02、T03、T09 的目标位置改用 A、B 编号。每个核种有四个候选峰，其中有外观和真峰相近的模拟杂峰。面积、候选相关与干扰由模拟生成，目标位移沿用 C10 档案。</p>
+        <p>T02、T03、T09 的目标位置改用 A、B 编号。每个核种有四个候选峰，其中有外观和真峰相近的模拟杂峰。面积、候选相关与干扰由模拟生成，目标位移沿用原核磁档案。</p>
         <div class="table-scroll">
           <table>
             <caption>改题后的三个判断</caption>
@@ -95,7 +95,7 @@
         <p>预测 T01–T10 指定位置的 ¹H 和 ¹³C 化学位移。每题含 2–4 组位点。氢只有一条归属时填 <code>single</code>。同一碳有两条分列的氢线时，按该碳内的 ppm 从低到高填 <code>low</code> 和 <code>high</code>。同一组等价原子共填一条归属。</p>
 
         <h3>背景与数据</h3>
-        <p>数据来自原 C10 核磁数据库的四个样例分子，使用 CDCl₃ 条件下的档案归属。一个母分子用于公开样例，三个母分子用于测试，分别出 3、3、4 题。每个测试分子的所有目标值先一起遮盖，再生成该分子的公共控制表。公开的峰窗由档案位移分箱得到，积分、峰形和表观耦合常数 <var>J</var> 来自档案字段。</p>
+        <p>数据来自原核磁数据库的四个样例分子，使用 CDCl₃ 条件下的档案归属。一个母分子用于公开样例，三个母分子用于测试，分别出 3、3、4 题。每个测试分子的所有目标值先一起遮盖，再生成该分子的公共控制表。公开的峰窗由档案位移分箱得到，积分、峰形和表观耦合常数 <var>J</var> 来自档案字段。</p>
 
         <h3>输入</h3>
         <p>每个分子给编号结构、采集条件、部分已归属的控制位点，以及无位置标签的 ¹H 和 ¹³C 峰包。位移窗左闭右开。同一序号的氢、碳峰包彼此独立。公开的分子图、带原子编号的 SMILES 和机器可读数据随包提供。</p>
@@ -179,7 +179,7 @@ D00,C2,13C,single,61.5</code></pre>
         <dl class="case-facts">
           <dt>领域</dt><dd>化学 · 核磁共振谱学</dd>
           <dt>任务</dt><dd>位移预测 · 信号归属</dd>
-          <dt>来源</dt><dd>C10 有机分子核磁数据库样例</dd>
+          <dt>来源</dt><dd>有机分子核磁数据库样例</dd>
           <dt>验证范围</dt><dd>三个独立测试母分子。以数据库归属计分，试题标尺属于 本题规则。三家模型各有一份按相同协议拼合的完整答卷。</dd>
         </dl>
         <p class="case-links"><a href="https://play.bohrium.com/challenge/predict-crispri-perturbation-effects-in-h1-hesc-fr-c772ce91">Bohrium 题面结构参考</a></p>

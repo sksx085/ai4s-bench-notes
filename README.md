@@ -16,7 +16,7 @@
 
 日期页的内容由 JSON 决定。更新正文时编辑源文件后重跑脚本。[出题思路和提示词](practice/ideas.html)在独立页面编辑。
 
-## 更新 C10 核磁位移预测
+## 更新 核磁位移预测任务
 
 [题面固定入口](practice/nmr-shift-prediction.html)展示当前发布版，出题记录直接链接到这个地址。发布下一版时，把被替换的题面、下载和结果移入[历史版本](practice/nmr-shift-prediction-archive.html)，然后更新固定入口。旧版作答包保留原下载路径。
 
