@@ -11,14 +11,14 @@
 
 ## 新增每日出题实践
 
-1. 复制 [11 月 17 日的记录源文件](practice/entries/2026-11-17.json)，按新日期保存为 `practice/entries/YYYY-MM-DD.json`。填写当天标题、主题、记录类型、摘要和各段正文。可选的相关链接使用站内相对路径或 HTTP(S) 地址。
-2. 在站点目录运行 `python3 scripts/build_practice.py`。脚本会为每个日期生成一个 `practice/YYYY-MM-DD.html`，并按日期倒序更新[实践目录](practice/index.html)。
+1. 按新日期保存 `practice/entries/YYYY-MM-DD.json`，填写标题、主题、记录类型和摘要。独立记录用 `sections` 填各段标题与正文，已有题面则用 `href` 填入相对路径，由目录直接链接到题面。
+2. 在站点目录运行 `python3 scripts/build_practice.py`。脚本会为独立记录生成 `practice/YYYY-MM-DD.html`，并按日期倒序更新[实践目录](practice/index.html)。
 
 日期页的内容由 JSON 决定。更新正文时编辑源文件后重跑脚本。[出题思路和提示词](practice/ideas.html)在独立页面编辑。
 
-## 更新 C10 出题 Demo
+## 更新 C10 核磁位移预测
 
-[Demo 固定入口](practice/nmr-shift-prediction.html)展示当前发布版。每日实践目录和日期页都链接到这个地址。发布下一版时，把被替换的题面、下载和结果移入[历史版本](practice/nmr-shift-prediction-archive.html)，然后更新固定入口。旧版作答包保留原下载路径。
+[题面固定入口](practice/nmr-shift-prediction.html)展示当前发布版，出题记录直接链接到这个地址。发布下一版时，把被替换的题面、下载和结果移入[历史版本](practice/nmr-shift-prediction-archive.html)，然后更新固定入口。旧版作答包保留原下载路径。
 
 ## GitHub Pages
 

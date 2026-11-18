@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="给定分子结构、部分已归属峰和打乱的粗峰窗，恢复指定位置的氢、碳化学位移。含一个公开样例、十个测试和三模型试跑结果。">
-  <title>核磁位移预测 Demo 历史版本 | 每日出题实践</title>
+  <title>核磁位移预测 历史版本 | 每日出题实践</title>
   <link rel="stylesheet" href="../styles.css">
   <link rel="stylesheet" href="./challenge.css">
 </head>
@@ -24,9 +24,9 @@
 
   <main class="wrap" id="main" tabindex="-1">
     <header class="intro intro-topic challenge-intro">
-      <a class="page-back" href="./nmr-shift-prediction.html"><span aria-hidden="true">←</span> 返回当前 Demo</a>
+      <a class="page-back" href="./nmr-shift-prediction.html"><span aria-hidden="true">←</span> 返回当前题面</a>
       <p class="meta"><time datetime="2026-11-17">2026.11.17</time><span>C10 核磁共振 · 历史版本</span></p>
-      <h1>核磁位移预测 Demo 历史版本</h1>
+      <h1>核磁位移预测 历史版本</h1>
       <p>v3 使用 10 个测试母分子、80 个位点，要求填写点预测和 95% 预测区间。</p>
       <p class="case-links"><a href="./nmr-shift-prediction-v3.html#prediction-v3">v3 题面</a> · <a href="./resources/nmr-shift-prediction/c10-nmr-demo-v3.zip" download>v3 作答包</a> · <a href="./nmr-shift-prediction-results.html#reference-score">v3 三家模型试跑</a></p>
       <h2>v1 与 v2 粗峰窗任务</h2>
@@ -66,7 +66,7 @@
           </table>
         </div>
 
-        <p><strong>为什么值得做。</strong> 把两个相似位置的峰互换，预测的绝对位移可能仍然很接近，但组间差的正负会翻转。这个 Demo 用同一批数据分别检查位点误差、组间差和方向，观察模型能否把相似位置区分开。</p>
+        <p><strong>为什么值得做。</strong> 把两个相似位置的峰互换，预测的绝对位移可能仍然很接近，但组间差的正负会翻转。本题 用同一批数据分别检查位点误差、组间差和方向，观察模型能否把相似位置区分开。</p>
         <p><strong>你要交什么。</strong> 在空白表中填入 54 个 ppm 数值。十个评分分项合成满分 100 分。只按峰窗中位数填表的基线得 14.38 分，官能团经验基线得 43.82 分。</p>
       </section>
 
@@ -180,7 +180,7 @@ D00,C2,13C,single,61.5</code></pre>
           <dt>领域</dt><dd>化学 · 核磁共振谱学</dd>
           <dt>任务</dt><dd>位移预测 · 信号归属</dd>
           <dt>来源</dt><dd>C10 有机分子核磁数据库样例</dd>
-          <dt>验证范围</dt><dd>三个独立测试母分子。以数据库归属计分，试题标尺属于 Demo 规则。三家模型各有一份按相同协议拼合的完整答卷。</dd>
+          <dt>验证范围</dt><dd>三个独立测试母分子。以数据库归属计分，试题标尺属于 本题规则。三家模型各有一份按相同协议拼合的完整答卷。</dd>
         </dl>
         <p class="case-links"><a href="https://play.bohrium.com/challenge/predict-crispri-perturbation-effects-in-h1-hesc-fr-c772ce91">Bohrium 题面结构参考</a></p>
       </section>

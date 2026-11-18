@@ -1,4 +1,4 @@
-"""Generate the practice archive and one static HTML page per dated entry."""
+"""Generate the practice archive and pages for entries with their own content."""
 
 import json
 import os
@@ -47,18 +47,29 @@ def read_entry(path):
             key: escape(text_field(entry, key))
             for key in ("title", "topic", "kind", "summary")
         }
-        if not isinstance(entry["sections"], list) or not entry["sections"]:
-            raise ValueError("sections 须为至少包含一项的数组")
+        direct_link = "href" in entry
+        href = safe_href(text_field(entry, "href")) if direct_link else f"./{day.isoformat()}.html"
+        raw_sections = entry.get("sections", [])
+        if not isinstance(raw_sections, list) or (not direct_link and not raw_sections):
+            raise ValueError("独立记录的 sections 须为至少包含一项的数组")
         sections = [
             (escape(text_field(section, "heading")), escape(text_field(section, "text")))
-            for section in entry["sections"]
+            for section in raw_sections
         ]
         links = read_links(entry, "links")
         challenges = read_links(entry, "challenges")
     except (ValueError, KeyError, TypeError) as error:
         raise ValueError(f"{path.name}：{error}") from error
 
-    return dict(fields, day=day.isoformat(), sections=sections, links=links, challenges=challenges)
+    return dict(
+        fields,
+        day=day.isoformat(),
+        href=href,
+        direct_link=direct_link,
+        sections=sections,
+        links=links,
+        challenges=challenges,
+    )
 
 
 def entry_meta(entry):
@@ -79,7 +90,7 @@ def challenge_links(entry, padding):
 def archive_item(entry):
     return f"""<li id="practice-{entry['day']}">
   <p class="meta">{entry_meta(entry)}</p>
-  <h3><a href="./{entry['day']}.html">{entry['title']}</a></h3>
+  <h3><a href="{entry['href']}">{entry['title']}</a></h3>
   <p>{entry['summary']}</p>
 {challenge_links(entry, '  ')}</li>"""
 
@@ -174,6 +185,7 @@ def main():
     daily_pages = [
         (PRACTICE / f"{entry['day']}.html", render_day(entry))
         for entry in entries
+        if not entry["direct_link"]
     ]
     empty = "<li>暂无出题记录。</li>"
     archive_items = "\n".join(archive_item(entry) for entry in entries) or empty
@@ -182,7 +194,7 @@ def main():
     for path, contents in daily_pages:
         write_page(path, contents)
     write_page(archive, archive_contents)
-    print(f"已生成 {len(entries)} 篇实践记录，并更新栏目页。")
+    print(f"已生成 {len(daily_pages)} 篇独立记录，栏目页收录 {len(entries)} 条记录。")
 
 
 if __name__ == "__main__":

@@ -1,11 +1,11 @@
 {
-  "title": "把核磁位移填空扩到 20 个分子",
+  "title": "C10 核磁位移预测 v4",
   "topic": "NMR-bench",
-  "kind": "Demo 封存",
+  "kind": "v4 封存",
   "summary": "保留首批 10 个分子，加入 10 个有实验归属的分子。预测 160 个信号中心及各自的 95% 预测区间。",
   "challenges": [
     {
-      "label": "C10 核磁位移预测 Demo v4",
+      "label": "C10 核磁位移预测 v4",
       "href": "./nmr-shift-prediction.html"
     }
   ],

@@ -36,7 +36,7 @@
 
 ## 4. 选择区间分数
 
-C10 Demo 采用 **Winkler 区间分数**评价等尾 95% 预测区间，在点位主分之外单列。目标对应观测分布的 2.5%、50% 和 97.5% 分位数，中位数与绝对误差匹配。在同一 ppm 尺度上，区间分数同时惩罚区间太宽和漏掉观测，且上漏、下漏的距离权重相等。等尾区间可以在点预测两侧具有不同宽度。[Gneiting 和 Raftery，区间分数](https://sites.stat.washington.edu/raftery/Research/PDF/Gneiting2007jasa.pdf) · [Brehmer 和 Gneiting，等尾区间](https://doi.org/10.3150/20-BEJ1298)
+C10 核磁位移预测 采用 **Winkler 区间分数**评价等尾 95% 预测区间，在点位主分之外单列。目标对应观测分布的 2.5%、50% 和 97.5% 分位数，中位数与绝对误差匹配。在同一 ppm 尺度上，区间分数同时惩罚区间太宽和漏掉观测，且上漏、下漏的距离权重相等。等尾区间可以在点预测两侧具有不同宽度。[Gneiting 和 Raftery，区间分数](https://sites.stat.washington.edu/raftery/Research/PDF/Gneiting2007jasa.pdf) · [Brehmer 和 Gneiting，等尾区间](https://doi.org/10.3150/20-BEJ1298)
 
 | 方案 | 衡量什么 | 本评测用法 |
 | --- | --- | --- |
