@@ -92,7 +92,7 @@ def archive_item(entry):
   <p class="meta">{entry_meta(entry)}</p>
   <h3><a href="{entry['href']}">{entry['title']}</a></h3>
   <p>{entry['summary']}</p>
-{challenge_links(entry, '  ')}</li>"""
+</li>"""
 
 
 def update_items(page, marker, items):
