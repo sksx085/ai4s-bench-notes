@@ -188,13 +188,21 @@ def main():
         if not entry["direct_link"]
     ]
     empty = "<li>暂无出题记录。</li>"
-    archive_items = "\n".join(archive_item(entry) for entry in entries) or empty
+    seen_tasks = set()
+    archive_entries = []
+    for entry in entries:
+        if entry["direct_link"]:
+            if entry["href"] in seen_tasks:
+                continue
+            seen_tasks.add(entry["href"])
+        archive_entries.append(entry)
+    archive_items = "\n".join(archive_item(entry) for entry in archive_entries) or empty
     archive = PRACTICE / "index.html"
     archive_contents = update_items(archive, "practice-entries", archive_items)
     for path, contents in daily_pages:
         write_page(path, contents)
     write_page(archive, archive_contents)
-    print(f"已生成 {len(daily_pages)} 篇独立记录，栏目页收录 {len(entries)} 条记录。")
+    print(f"已生成 {len(daily_pages)} 篇独立记录，栏目页收录 {len(archive_entries)} 条记录。")
 
 
 if __name__ == "__main__":
