@@ -1,0 +1,174 @@
+.result-intro h1 {
+  margin-block: .35rem .55rem;
+}
+
+.result-content {
+  display: grid;
+  gap: 1.25rem;
+  max-width: none;
+  padding-block-start: 1.5rem;
+}
+
+.result-content .result-card {
+  position: relative;
+  min-width: 0;
+  margin: 0;
+  padding: clamp(1rem, 3vw, 1.65rem);
+  border: 1px solid var(--line);
+  border-radius: .55rem;
+  background: var(--surface);
+}
+
+.result-content > .result-card:first-child {
+  padding-block-start: clamp(1rem, 3vw, 1.65rem);
+  border-block-start: 1px solid var(--line);
+}
+
+.result-card :is(h2, h3) {
+  margin-block: 0 .35rem;
+}
+
+.result-anchor {
+  position: absolute;
+  inset-block-start: 0;
+}
+
+.result-note {
+  color: var(--muted);
+  font-size: .92rem;
+}
+
+.result-scroll {
+  margin-block: .75rem 1rem;
+}
+
+.measure-table {
+  min-width: 37rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.measure-table :is(th, td) {
+  padding: .62rem .72rem;
+  overflow-wrap: normal;
+}
+
+.measure-table :is(th, td):not(:first-child) {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.measure-table tbody th {
+  font-weight: 640;
+}
+
+.measure-table tr.best {
+  background: #e8f3ed;
+}
+
+.measure-table tr.best strong {
+  color: var(--accent);
+  font-size: 1.08rem;
+}
+
+.measure-table tr.baseline :is(th, td) {
+  color: var(--muted);
+  background: #f8f9f6;
+}
+
+.measure-table small {
+  display: inline-block;
+  margin-inline-start: .28em;
+  color: var(--muted);
+  font-size: .8em;
+}
+
+.result-card summary {
+  width: fit-content;
+  margin-block: .85rem .25rem;
+  color: var(--accent);
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.result-method summary {
+  margin-block-start: 0;
+}
+
+.breakdown-group, .nucleus-results {
+  margin-block-start: 1.25rem;
+}
+
+.breakdown-group + .breakdown-group {
+  padding-block-start: 1rem;
+  border-block-start: 1px solid var(--line);
+}
+
+.answer-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .7rem;
+  margin-block: 1rem .55rem;
+}
+
+.answer-toolbar select {
+  min-height: 2.75rem;
+  padding-inline: .6rem 1.3rem;
+  border: 1px solid var(--line);
+  border-radius: .35rem;
+  background-color: var(--surface);
+  color: var(--ink);
+  font: inherit;
+}
+
+.answer-toolbar .challenge-download {
+  margin-inline-start: auto;
+}
+
+.answer-files {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .45rem 1.15rem;
+  font-size: .9rem;
+}
+
+.answer-table small {
+  display: block;
+  margin-inline-start: 0;
+}
+
+.answer-table th:first-child {
+  white-space: nowrap;
+}
+
+@media (max-width: 34rem) {
+  .answer-toolbar .challenge-download {
+    margin-inline-start: 0;
+  }
+}
+
+@media (max-width: 40rem) {
+  .answer-table {
+    min-width: 0;
+    table-layout: fixed;
+  }
+
+  .answer-table :is(th, td) {
+    padding-inline: .3rem;
+    font-size: .8rem;
+  }
+
+  .answer-table :is(th, td):not(:first-child) {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .answer-table th:first-child {
+    width: 3.4rem;
+    white-space: normal;
+  }
+
+  .answer-table small {
+    font-size: .72rem;
+  }
+}

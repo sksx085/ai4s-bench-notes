@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="10 个测试分子的早期三模型试跑。">
+  <title>核磁位移预测早期试跑 | 每日出题实践</title>
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="./challenge.css">
+  <style>
+    .result-table { min-width: 38rem; }
+    .result-table th { white-space: nowrap; }
+    .result-table td { white-space: nowrap; }
+    #reference-score .result-table { min-width: 0; }
+    #reference-score :is(th, td) { padding-inline: .35rem; }
+    #reference-score thead th { white-space: normal; }
+    .direction-details { margin-block: 1.25rem; }
+    .direction-details summary { cursor: pointer; }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="wordmark" href="../index.html" aria-label="AI4S Bench 笔记首页">AI4S <span>Bench Notes</span></a>
+      <nav aria-label="栏目">
+        <a href="../bench.html">Bench 指标</a>
+        <a href="./index.html" aria-current="location">每日出题实践</a>
+        <a href="../papers.html">论文更新</a>
+        <a href="../skills.html">Skills 与插件</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap" id="main" tabindex="-1">
+    <header class="intro intro-topic">
+      <a class="page-back" href="./nmr-shift-prediction-v3.html"><span aria-hidden="true">←</span> 返回存档题面</a>
+      <h1>核磁位移预测早期试跑</h1>
+      <p>首批 10 个测试母分子的早期试跑。¹H 与 ¹³C 各 40 个评分位点。</p>
+    </header>
+
+    <nav class="challenge-nav" aria-label="结果页内容">
+      <a href="#reference-score">点位主分</a>
+      <a href="#results">95% 预测区间</a>
+      <a href="#protocol">试跑口径与计时</a>
+    </nav>
+    <article class="topic-content challenge-content" aria-label="早期三模型试跑">
+      <section class="topic-section" id="reference-score" aria-labelledby="reference-score-heading">
+        <h2 id="reference-score-heading">v3 三家模型的点位主分</h2>
+        <p>主分衡量模型把信号中心估得有多准。先对每种核的 MAE 按母分子等权汇总，再除以该核种的局部化学环境基线 MAE。两个比值等权平均为 <var>r</var>。氢和碳的基线分别为 0.36475 和 5.30875 ppm。</p>
+        <pre><code>r = (¹H MAE / 0.36475 + ¹³C MAE / 5.30875) / 2
+点位主分 = 100 / (1 + 3r)</code></pre>
+        <p>主分越高，点位越准。基线是 <strong>25 分</strong>，两种核的相对损失平均降到基线的一半时得 40 分，两种核的误差都为零时得 100 分。95% 区间质量见下一节。</p>
+        <div class="table-scroll" tabindex="0" aria-label="点位主分 · 同一批 10 个母分子">
+          <table class="result-table">
+            <caption>点位主分 · 同一批 10 个母分子</caption>
+            <thead><tr><th scope="col">模型或基线</th><th scope="col">点位主分</th><th scope="col">¹H MAE（ppm）</th><th scope="col">¹³C MAE（ppm）</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">kimi-3.1-pro</th><td>28.58</td><td>0.266</td><td>4.981</td></tr>
+              <tr><th scope="row">GLM-5.3</th><td>25.31</td><td>0.364</td><td>5.144</td></tr>
+              <tr><th scope="row">局部化学环境基线</th><td>25.00</td><td>0.365</td><td>5.309</td></tr>
+              <tr><th scope="row">位点对取均值基线</th><td>24.76</td><td>0.365</td><td>5.439</td></tr>
+              <tr><th scope="row">deepseek-v4-pro</th><td>24.73</td><td>0.292</td><td>6.526</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>kimi-3.1-pro 在这批分子上两种核的 MAE 均最低。GLM-5.3 的氢 MAE 接近局部化学环境基线，碳 MAE 略低，主分为 25.31。</p>
+        <details class="direction-details">
+          <summary>查看位点对的方向正确率</summary>
+          <p>比较同一分子里两处信号的先后顺序。¹H 有 20 对、¹³C 有 19 对可判方向。方向正确率先在分子内平均，再对母分子等权平均。位点对取均值基线给每对位点相同的点预测，因此每对预测差为零。</p>
+          <div class="table-scroll" tabindex="0" aria-label="位点对方向正确率">
+            <table class="result-table">
+              <caption>位点对方向正确率</caption>
+              <thead><tr><th scope="col">模型或基线</th><th scope="col">¹H</th><th scope="col">¹³C</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">kimi-3.1-pro</th><td>60%</td><td>65%</td></tr>
+                <tr><th scope="row">GLM-5.3</th><td>60%</td><td>65%</td></tr>
+                <tr><th scope="row">局部化学环境基线</th><td>25%</td><td>25%</td></tr>
+                <tr><th scope="row">位点对取均值基线</th><td>0%</td><td>0%</td></tr>
+                <tr><th scope="row">deepseek-v4-pro</th><td>70%</td><td>60%</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+      </section>
+
+      <section class="topic-section" id="results" aria-labelledby="results-heading">
+        <h2 id="results-heading">v3 试跑的 95% 区间质量</h2>
+        <p>区间单独比较 Winkler 损失、覆盖率和宽度。Winkler 越低越好。两种核分别报告，每种核有 40 个评分位点。</p>
+        <div class="table-scroll" tabindex="0" aria-label="¹H · 40 个测试位点">
+          <table class="result-table">
+            <caption>¹H · 40 个测试位点</caption>
+            <thead><tr><th scope="col">模型或基线</th><th scope="col">Winkler（ppm）</th><th scope="col">实测覆盖率</th><th scope="col">平均宽度（ppm）</th><th scope="col">低于下界 / 高于上界</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">kimi-3.1-pro</th><td>5.441</td><td>25/40（62.5%）</td><td>0.420</td><td>8 / 7</td></tr>
+              <tr><th scope="row">GLM-5.3</th><td>7.614</td><td>23/40（57.5%）</td><td>0.564</td><td>6 / 11</td></tr>
+              <tr><th scope="row">局部化学环境基线</th><td>2.340</td><td>37/40（92.5%）</td><td>2.000</td><td>0 / 3</td></tr>
+              <tr><th scope="row">位点对取均值基线</th><td>2.750</td><td>36/40（90.0%）</td><td>2.000</td><td>1 / 3</td></tr>
+              <tr><th scope="row">deepseek-v4-pro</th><td>6.760</td><td>23/40（57.5%）</td><td>0.390</td><td>8 / 9</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="table-scroll" tabindex="0" aria-label="¹³C · 40 个测试位点">
+          <table class="result-table">
+            <caption>¹³C · 40 个测试位点</caption>
+            <thead><tr><th scope="col">模型或基线</th><th scope="col">Winkler（ppm）</th><th scope="col">实测覆盖率</th><th scope="col">平均宽度（ppm）</th><th scope="col">低于下界 / 高于上界</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">kimi-3.1-pro</th><td>127.250</td><td>13/40（32.5%）</td><td>4.900</td><td>16 / 11</td></tr>
+              <tr><th scope="row">GLM-5.3</th><td>108.360</td><td>16/40（40.0%）</td><td>6.710</td><td>19 / 5</td></tr>
+              <tr><th scope="row">局部化学环境基线</th><td>34.200</td><td>38/40（95.0%）</td><td>30.000</td><td>1 / 1</td></tr>
+              <tr><th scope="row">位点对取均值基线</th><td>33.700</td><td>38/40（95.0%）</td><td>30.000</td><td>1 / 1</td></tr>
+              <tr><th scope="row">deepseek-v4-pro</th><td>178.530</td><td>12/40（30.0%）</td><td>5.480</td><td>16 / 12</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>两条基线都使用固定区间宽度，¹H 为 2.0 ppm，¹³C 为 30.0 ppm。这批试跑中，三家模型报的区间更窄，实测覆盖率和 Winkler 损失均逊于两条基线。</p>
+        <p>试跑的 API ID 分别为 <code>deepseek-v4-pro</code>、<code>glm-5.3</code>、<code>kimi-k3.1-pro</code>。</p>
+      </section>
+
+      <section class="topic-section" id="protocol" aria-labelledby="protocol-heading">
+        <h2 id="protocol-heading">试跑口径与计时</h2>
+        <p>首轮三家都用 16,384 token 上限，共同有效 5 题。按题补跑后获得 10 题共同有效结果。同一题的三家使用同一份离线输入和同一输出上限。纳入 10 题汇总的协议分别有 5 题使用 16,384、3 题使用 32,768、2 题使用 65,536 token。</p>
+        <div class="table-scroll" tabindex="0" aria-label="首轮共同有效的 5 题 · 每种核 20 个位点">
+          <table class="result-table">
+            <caption>首轮共同有效的 5 题 · 每种核 20 个位点</caption>
+            <thead><tr><th scope="col">模型</th><th scope="col">¹H MAE（ppm）</th><th scope="col">¹H Winkler（ppm）</th><th scope="col">¹H 覆盖率</th><th scope="col">¹³C MAE（ppm）</th><th scope="col">¹³C Winkler（ppm）</th><th scope="col">¹³C 覆盖率</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">deepseek-v4-pro</th><td>0.314</td><td>6.369</td><td>55.0%</td><td>8.113</td><td>243.410</td><td>35.0%</td></tr>
+              <tr><th scope="row">GLM-5.3</th><td>0.292</td><td>5.778</td><td>60.0%</td><td>5.038</td><td>98.800</td><td>35.0%</td></tr>
+              <tr><th scope="row">kimi-3.1-pro</th><td>0.288</td><td>7.002</td><td>60.0%</td><td>5.588</td><td>153.620</td><td>25.0%</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="table-scroll" tabindex="0" aria-label="首轮运行状态与最终 10 题的计时">
+          <table class="result-table">
+            <caption>首轮运行状态与最终 10 题的计时</caption>
+            <thead><tr><th scope="col">模型</th><th scope="col">首轮有效</th><th scope="col">首轮截断</th><th scope="col">首轮缺表头</th><th scope="col">有效作答累计（分钟）</th><th scope="col">本地评分（毫秒）</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">deepseek-v4-pro</th><td>9</td><td>0</td><td>1</td><td>30.59</td><td>3.0</td></tr>
+              <tr><th scope="row">GLM-5.3</th><td>6</td><td>4</td><td>0</td><td>12.45</td><td>2.7</td></tr>
+              <tr><th scope="row">kimi-3.1-pro</th><td>10</td><td>0</td><td>0</td><td>12.88</td><td>3.2</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>有效作答累计为入表的 10 次有效响应的墙钟时间之和，含传输和服务端等待。GLM-5.3 在 T09 曾超时约 600 秒。计入这次超时后，所选十题协议的累计请求耗时为 22.45 分钟。截断、格式失败和超时单独记录。</p>
+      </section>
+
+      <section class="topic-section" id="prediction-interval" aria-labelledby="interval-heading">
+        <h2 id="interval-heading">95% 预测区间怎么用</h2>
+        <h3>每个位点交三个数</h3>
+        <p>预测目标是在题面条件下测得的信号中心。模型提交第 2.5 百分位 <var>L</var>、中位数 <var>p</var> 和第 97.5 百分位 <var>U</var>，要求 <var>L</var> ≤ <var>p</var> ≤ <var>U</var>。等尾表示模型在两端各留 2.5% 的概率，两端距中位数可以不同。95% 是逐位点预测的名义覆盖率。</p>
+        <h3>同时看覆盖和宽度</h3>
+        <p>实测值 <var>y</var> 落入闭区间便记为覆盖，点误差单独算 |<var>p</var> − <var>y</var>|。区间用 Winkler 损失，越低越好。区间变宽会增加基础损失，真值漏在外面会按超出距离加罚。系数 40 来自 2 ÷ (1 − 0.95)。 <a href="https://sites.stat.washington.edu/raftery/Research/PDF/Gneiting2007jasa.pdf#page=12">原始评分公式</a></p>
+        <pre><code>区间损失 = (U − L) + 40 × [max(L − y, 0) + max(y − U, 0)]</code></pre>
+        <p>实测值为 8.48 ppm 时，报 [8.33, 8.63] 得 0.30 ppm。报同样宽度的 [8.00, 8.30] 时，漏掉 0.18 ppm，损失为 0.30 + 40 × 0.18 = 7.50 ppm。</p>
+        <h3>试跑的覆盖率怎样读</h3>
+        <p>¹H 命中 23–25 个位点，¹³C 命中 12–16 个，各核种分母都是 40。两种核都明显低于名义覆盖率。平均宽度衡量区间给得有多宽，上下侧漏报帮助定位偏差。例如 GLM-5.3 的 ¹³C 实测值有 19 次低于下界、5 次高于上界，区间在这批分子上更常放得偏高。</p>
+        <p>同一分子的多个位点可能相关。这批 10 个母分子可用于诊断欠覆盖，稳定评估校准需要更多独立母分子。同条件重复测量是另一个问题，本批样本的实验噪声仍待估计。 <a href="../bench/nmr-uncertainty.md">数据、预测区间与测量重复性的完整说明</a></p>
+      </section>
+    </article>
+  </main>
+</body>
+</html>

@@ -3,20 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="核磁位移预测任务 v4 的两条基线和 v3 三家模型试跑，含点位主分、分核种区间质量和计时。">
+  <meta name="description" content="20 个测试分子的点位主分、95% 区间、耗时和全部计分答卷。">
   <title>核磁位移预测任务结果 | 每日出题实践</title>
   <link rel="stylesheet" href="../styles.css">
   <link rel="stylesheet" href="./challenge.css">
-  <style>
-    .result-table { min-width: 38rem; }
-    .result-table th { white-space: nowrap; }
-    .result-table td { white-space: nowrap; }
-    #reference-score .result-table { min-width: 0; }
-    #reference-score :is(th, td) { padding-inline: .35rem; }
-    #reference-score thead th { white-space: normal; }
-    .direction-details { margin-block: 1.25rem; }
-    .direction-details summary { cursor: pointer; }
-  </style>
+  <link rel="stylesheet" href="./nmr-results.css">
+  <script src="./nmr-responses.js" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">跳到正文</a>
@@ -32,269 +24,245 @@
     </div>
   </header>
 
-  <main class="wrap" id="main" tabindex="-1">
-    <header class="intro intro-topic">
-      <a class="page-back" href="./nmr-shift-prediction.html"><span aria-hidden="true">←</span> 返回 v4 题面</a>
-      <h1>核磁位移预测任务结果</h1>
-      <p>v4 的三家模型与两条基线都按原批、新增批和合并批报告。历史 v3 试跑限于原批 T01–T10。<a href="./nmr-shift-prediction-v3.html">v3 存档题面</a></p>
+  <main class="wrap results-page" id="main" tabindex="-1">
+    <header class="intro intro-topic result-intro">
+      <a class="page-back" href="./nmr-shift-prediction.html"><span aria-hidden="true">←</span> 返回题面</a>
+      <p class="meta"><time datetime="2026-11-18">2026.11.18</time></p>
+      <h1>核磁位移预测结果</h1>
+      <p>20 个测试分子，每个分子预测 4 个 ¹H 位点和 4 个 ¹³C 位点。三家模型与两条基线共用同一套评分规则。</p>
     </header>
+
     <nav class="challenge-nav" aria-label="结果页内容">
-      <a href="#v4-results">v4 三模型与基线</a>
-      <a href="#reference-score">v3 点位主分</a>
-      <a href="#results">95% 区间质量</a>
-      <a href="#protocol">试跑口径与计时</a>
-      <a href="#prediction-interval">95% 区间逻辑</a>
+      <a href="#point-results">点位主分</a>
+      <a href="#interval-results">95% 预测区间</a>
+      <a href="#timing">作答与评分耗时</a>
+      <a href="#answers">逐分子答卷</a>
     </nav>
 
-    <article class="topic-content challenge-content" aria-label="核磁位移预测任务基线与三模型试跑">
-      <section class="topic-section v4-results" id="v4-results" aria-labelledby="v4-results-heading">
-      <span id="v4-baselines"></span>
-      <h2 id="v4-results-heading">v4 按批次比较预测结果</h2>
-      <p>三家模型在 v4 的 20 个测试分子上各提交了一份完整答卷。每个分子独立请求，三家使用同一份作答包中的结构、可见参考位移、数字模板和 D00 格式示例。无检索或工具调用，输出上限统一为 65,536 tokens。各分子采用第一份通过格式检查的答卷。T19 多次缺表头后，三家均用同一作答包重跑，统一在提示开头逐字列出公开模板表头，三家的 T19 均采用这次重跑。D00 不计分。下方保留 v3 的独立试跑。</p><p>首轮通过格式检查的样品数为 deepseek-v4-pro 15/20、GLM-5.3 19/20、kimi-3.1-pro 20/20。重试耗时列在下方。</p>
-      <p>三批均用冻结的误差量尺，¹H 为 0.36475 ppm，¹³C 为 5.30875 ppm。主分先把两个核种的母分子等权 MAE 除以各自量尺，再把两个比值等权平均为 <var>r</var>。</p>
-      <pre><code>r = (¹H MAE / 0.36475 + ¹³C MAE / 5.30875) / 2
-      点位主分 = 100 / (1 + 3r)</code></pre>
-      <h3 id="v4-first10">原批 T01–T10</h3>
-      <p>本批 10 个测试母分子。方向正确率按母分子等权汇总，括号内为可判方向的位点对数。</p>
-      <div class="table-scroll" tabindex="0" aria-label="原批 T01–T10的点位主分与方向">
-      <table class="result-table"><caption>原批 T01–T10的点位主分与方向</caption>
-      <thead><tr><th scope="col">模型或基线</th><th scope="col">点位主分</th><th scope="col">¹H MAE（ppm）</th><th scope="col">¹³C MAE（ppm）</th><th scope="col">¹H 方向</th><th scope="col">¹³C 方向</th></tr></thead>
-      <tbody><tr><th scope="row">deepseek-v4-pro</th><td>30.88</td><td>0.231</td><td>4.559</td><td>55.0% <span class="metric-count">（20 对）</span></td><td>75.0% <span class="metric-count">（19 对）</span></td></tr>
-      <tr><th scope="row">GLM-5.3</th><td>26.13</td><td>0.308</td><td>5.524</td><td>60.0% <span class="metric-count">（20 对）</span></td><td>45.0% <span class="metric-count">（19 对）</span></td></tr>
-      <tr><th scope="row">kimi-3.1-pro</th><td>30.34</td><td>0.265</td><td>4.266</td><td>50.0% <span class="metric-count">（20 对）</span></td><td>55.0% <span class="metric-count">（19 对）</span></td></tr>
-      <tr><th scope="row">局部化学环境基线</th><td>25.00</td><td>0.365</td><td>5.309</td><td>25.0% <span class="metric-count">（20 对）</span></td><td>25.0% <span class="metric-count">（19 对）</span></td></tr>
-      <tr><th scope="row">位点对取均值基线</th><td>24.76</td><td>0.365</td><td>5.439</td><td>0.0% <span class="metric-count">（20 对）</span></td><td>0.0% <span class="metric-count">（19 对）</span></td></tr></tbody></table>
-      </div>
-      <h3 id="v4-added10">新增批 T11–T20</h3>
-      <p>本批 10 个测试母分子。方向正确率按母分子等权汇总，括号内为可判方向的位点对数。</p>
-      <div class="table-scroll" tabindex="0" aria-label="新增批 T11–T20的点位主分与方向">
-      <table class="result-table"><caption>新增批 T11–T20的点位主分与方向</caption>
-      <thead><tr><th scope="col">模型或基线</th><th scope="col">点位主分</th><th scope="col">¹H MAE（ppm）</th><th scope="col">¹³C MAE（ppm）</th><th scope="col">¹H 方向</th><th scope="col">¹³C 方向</th></tr></thead>
-      <tbody><tr><th scope="row">deepseek-v4-pro</th><td>41.82</td><td>0.159</td><td>2.608</td><td>65.0% <span class="metric-count">（18 对）</span></td><td>75.0% <span class="metric-count">（20 对）</span></td></tr>
-      <tr><th scope="row">GLM-5.3</th><td>35.38</td><td>0.207</td><td>3.443</td><td>80.0% <span class="metric-count">（18 对）</span></td><td>55.0% <span class="metric-count">（20 对）</span></td></tr>
-      <tr><th scope="row">kimi-3.1-pro</th><td>33.97</td><td>0.216</td><td>3.734</td><td>60.0% <span class="metric-count">（18 对）</span></td><td>65.0% <span class="metric-count">（20 对）</span></td></tr>
-      <tr><th scope="row">局部化学环境基线</th><td>19.17</td><td>0.406</td><td>9.020</td><td>15.0% <span class="metric-count">（18 对）</span></td><td>5.0% <span class="metric-count">（20 对）</span></td></tr>
-      <tr><th scope="row">位点对取均值基线</th><td>18.53</td><td>0.449</td><td>9.020</td><td>0.0% <span class="metric-count">（18 对）</span></td><td>0.0% <span class="metric-count">（20 对）</span></td></tr></tbody></table>
-      </div>
-      <h3 id="v4-all20">合并批 T01–T20</h3>
-      <p>本批 20 个测试母分子。方向正确率按母分子等权汇总，括号内为可判方向的位点对数。</p>
-      <div class="table-scroll" tabindex="0" aria-label="合并批 T01–T20的点位主分与方向">
-      <table class="result-table"><caption>合并批 T01–T20的点位主分与方向</caption>
-      <thead><tr><th scope="col">模型或基线</th><th scope="col">点位主分</th><th scope="col">¹H MAE（ppm）</th><th scope="col">¹³C MAE（ppm）</th><th scope="col">¹H 方向</th><th scope="col">¹³C 方向</th></tr></thead>
-      <tbody><tr><th scope="row">deepseek-v4-pro</th><td>35.53</td><td>0.195</td><td>3.583</td><td>60.0% <span class="metric-count">（38 对）</span></td><td>75.0% <span class="metric-count">（39 对）</span></td></tr>
-      <tr><th scope="row">GLM-5.3</th><td>30.06</td><td>0.258</td><td>4.483</td><td>70.0% <span class="metric-count">（38 对）</span></td><td>50.0% <span class="metric-count">（39 对）</span></td></tr>
-      <tr><th scope="row">kimi-3.1-pro</th><td>32.05</td><td>0.241</td><td>4.000</td><td>55.0% <span class="metric-count">（38 对）</span></td><td>60.0% <span class="metric-count">（39 对）</span></td></tr>
-      <tr><th scope="row">局部化学环境基线</th><td>21.70</td><td>0.385</td><td>7.164</td><td>20.0% <span class="metric-count">（38 对）</span></td><td>15.0% <span class="metric-count">（39 对）</span></td></tr>
-      <tr><th scope="row">位点对取均值基线</th><td>21.20</td><td>0.407</td><td>7.229</td><td>0.0% <span class="metric-count">（38 对）</span></td><td>0.0% <span class="metric-count">（39 对）</span></td></tr></tbody></table>
-      </div>
-      <details class="direction-details" id="v4-intervals"><summary>查看 v4 的 95% 预测区间质量</summary>
-      <p>各核种分别报告区间覆盖率、宽度和 Winkler 损失。Winkler 越低越好。区间两端均算覆盖。</p>
-      <h4>原批 T01–T10</h4>
-      <div class="table-scroll" tabindex="0" aria-label="原批 T01–T10 ¹H 的区间质量">
-      <table class="result-table"><caption>原批 T01–T10 ¹H 的区间质量</caption>
-      <thead><tr><th scope="col">模型或基线</th><th scope="col">位点数</th><th scope="col">Winkler（ppm）</th><th scope="col">覆盖率</th><th scope="col">平均宽度（ppm）</th><th scope="col">低于下界 / 高于上界</th></tr></thead>
-      <tbody><tr><th scope="row">deepseek-v4-pro</th><td>40</td><td>4.972</td><td>62.5%（25/40）</td><td>0.422</td><td>6 / 9</td></tr>
-      <tr><th scope="row">GLM-5.3</th><td>40</td><td>4.431</td><td>67.5%（27/40）</td><td>0.650</td><td>7 / 6</td></tr>
-      <tr><th scope="row">kimi-3.1-pro</th><td>40</td><td>6.133</td><td>62.5%（25/40）</td><td>0.403</td><td>7 / 8</td></tr>
-      <tr><th scope="row">局部化学环境基线</th><td>40</td><td>2.340</td><td>92.5%（37/40）</td><td>2.000</td><td>0 / 3</td></tr>
-      <tr><th scope="row">位点对取均值基线</th><td>40</td><td>2.750</td><td>90.0%（36/40）</td><td>2.000</td><td>1 / 3</td></tr></tbody></table>
-      </div>
-      <div class="table-scroll" tabindex="0" aria-label="原批 T01–T10 ¹³C 的区间质量">
-      <table class="result-table"><caption>原批 T01–T10 ¹³C 的区间质量</caption>
-      <thead><tr><th scope="col">模型或基线</th><th scope="col">位点数</th><th scope="col">Winkler（ppm）</th><th scope="col">覆盖率</th><th scope="col">平均宽度（ppm）</th><th scope="col">低于下界 / 高于上界</th></tr></thead>
-      <tbody><tr><th scope="row">deepseek-v4-pro</th><td>40</td><td>112.275</td><td>45.0%（18/40）</td><td>5.115</td><td>14 / 8</td></tr>
-      <tr><th scope="row">GLM-5.3</th><td>40</td><td>115.323</td><td>52.5%（21/40）</td><td>7.473</td><td>14 / 5</td></tr>
-      <tr><th scope="row">kimi-3.1-pro</th><td>40</td><td>106.210</td><td>47.5%（19/40）</td><td>4.970</td><td>10 / 11</td></tr>
-      <tr><th scope="row">局部化学环境基线</th><td>40</td><td>34.200</td><td>95.0%（38/40）</td><td>30.000</td><td>1 / 1</td></tr>
-      <tr><th scope="row">位点对取均值基线</th><td>40</td><td>33.700</td><td>95.0%（38/40）</td><td>30.000</td><td>1 / 1</td></tr></tbody></table>
-      </div>
-      <h4>新增批 T11–T20</h4>
-      <div class="table-scroll" tabindex="0" aria-label="新增批 T11–T20 ¹H 的区间质量">
-      <table class="result-table"><caption>新增批 T11–T20 ¹H 的区间质量</caption>
-      <thead><tr><th scope="col">模型或基线</th><th scope="col">位点数</th><th scope="col">Winkler（ppm）</th><th scope="col">覆盖率</th><th scope="col">平均宽度（ppm）</th><th scope="col">低于下界 / 高于上界</th></tr></thead>
-      <tbody><tr><th scope="row">deepseek-v4-pro</th><td>40</td><td>2.721</td><td>67.5%（27/40）</td><td>0.341</td><td>5 / 8</td></tr>
-      <tr><th scope="row">GLM-5.3</th><td>40</td><td>3.607</td><td>70.0%（28/40）</td><td>0.497</td><td>6 / 6</td></tr>
-      <tr><th scope="row">kimi-3.1-pro</th><td>40</td><td>5.512</td><td>70.0%（28/40）</td><td>0.312</td><td>5 / 7</td></tr>
-      <tr><th scope="row">局部化学环境基线</th><td>40</td><td>2.190</td><td>92.5%（37/40）</td><td>2.000</td><td>0 / 3</td></tr>
-      <tr><th scope="row">位点对取均值基线</th><td>40</td><td>2.190</td><td>92.5%（37/40）</td><td>2.000</td><td>0 / 3</td></tr></tbody></table>
-      </div>
-      <div class="table-scroll" tabindex="0" aria-label="新增批 T11–T20 ¹³C 的区间质量">
-      <table class="result-table"><caption>新增批 T11–T20 ¹³C 的区间质量</caption>
-      <thead><tr><th scope="col">模型或基线</th><th scope="col">位点数</th><th scope="col">Winkler（ppm）</th><th scope="col">覆盖率</th><th scope="col">平均宽度（ppm）</th><th scope="col">低于下界 / 高于上界</th></tr></thead>
-      <tbody><tr><th scope="row">deepseek-v4-pro</th><td>40</td><td>53.697</td><td>57.5%（23/40）</td><td>4.647</td><td>10 / 7</td></tr>
-      <tr><th scope="row">GLM-5.3</th><td>40</td><td>67.525</td><td>60.0%（24/40）</td><td>6.590</td><td>7 / 9</td></tr>
-      <tr><th scope="row">kimi-3.1-pro</th><td>40</td><td>90.047</td><td>50.0%（20/40）</td><td>4.400</td><td>6 / 14</td></tr>
-      <tr><th scope="row">局部化学环境基线</th><td>40</td><td>89.400</td><td>77.5%（31/40）</td><td>30.000</td><td>4 / 5</td></tr>
-      <tr><th scope="row">位点对取均值基线</th><td>40</td><td>89.400</td><td>77.5%（31/40）</td><td>30.000</td><td>4 / 5</td></tr></tbody></table>
-      </div>
-      <h4>合并批 T01–T20</h4>
-      <div class="table-scroll" tabindex="0" aria-label="合并批 T01–T20 ¹H 的区间质量">
-      <table class="result-table"><caption>合并批 T01–T20 ¹H 的区间质量</caption>
-      <thead><tr><th scope="col">模型或基线</th><th scope="col">位点数</th><th scope="col">Winkler（ppm）</th><th scope="col">覆盖率</th><th scope="col">平均宽度（ppm）</th><th scope="col">低于下界 / 高于上界</th></tr></thead>
-      <tbody><tr><th scope="row">deepseek-v4-pro</th><td>80</td><td>3.846</td><td>65.0%（52/80）</td><td>0.381</td><td>11 / 17</td></tr>
-      <tr><th scope="row">GLM-5.3</th><td>80</td><td>4.019</td><td>68.8%（55/80）</td><td>0.574</td><td>13 / 12</td></tr>
-      <tr><th scope="row">kimi-3.1-pro</th><td>80</td><td>5.822</td><td>66.2%（53/80）</td><td>0.357</td><td>12 / 15</td></tr>
-      <tr><th scope="row">局部化学环境基线</th><td>80</td><td>2.265</td><td>92.5%（74/80）</td><td>2.000</td><td>0 / 6</td></tr>
-      <tr><th scope="row">位点对取均值基线</th><td>80</td><td>2.470</td><td>91.2%（73/80）</td><td>2.000</td><td>1 / 6</td></tr></tbody></table>
-      </div>
-      <div class="table-scroll" tabindex="0" aria-label="合并批 T01–T20 ¹³C 的区间质量">
-      <table class="result-table"><caption>合并批 T01–T20 ¹³C 的区间质量</caption>
-      <thead><tr><th scope="col">模型或基线</th><th scope="col">位点数</th><th scope="col">Winkler（ppm）</th><th scope="col">覆盖率</th><th scope="col">平均宽度（ppm）</th><th scope="col">低于下界 / 高于上界</th></tr></thead>
-      <tbody><tr><th scope="row">deepseek-v4-pro</th><td>80</td><td>82.986</td><td>51.2%（41/80）</td><td>4.881</td><td>24 / 15</td></tr>
-      <tr><th scope="row">GLM-5.3</th><td>80</td><td>91.424</td><td>56.2%（45/80）</td><td>7.031</td><td>21 / 14</td></tr>
-      <tr><th scope="row">kimi-3.1-pro</th><td>80</td><td>98.129</td><td>48.8%（39/80）</td><td>4.685</td><td>16 / 25</td></tr>
-      <tr><th scope="row">局部化学环境基线</th><td>80</td><td>61.800</td><td>86.2%（69/80）</td><td>30.000</td><td>5 / 6</td></tr>
-      <tr><th scope="row">位点对取均值基线</th><td>80</td><td>61.550</td><td>86.2%（69/80）</td><td>30.000</td><td>5 / 6</td></tr></tbody></table>
-      </div>
-      </details>
-      <details class="direction-details" id="v4-timing"><summary>查看 v4 的作答和评分耗时</summary>
-      <p>计分请求累计为所选有效答卷的请求耗时之和。尝试累计包含对应协议里记录的重试开销。远程请求耗时包含传输和服务端等待，本地评分采用单调时钟。两条基线直接记录本地生成耗时。</p>
-      <h4>原批 T01–T10</h4>
-      <div class="table-scroll" tabindex="0" aria-label="原批 T01–T10的作答与评分耗时">
-      <table class="result-table"><caption>原批 T01–T10的作答与评分耗时</caption>
-      <thead><tr><th scope="col">模型或基线</th><th scope="col">有效作答耗时</th><th scope="col">尝试累计（分钟）</th><th scope="col">本地评分（毫秒）</th></tr></thead>
-      <tbody><tr><th scope="row">deepseek-v4-pro</th><td>39.51 分钟</td><td>57.72</td><td>3.12</td></tr>
-      <tr><th scope="row">GLM-5.3</th><td>40.62 分钟</td><td>50.62</td><td>3.09</td></tr>
-      <tr><th scope="row">kimi-3.1-pro</th><td>13.45 分钟</td><td>13.45</td><td>2.97</td></tr>
-      <tr><th scope="row">局部化学环境基线</th><td>28.35 毫秒（本地）</td><td>—</td><td>3.64</td></tr>
-      <tr><th scope="row">位点对取均值基线</th><td>28.48 毫秒（本地）</td><td>—</td><td>2.98</td></tr></tbody></table>
-      </div>
-      <h4>新增批 T11–T20</h4>
-      <div class="table-scroll" tabindex="0" aria-label="新增批 T11–T20的作答与评分耗时">
-      <table class="result-table"><caption>新增批 T11–T20的作答与评分耗时</caption>
-      <thead><tr><th scope="col">模型或基线</th><th scope="col">有效作答耗时</th><th scope="col">尝试累计（分钟）</th><th scope="col">本地评分（毫秒）</th></tr></thead>
-      <tbody><tr><th scope="row">deepseek-v4-pro</th><td>35.54 分钟</td><td>50.94</td><td>3.04</td></tr>
-      <tr><th scope="row">GLM-5.3</th><td>19.16 分钟</td><td>19.35</td><td>3.27</td></tr>
-      <tr><th scope="row">kimi-3.1-pro</th><td>9.45 分钟</td><td>10.15</td><td>3.16</td></tr>
-      <tr><th scope="row">局部化学环境基线</th><td>9.23 毫秒（本地）</td><td>—</td><td>2.95</td></tr>
-      <tr><th scope="row">位点对取均值基线</th><td>9.30 毫秒（本地）</td><td>—</td><td>3.04</td></tr></tbody></table>
-      </div>
-      <h4>合并批 T01–T20</h4>
-      <div class="table-scroll" tabindex="0" aria-label="合并批 T01–T20的作答与评分耗时">
-      <table class="result-table"><caption>合并批 T01–T20的作答与评分耗时</caption>
-      <thead><tr><th scope="col">模型或基线</th><th scope="col">有效作答耗时</th><th scope="col">尝试累计（分钟）</th><th scope="col">本地评分（毫秒）</th></tr></thead>
-      <tbody><tr><th scope="row">deepseek-v4-pro</th><td>75.05 分钟</td><td>108.66</td><td>5.49</td></tr>
-      <tr><th scope="row">GLM-5.3</th><td>59.78 分钟</td><td>69.97</td><td>5.54</td></tr>
-      <tr><th scope="row">kimi-3.1-pro</th><td>22.90 分钟</td><td>23.60</td><td>5.43</td></tr>
-      <tr><th scope="row">局部化学环境基线</th><td>19.01 毫秒（本地）</td><td>—</td><td>5.27</td></tr>
-      <tr><th scope="row">位点对取均值基线</th><td>19.13 毫秒（本地）</td><td>—</td><td>5.28</td></tr></tbody></table>
-      </div>
-      </details>
-      <p>模型展示名为 <code>deepseek-v4-pro</code>、<code>GLM-5.3</code>、<code>kimi-3.1-pro</code>。对应 API ID 为 <code>deepseek-v4-pro</code>、<code>glm-5.3</code>、<code>kimi-k3.1-pro</code>。</p>
-      </section>
-
-      <section class="topic-section" id="reference-score" aria-labelledby="reference-score-heading">
-        <h2 id="reference-score-heading">v3 三家模型的点位主分</h2>
-        <p>主分衡量模型把信号中心估得有多准。先对每种核的 MAE 按母分子等权汇总，再除以该核种的局部化学环境基线 MAE。两个比值等权平均为 <var>r</var>。氢和碳的基线分别为 0.36475 和 5.30875 ppm。</p>
-        <pre><code>r = (¹H MAE / 0.36475 + ¹³C MAE / 5.30875) / 2
-点位主分 = 100 / (1 + 3r)</code></pre>
-        <p>主分越高，点位越准。基线是 <strong>25 分</strong>，两种核的相对损失平均降到基线的一半时得 40 分，两种核的误差都为零时得 100 分。95% 区间质量见下一节。</p>
-        <div class="table-scroll" tabindex="0" aria-label="点位主分 · 同一批 10 个母分子">
-          <table class="result-table">
-            <caption>点位主分 · 同一批 10 个母分子</caption>
-            <thead><tr><th scope="col">模型或基线</th><th scope="col">点位主分</th><th scope="col">¹H MAE（ppm）</th><th scope="col">¹³C MAE（ppm）</th></tr></thead>
-            <tbody>
-              <tr><th scope="row">kimi-3.1-pro</th><td>28.58</td><td>0.266</td><td>4.981</td></tr>
-              <tr><th scope="row">GLM-5.3</th><td>25.31</td><td>0.364</td><td>5.144</td></tr>
-              <tr><th scope="row">局部化学环境基线</th><td>25.00</td><td>0.365</td><td>5.309</td></tr>
-              <tr><th scope="row">位点对取均值基线</th><td>24.76</td><td>0.365</td><td>5.439</td></tr>
-              <tr><th scope="row">deepseek-v4-pro</th><td>24.73</td><td>0.292</td><td>6.526</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <p>kimi-3.1-pro 在这批分子上两种核的 MAE 均最低。GLM-5.3 的氢 MAE 接近局部化学环境基线，碳 MAE 略低，主分为 25.31。</p>
-        <details class="direction-details">
-          <summary>查看位点对的方向正确率</summary>
-          <p>比较同一分子里两处信号的先后顺序。¹H 有 20 对、¹³C 有 19 对可判方向。方向正确率先在分子内平均，再对母分子等权平均。位点对取均值基线给每对位点相同的点预测，因此每对预测差为零。</p>
-          <div class="table-scroll" tabindex="0" aria-label="位点对方向正确率">
-            <table class="result-table">
-              <caption>位点对方向正确率</caption>
-              <thead><tr><th scope="col">模型或基线</th><th scope="col">¹H</th><th scope="col">¹³C</th></tr></thead>
-              <tbody>
-                <tr><th scope="row">kimi-3.1-pro</th><td>60%</td><td>65%</td></tr>
-                <tr><th scope="row">GLM-5.3</th><td>60%</td><td>65%</td></tr>
-                <tr><th scope="row">局部化学环境基线</th><td>25%</td><td>25%</td></tr>
-                <tr><th scope="row">位点对取均值基线</th><td>0%</td><td>0%</td></tr>
-                <tr><th scope="row">deepseek-v4-pro</th><td>70%</td><td>60%</td></tr>
-              </tbody>
-            </table>
-          </div>
+    <article class="topic-content result-content">
+      <section class="topic-section result-card" id="point-results" aria-labelledby="points-heading">
+        <span id="v4-results" class="result-anchor" aria-hidden="true"></span>
+        <span id="v4-baselines" class="result-anchor" aria-hidden="true"></span>
+        <h2 id="points-heading">点位主分</h2>
+        <p class="result-note">合并批 T01–T20。MAE 单位为 ppm，方向正确率按母分子等权平均，计入统计的位点对为 ¹H 38 对，¹³C 39 对。</p>
+        <div class="table-scroll result-scroll" tabindex="0" role="region" aria-label="合并批 T01–T20点位主分和方向">
+  <table class="measure-table point-table">
+    <thead><tr><th scope="col">模型或基线</th><th scope="col">点位主分</th><th scope="col">¹H MAE</th><th scope="col">¹³C MAE</th><th scope="col">¹H 方向</th><th scope="col">¹³C 方向</th></tr></thead>
+    <tbody>
+      <tr class="best"><th scope="row">deepseek-v4-pro</th><td><strong>35.53</strong></td><td>0.195</td><td>3.583</td><td>60.0%</td><td>75.0%</td></tr>
+      <tr><th scope="row">kimi-3.1-pro</th><td>32.05</td><td>0.241</td><td>4.000</td><td>55.0%</td><td>60.0%</td></tr>
+      <tr><th scope="row">GLM-5.3</th><td>30.06</td><td>0.258</td><td>4.483</td><td>70.0%</td><td>50.0%</td></tr>
+      <tr class="baseline"><th scope="row">局部化学环境基线</th><td>21.70</td><td>0.385</td><td>7.164</td><td>20.0%</td><td>15.0%</td></tr>
+      <tr class="baseline"><th scope="row">位点对取均值基线</th><td>21.20</td><td>0.407</td><td>7.229</td><td>0.0%</td><td>0.0%</td></tr>
+    </tbody>
+  </table>
+</div>
+        <details>
+          <summary>查看原批和新增批</summary>
+          <div class="breakdown-group"><h3>原批 T01–T10</h3><p class="result-note">计入方向统计的位点对为 ¹H 20 对，¹³C 19 对。</p>
+<div class="table-scroll result-scroll" tabindex="0" role="region" aria-label="原批 T01–T10点位主分和方向">
+  <table class="measure-table point-table">
+    <thead><tr><th scope="col">模型或基线</th><th scope="col">点位主分</th><th scope="col">¹H MAE</th><th scope="col">¹³C MAE</th><th scope="col">¹H 方向</th><th scope="col">¹³C 方向</th></tr></thead>
+    <tbody>
+      <tr class="best"><th scope="row">deepseek-v4-pro</th><td><strong>30.88</strong></td><td>0.231</td><td>4.559</td><td>55.0%</td><td>75.0%</td></tr>
+      <tr><th scope="row">kimi-3.1-pro</th><td>30.34</td><td>0.265</td><td>4.266</td><td>50.0%</td><td>55.0%</td></tr>
+      <tr><th scope="row">GLM-5.3</th><td>26.13</td><td>0.308</td><td>5.524</td><td>60.0%</td><td>45.0%</td></tr>
+      <tr class="baseline"><th scope="row">局部化学环境基线</th><td>25.00</td><td>0.365</td><td>5.309</td><td>25.0%</td><td>25.0%</td></tr>
+      <tr class="baseline"><th scope="row">位点对取均值基线</th><td>24.76</td><td>0.365</td><td>5.439</td><td>0.0%</td><td>0.0%</td></tr>
+    </tbody>
+  </table>
+</div></div>
+<div class="breakdown-group"><h3>新增批 T11–T20</h3><p class="result-note">计入方向统计的位点对为 ¹H 18 对，¹³C 20 对。</p>
+<div class="table-scroll result-scroll" tabindex="0" role="region" aria-label="新增批 T11–T20点位主分和方向">
+  <table class="measure-table point-table">
+    <thead><tr><th scope="col">模型或基线</th><th scope="col">点位主分</th><th scope="col">¹H MAE</th><th scope="col">¹³C MAE</th><th scope="col">¹H 方向</th><th scope="col">¹³C 方向</th></tr></thead>
+    <tbody>
+      <tr class="best"><th scope="row">deepseek-v4-pro</th><td><strong>41.82</strong></td><td>0.159</td><td>2.608</td><td>65.0%</td><td>75.0%</td></tr>
+      <tr><th scope="row">GLM-5.3</th><td>35.38</td><td>0.207</td><td>3.443</td><td>80.0%</td><td>55.0%</td></tr>
+      <tr><th scope="row">kimi-3.1-pro</th><td>33.97</td><td>0.216</td><td>3.734</td><td>60.0%</td><td>65.0%</td></tr>
+      <tr class="baseline"><th scope="row">局部化学环境基线</th><td>19.17</td><td>0.406</td><td>9.020</td><td>15.0%</td><td>5.0%</td></tr>
+      <tr class="baseline"><th scope="row">位点对取均值基线</th><td>18.53</td><td>0.449</td><td>9.020</td><td>0.0%</td><td>0.0%</td></tr>
+    </tbody>
+  </table>
+</div></div>
+        </details>
+        <details>
+          <summary>查看位点对差值误差</summary>
+          <p class="result-note">每对位点先算右减左，再求预测差和实测差的绝对误差。MAE 单位为 ppm。</p>
+          <div class="table-scroll result-scroll" tabindex="0" role="region" aria-label="位点对差值 MAE">
+  <table class="measure-table difference-table">
+    <thead><tr><th scope="col">模型或基线</th><th scope="col">合并 ¹H</th><th scope="col">合并 ¹³C</th><th scope="col">原批 ¹H</th><th scope="col">原批 ¹³C</th><th scope="col">新增 ¹H</th><th scope="col">新增 ¹³C</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">deepseek-v4-pro</th><td>0.278</td><td>3.791</td><td>0.351</td><td>5.197</td><td>0.204</td><td>2.386</td></tr>
+      <tr><th scope="row">kimi-3.1-pro</th><td>0.369</td><td>6.438</td><td>0.389</td><td>6.532</td><td>0.350</td><td>6.344</td></tr>
+      <tr><th scope="row">GLM-5.3</th><td>0.362</td><td>6.338</td><td>0.458</td><td>7.726</td><td>0.266</td><td>4.949</td></tr>
+      <tr class="baseline"><th scope="row">局部化学环境基线</th><td>0.327</td><td>4.715</td><td>0.439</td><td>5.466</td><td>0.215</td><td>3.964</td></tr>
+      <tr class="baseline"><th scope="row">位点对取均值基线</th><td>0.364</td><td>5.155</td><td>0.434</td><td>6.657</td><td>0.294</td><td>3.654</td></tr>
+    </tbody>
+  </table>
+</div>
         </details>
       </section>
 
-      <section class="topic-section" id="results" aria-labelledby="results-heading">
-        <h2 id="results-heading">v3 试跑的 95% 区间质量</h2>
-        <p>区间单独比较 Winkler 损失、覆盖率和宽度。Winkler 越低越好。两种核分别报告，每种核有 40 个评分位点。</p>
-        <div class="table-scroll" tabindex="0" aria-label="¹H · 40 个测试位点">
-          <table class="result-table">
-            <caption>¹H · 40 个测试位点</caption>
-            <thead><tr><th scope="col">模型或基线</th><th scope="col">Winkler（ppm）</th><th scope="col">实测覆盖率</th><th scope="col">平均宽度（ppm）</th><th scope="col">低于下界 / 高于上界</th></tr></thead>
-            <tbody>
-              <tr><th scope="row">kimi-3.1-pro</th><td>5.441</td><td>25/40（62.5%）</td><td>0.420</td><td>8 / 7</td></tr>
-              <tr><th scope="row">GLM-5.3</th><td>7.614</td><td>23/40（57.5%）</td><td>0.564</td><td>6 / 11</td></tr>
-              <tr><th scope="row">局部化学环境基线</th><td>2.340</td><td>37/40（92.5%）</td><td>2.000</td><td>0 / 3</td></tr>
-              <tr><th scope="row">位点对取均值基线</th><td>2.750</td><td>36/40（90.0%）</td><td>2.000</td><td>1 / 3</td></tr>
-              <tr><th scope="row">deepseek-v4-pro</th><td>6.760</td><td>23/40（57.5%）</td><td>0.390</td><td>8 / 9</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="table-scroll" tabindex="0" aria-label="¹³C · 40 个测试位点">
-          <table class="result-table">
-            <caption>¹³C · 40 个测试位点</caption>
-            <thead><tr><th scope="col">模型或基线</th><th scope="col">Winkler（ppm）</th><th scope="col">实测覆盖率</th><th scope="col">平均宽度（ppm）</th><th scope="col">低于下界 / 高于上界</th></tr></thead>
-            <tbody>
-              <tr><th scope="row">kimi-3.1-pro</th><td>127.250</td><td>13/40（32.5%）</td><td>4.900</td><td>16 / 11</td></tr>
-              <tr><th scope="row">GLM-5.3</th><td>108.360</td><td>16/40（40.0%）</td><td>6.710</td><td>19 / 5</td></tr>
-              <tr><th scope="row">局部化学环境基线</th><td>34.200</td><td>38/40（95.0%）</td><td>30.000</td><td>1 / 1</td></tr>
-              <tr><th scope="row">位点对取均值基线</th><td>33.700</td><td>38/40（95.0%）</td><td>30.000</td><td>1 / 1</td></tr>
-              <tr><th scope="row">deepseek-v4-pro</th><td>178.530</td><td>12/40（30.0%）</td><td>5.480</td><td>16 / 12</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <p>两条基线都使用固定区间宽度，¹H 为 2.0 ppm，¹³C 为 30.0 ppm。这批试跑中，三家模型报的区间更窄，实测覆盖率和 Winkler 损失均逊于两条基线。</p>
-        <p>试跑的 API ID 分别为 <code>deepseek-v4-pro</code>、<code>glm-5.3</code>、<code>kimi-k3.1-pro</code>。</p>
+      <section class="topic-section result-card" id="interval-results" aria-labelledby="intervals-heading">
+        <h2 id="intervals-heading">95% 预测区间</h2>
+        <p class="result-note">下表为合并批。名义覆盖率为 95%。Winkler 损失兼顾区间宽度和超出区间的距离，单位为 ppm，越低越好。</p>
+        <div class="nucleus-results"><h3>¹H</h3><div class="table-scroll result-scroll" tabindex="0" role="region" aria-label="合并批 T01–T20 ¹H区间质量">
+  <table class="measure-table interval-table">
+    <thead><tr><th scope="col">模型或基线</th><th scope="col">实测覆盖率</th><th scope="col">Winkler</th><th scope="col">平均宽度</th><th scope="col">低于下限 / 高于上限</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">deepseek-v4-pro</th><td>65% <small>52/80</small></td><td>3.846</td><td>0.381</td><td>11 / 17</td></tr>
+      <tr><th scope="row">kimi-3.1-pro</th><td>66.25% <small>53/80</small></td><td>5.822</td><td>0.357</td><td>12 / 15</td></tr>
+      <tr><th scope="row">GLM-5.3</th><td>68.75% <small>55/80</small></td><td>4.019</td><td>0.574</td><td>13 / 12</td></tr>
+      <tr class="baseline"><th scope="row">局部化学环境基线</th><td>92.5% <small>74/80</small></td><td>2.265</td><td>2.000</td><td>0 / 6</td></tr>
+      <tr class="baseline"><th scope="row">位点对取均值基线</th><td>91.25% <small>73/80</small></td><td>2.470</td><td>2.000</td><td>1 / 6</td></tr>
+    </tbody>
+  </table>
+</div></div>
+<div class="nucleus-results"><h3>¹³C</h3><div class="table-scroll result-scroll" tabindex="0" role="region" aria-label="合并批 T01–T20 ¹³C区间质量">
+  <table class="measure-table interval-table">
+    <thead><tr><th scope="col">模型或基线</th><th scope="col">实测覆盖率</th><th scope="col">Winkler</th><th scope="col">平均宽度</th><th scope="col">低于下限 / 高于上限</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">deepseek-v4-pro</th><td>51.25% <small>41/80</small></td><td>82.986</td><td>4.881</td><td>24 / 15</td></tr>
+      <tr><th scope="row">kimi-3.1-pro</th><td>48.75% <small>39/80</small></td><td>98.129</td><td>4.685</td><td>16 / 25</td></tr>
+      <tr><th scope="row">GLM-5.3</th><td>56.25% <small>45/80</small></td><td>91.424</td><td>7.031</td><td>21 / 14</td></tr>
+      <tr class="baseline"><th scope="row">局部化学环境基线</th><td>86.25% <small>69/80</small></td><td>61.800</td><td>30.000</td><td>5 / 6</td></tr>
+      <tr class="baseline"><th scope="row">位点对取均值基线</th><td>86.25% <small>69/80</small></td><td>61.550</td><td>30.000</td><td>5 / 6</td></tr>
+    </tbody>
+  </table>
+</div></div>
+        <details>
+          <summary>查看原批和新增批</summary>
+          <div class="breakdown-group"><h3>原批 T01–T10</h3>
+<div class="nucleus-results"><h3>¹H</h3><div class="table-scroll result-scroll" tabindex="0" role="region" aria-label="原批 T01–T10 ¹H区间质量">
+  <table class="measure-table interval-table">
+    <thead><tr><th scope="col">模型或基线</th><th scope="col">实测覆盖率</th><th scope="col">Winkler</th><th scope="col">平均宽度</th><th scope="col">低于下限 / 高于上限</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">deepseek-v4-pro</th><td>62.5% <small>25/40</small></td><td>4.972</td><td>0.422</td><td>6 / 9</td></tr>
+      <tr><th scope="row">kimi-3.1-pro</th><td>62.5% <small>25/40</small></td><td>6.133</td><td>0.403</td><td>7 / 8</td></tr>
+      <tr><th scope="row">GLM-5.3</th><td>67.5% <small>27/40</small></td><td>4.431</td><td>0.650</td><td>7 / 6</td></tr>
+      <tr class="baseline"><th scope="row">局部化学环境基线</th><td>92.5% <small>37/40</small></td><td>2.340</td><td>2.000</td><td>0 / 3</td></tr>
+      <tr class="baseline"><th scope="row">位点对取均值基线</th><td>90% <small>36/40</small></td><td>2.750</td><td>2.000</td><td>1 / 3</td></tr>
+    </tbody>
+  </table>
+</div></div>
+<div class="nucleus-results"><h3>¹³C</h3><div class="table-scroll result-scroll" tabindex="0" role="region" aria-label="原批 T01–T10 ¹³C区间质量">
+  <table class="measure-table interval-table">
+    <thead><tr><th scope="col">模型或基线</th><th scope="col">实测覆盖率</th><th scope="col">Winkler</th><th scope="col">平均宽度</th><th scope="col">低于下限 / 高于上限</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">deepseek-v4-pro</th><td>45% <small>18/40</small></td><td>112.275</td><td>5.115</td><td>14 / 8</td></tr>
+      <tr><th scope="row">kimi-3.1-pro</th><td>47.5% <small>19/40</small></td><td>106.210</td><td>4.970</td><td>10 / 11</td></tr>
+      <tr><th scope="row">GLM-5.3</th><td>52.5% <small>21/40</small></td><td>115.323</td><td>7.473</td><td>14 / 5</td></tr>
+      <tr class="baseline"><th scope="row">局部化学环境基线</th><td>95% <small>38/40</small></td><td>34.200</td><td>30.000</td><td>1 / 1</td></tr>
+      <tr class="baseline"><th scope="row">位点对取均值基线</th><td>95% <small>38/40</small></td><td>33.700</td><td>30.000</td><td>1 / 1</td></tr>
+    </tbody>
+  </table>
+</div></div></div>
+<div class="breakdown-group"><h3>新增批 T11–T20</h3>
+<div class="nucleus-results"><h3>¹H</h3><div class="table-scroll result-scroll" tabindex="0" role="region" aria-label="新增批 T11–T20 ¹H区间质量">
+  <table class="measure-table interval-table">
+    <thead><tr><th scope="col">模型或基线</th><th scope="col">实测覆盖率</th><th scope="col">Winkler</th><th scope="col">平均宽度</th><th scope="col">低于下限 / 高于上限</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">deepseek-v4-pro</th><td>67.5% <small>27/40</small></td><td>2.721</td><td>0.341</td><td>5 / 8</td></tr>
+      <tr><th scope="row">kimi-3.1-pro</th><td>70% <small>28/40</small></td><td>5.512</td><td>0.312</td><td>5 / 7</td></tr>
+      <tr><th scope="row">GLM-5.3</th><td>70% <small>28/40</small></td><td>3.607</td><td>0.497</td><td>6 / 6</td></tr>
+      <tr class="baseline"><th scope="row">局部化学环境基线</th><td>92.5% <small>37/40</small></td><td>2.190</td><td>2.000</td><td>0 / 3</td></tr>
+      <tr class="baseline"><th scope="row">位点对取均值基线</th><td>92.5% <small>37/40</small></td><td>2.190</td><td>2.000</td><td>0 / 3</td></tr>
+    </tbody>
+  </table>
+</div></div>
+<div class="nucleus-results"><h3>¹³C</h3><div class="table-scroll result-scroll" tabindex="0" role="region" aria-label="新增批 T11–T20 ¹³C区间质量">
+  <table class="measure-table interval-table">
+    <thead><tr><th scope="col">模型或基线</th><th scope="col">实测覆盖率</th><th scope="col">Winkler</th><th scope="col">平均宽度</th><th scope="col">低于下限 / 高于上限</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">deepseek-v4-pro</th><td>57.5% <small>23/40</small></td><td>53.697</td><td>4.647</td><td>10 / 7</td></tr>
+      <tr><th scope="row">kimi-3.1-pro</th><td>50% <small>20/40</small></td><td>90.047</td><td>4.400</td><td>6 / 14</td></tr>
+      <tr><th scope="row">GLM-5.3</th><td>60% <small>24/40</small></td><td>67.525</td><td>6.590</td><td>7 / 9</td></tr>
+      <tr class="baseline"><th scope="row">局部化学环境基线</th><td>77.5% <small>31/40</small></td><td>89.400</td><td>30.000</td><td>4 / 5</td></tr>
+      <tr class="baseline"><th scope="row">位点对取均值基线</th><td>77.5% <small>31/40</small></td><td>89.400</td><td>30.000</td><td>4 / 5</td></tr>
+    </tbody>
+  </table>
+</div></div></div>
+        </details>
       </section>
 
-      <section class="topic-section" id="protocol" aria-labelledby="protocol-heading">
-        <h2 id="protocol-heading">试跑口径与计时</h2>
-        <p>首轮三家都用 16,384 token 上限，共同有效 5 题。按题补跑后获得 10 题共同有效结果。同一题的三家使用同一份离线输入和同一输出上限。纳入 10 题汇总的协议分别有 5 题使用 16,384、3 题使用 32,768、2 题使用 65,536 token。</p>
-        <div class="table-scroll" tabindex="0" aria-label="首轮共同有效的 5 题 · 每种核 20 个位点">
-          <table class="result-table">
-            <caption>首轮共同有效的 5 题 · 每种核 20 个位点</caption>
-            <thead><tr><th scope="col">模型</th><th scope="col">¹H MAE（ppm）</th><th scope="col">¹H Winkler（ppm）</th><th scope="col">¹H 覆盖率</th><th scope="col">¹³C MAE（ppm）</th><th scope="col">¹³C Winkler（ppm）</th><th scope="col">¹³C 覆盖率</th></tr></thead>
-            <tbody>
-              <tr><th scope="row">deepseek-v4-pro</th><td>0.314</td><td>6.369</td><td>55.0%</td><td>8.113</td><td>243.410</td><td>35.0%</td></tr>
-              <tr><th scope="row">GLM-5.3</th><td>0.292</td><td>5.778</td><td>60.0%</td><td>5.038</td><td>98.800</td><td>35.0%</td></tr>
-              <tr><th scope="row">kimi-3.1-pro</th><td>0.288</td><td>7.002</td><td>60.0%</td><td>5.588</td><td>153.620</td><td>25.0%</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="table-scroll" tabindex="0" aria-label="首轮运行状态与最终 10 题的计时">
-          <table class="result-table">
-            <caption>首轮运行状态与最终 10 题的计时</caption>
-            <thead><tr><th scope="col">模型</th><th scope="col">首轮有效</th><th scope="col">首轮截断</th><th scope="col">首轮缺表头</th><th scope="col">有效作答累计（分钟）</th><th scope="col">本地评分（毫秒）</th></tr></thead>
-            <tbody>
-              <tr><th scope="row">deepseek-v4-pro</th><td>9</td><td>0</td><td>1</td><td>30.59</td><td>3.0</td></tr>
-              <tr><th scope="row">GLM-5.3</th><td>6</td><td>4</td><td>0</td><td>12.45</td><td>2.7</td></tr>
-              <tr><th scope="row">kimi-3.1-pro</th><td>10</td><td>0</td><td>0</td><td>12.88</td><td>3.2</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <p>有效作答累计为入表的 10 次有效响应的墙钟时间之和，含传输和服务端等待。GLM-5.3 在 T09 曾超时约 600 秒。计入这次超时后，所选十题协议的累计请求耗时为 22.45 分钟。截断、格式失败和超时单独记录。</p>
+      <section class="topic-section result-card" id="timing" aria-labelledby="timing-heading">
+        <h2 id="timing-heading">作答与评分耗时</h2>
+        <p class="result-note">模型耗时按每个请求的墙钟时间累计，含网络传输和服务端等待。全部尝试计入格式失败、超时及重跑。基线显示本地生成耗时。</p>
+        <div class="table-scroll result-scroll" tabindex="0" role="region" aria-label="合并批 T01–T20作答与评分耗时">
+  <table class="measure-table timing-table">
+    <thead><tr><th scope="col">模型或基线</th><th scope="col">有效作答</th><th scope="col">全部尝试</th><th scope="col">本地评分</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">deepseek-v4-pro</th><td>75.05 分钟</td><td>108.66 分钟</td><td>5.49 毫秒</td></tr>
+      <tr><th scope="row">kimi-3.1-pro</th><td>22.90 分钟</td><td>23.60 分钟</td><td>5.43 毫秒</td></tr>
+      <tr><th scope="row">GLM-5.3</th><td>59.78 分钟</td><td>69.97 分钟</td><td>5.54 毫秒</td></tr>
+      <tr class="baseline"><th scope="row">局部化学环境基线</th><td>19.01 毫秒</td><td>—</td><td>5.27 毫秒</td></tr>
+      <tr class="baseline"><th scope="row">位点对取均值基线</th><td>19.13 毫秒</td><td>—</td><td>5.28 毫秒</td></tr>
+    </tbody>
+  </table>
+</div>
+        <details>
+          <summary>查看原批和新增批</summary>
+          <div class="breakdown-group"><h3>原批 T01–T10</h3>
+<div class="table-scroll result-scroll" tabindex="0" role="region" aria-label="原批 T01–T10作答与评分耗时">
+  <table class="measure-table timing-table">
+    <thead><tr><th scope="col">模型或基线</th><th scope="col">有效作答</th><th scope="col">全部尝试</th><th scope="col">本地评分</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">deepseek-v4-pro</th><td>39.51 分钟</td><td>57.72 分钟</td><td>3.12 毫秒</td></tr>
+      <tr><th scope="row">kimi-3.1-pro</th><td>13.45 分钟</td><td>13.45 分钟</td><td>2.97 毫秒</td></tr>
+      <tr><th scope="row">GLM-5.3</th><td>40.62 分钟</td><td>50.62 分钟</td><td>3.09 毫秒</td></tr>
+      <tr class="baseline"><th scope="row">局部化学环境基线</th><td>28.35 毫秒</td><td>—</td><td>3.64 毫秒</td></tr>
+      <tr class="baseline"><th scope="row">位点对取均值基线</th><td>28.48 毫秒</td><td>—</td><td>2.98 毫秒</td></tr>
+    </tbody>
+  </table>
+</div></div>
+<div class="breakdown-group"><h3>新增批 T11–T20</h3>
+<div class="table-scroll result-scroll" tabindex="0" role="region" aria-label="新增批 T11–T20作答与评分耗时">
+  <table class="measure-table timing-table">
+    <thead><tr><th scope="col">模型或基线</th><th scope="col">有效作答</th><th scope="col">全部尝试</th><th scope="col">本地评分</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">deepseek-v4-pro</th><td>35.54 分钟</td><td>50.94 分钟</td><td>3.04 毫秒</td></tr>
+      <tr><th scope="row">kimi-3.1-pro</th><td>9.45 分钟</td><td>10.15 分钟</td><td>3.16 毫秒</td></tr>
+      <tr><th scope="row">GLM-5.3</th><td>19.16 分钟</td><td>19.35 分钟</td><td>3.27 毫秒</td></tr>
+      <tr class="baseline"><th scope="row">局部化学环境基线</th><td>9.23 毫秒</td><td>—</td><td>2.95 毫秒</td></tr>
+      <tr class="baseline"><th scope="row">位点对取均值基线</th><td>9.30 毫秒</td><td>—</td><td>3.04 毫秒</td></tr>
+    </tbody>
+  </table>
+</div></div>
+        </details>
       </section>
 
-      <section class="topic-section" id="prediction-interval" aria-labelledby="interval-heading">
-        <h2 id="interval-heading">95% 预测区间怎么用</h2>
-        <h3>每个位点交三个数</h3>
-        <p>预测目标是在题面条件下测得的信号中心。模型提交第 2.5 百分位 <var>L</var>、中位数 <var>p</var> 和第 97.5 百分位 <var>U</var>，要求 <var>L</var> ≤ <var>p</var> ≤ <var>U</var>。等尾表示模型在两端各留 2.5% 的概率，两端距中位数可以不同。95% 是逐位点预测的名义覆盖率。</p>
-        <h3>同时看覆盖和宽度</h3>
-        <p>实测值 <var>y</var> 落入闭区间便记为覆盖，点误差单独算 |<var>p</var> − <var>y</var>|。区间用 Winkler 损失，越低越好。区间变宽会增加基础损失，真值漏在外面会按超出距离加罚。系数 40 来自 2 ÷ (1 − 0.95)。 <a href="https://sites.stat.washington.edu/raftery/Research/PDF/Gneiting2007jasa.pdf#page=12">原始评分公式</a></p>
-        <pre><code>区间损失 = (U − L) + 40 × [max(L − y, 0) + max(y − U, 0)]</code></pre>
-        <p>实测值为 8.48 ppm 时，报 [8.33, 8.63] 得 0.30 ppm。报同样宽度的 [8.00, 8.30] 时，漏掉 0.18 ppm，损失为 0.30 + 40 × 0.18 = 7.50 ppm。</p>
-        <h3>试跑的覆盖率怎样读</h3>
-        <p>¹H 命中 23–25 个位点，¹³C 命中 12–16 个，各核种分母都是 40。两种核都明显低于名义覆盖率。平均宽度衡量区间给得有多宽，上下侧漏报帮助定位偏差。例如 GLM-5.3 的 ¹³C 实测值有 19 次低于下界、5 次高于上界，区间在这批分子上更常放得偏高。</p>
-        <p>同一分子的多个位点可能相关。这批 10 个母分子可用于诊断欠覆盖，稳定评估校准需要更多独立母分子。同条件重复测量是另一个问题，本批样本的实验噪声仍待估计。 <a href="../bench/nmr-uncertainty.md">数据、预测区间与测量重复性的完整说明</a></p>
+      <section class="topic-section result-card" id="answers" aria-labelledby="answers-heading">
+        <h2 id="answers-heading">逐分子答卷</h2>
+        <p class="result-note">选一个分子并排查看三份计分答卷。加粗数值为点预测，下行是 95% 预测区间，单位均为 ppm。</p>
+        <div class="answer-toolbar">
+          <label for="answer-sample">测试分子</label>
+          <select id="answer-sample" disabled><option value="T01">T01</option><option value="T02">T02</option><option value="T03">T03</option><option value="T04">T04</option><option value="T05">T05</option><option value="T06">T06</option><option value="T07">T07</option><option value="T08">T08</option><option value="T09">T09</option><option value="T10">T10</option><option value="T11">T11</option><option value="T12">T12</option><option value="T13">T13</option><option value="T14">T14</option><option value="T15">T15</option><option value="T16">T16</option><option value="T17">T17</option><option value="T18">T18</option><option value="T19">T19</option><option value="T20">T20</option></select>
+          <a class="challenge-download" href="./resources/nmr-shift-prediction/answers/all-predictions.csv" download>下载全部答卷 CSV</a>
+        </div>
+        <p id="answer-status" class="result-note" role="status">可下载数字答卷。</p>
+        <div id="answer-view" class="table-scroll result-scroll" tabindex="0" role="region" aria-label="逐分子答卷表" hidden>
+          <table class="measure-table answer-table">
+            <thead><tr><th scope="col">位点</th><th scope="col">deepseek-v4-pro</th><th scope="col">kimi-3.1-pro</th><th scope="col">GLM-5.3</th></tr></thead>
+            <tbody id="answer-rows"></tbody>
+          </table>
+        </div>
+        <div class="answer-files" aria-label="按模型下载 CSV">
+            <a href="./resources/nmr-shift-prediction/answers/deepseek.csv" download>deepseek-v4-pro</a>
+            <a href="./resources/nmr-shift-prediction/answers/kimi.csv" download>kimi-3.1-pro</a>
+            <a href="./resources/nmr-shift-prediction/answers/glm.csv" download>GLM-5.3</a>
+        </div>
       </section>
+
+      <details class="result-card result-method" id="method">
+        <summary>评分公式与试跑协议</summary>
+        <p>先在母分子内计算两核 MAE，再对母分子等权。两核 MAE 分别除以固定的 ppm 量尺后等权合成。只有点位主分用于排名。</p>
+        <pre><code>r = (¹H MAE / 0.36475 + ¹³C MAE / 5.30875) / 2
+点位主分 = 100 / (1 + 3r)</code></pre>
+        <p>三家只收到作答包的公开材料，每个分子独立请求，无检索或工具调用，统一输出上限为 65,536 tokens。D00 只用于演示格式，不计分。</p>
+        <p>首轮有效答卷为 deepseek-v4-pro 15/20、GLM-5.3 19/20、kimi-3.1-pro 20/20。T19 的多次回复缺少表头，三家统一增加公开表头提示后重跑，均采用该次计分答卷。</p>
+        <p>接口模型名为 <code>deepseek-v4-pro</code>、<code>kimi-k3.1-pro</code> 和 <code>glm-5.3</code>。</p>
+      </details>
     </article>
   </main>
 </body>

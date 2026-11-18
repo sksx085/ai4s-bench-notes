@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="从编号分子结构和部分已归属信号预测 160 个 ¹H、¹³C 化学位移及各自的 95% 预测区间。">
-  <title>核磁位移预测任务 v4 | 每日出题实践</title>
+  <title>核磁位移预测任务 | 每日出题实践</title>
   <link rel="stylesheet" href="../styles.css">
   <link rel="stylesheet" href="./challenge.css">
 </head>
@@ -25,7 +25,7 @@
   <main class="wrap" id="main" tabindex="-1">
     <header class="intro intro-topic challenge-intro" id="prediction-v4">
       <a class="page-back" href="./index.html#practice-2026-11-18"><span aria-hidden="true">←</span> 返回每日出题实践</a>
-      <p class="meta"><time datetime="2026-11-18">2026.11.18</time><span>化学 · 核磁共振 · v4 封存版</span></p>
+      <p class="meta"><time datetime="2026-11-18">2026.11.18</time><span>化学 · 核磁共振</span></p>
       <h1>核磁位移预测任务</h1>
       <dl class="challenge-stats">
         <div><dt>公开样例</dt><dd>1</dd></div>
@@ -33,7 +33,7 @@
         <div><dt>预测位点</dt><dd>160</dd></div>
       </dl>
       <a class="challenge-download" href="./resources/nmr-shift-prediction/c10-nmr-demo-v4.zip" download>下载作答包 <span aria-hidden="true">↓</span></a>
-      <p class="case-links"><a href="./nmr-shift-prediction-results.html#v4-results">查看 v4 三家模型与两条基线 <span aria-hidden="true">→</span></a></p>
+      <p class="case-links"><a href="./nmr-shift-prediction-results.html">查看评测结果与答卷 <span aria-hidden="true">→</span></a></p>
     </header>
 
     <nav class="challenge-nav" aria-label="题目内容">
@@ -47,7 +47,7 @@
       <a href="#completion">完成标准</a>
     </nav>
 
-    <article class="topic-content challenge-content" aria-label="核磁位移预测任务 v4 题面">
+    <article class="topic-content challenge-content" aria-label="核磁位移预测任务题面">
       <section id="overview" class="topic-section" aria-labelledby="overview-heading">
         <h2 id="overview-heading">这道题在做什么</h2>
         <p>核磁共振谱把分子里不同位置的氢和碳显示成信号。题包给出编号结构图和少量已知的实测读数。请给指定位置填三个数，分别是你预测的信号中心，以及实测值可能落入的范围的下限和上限。</p>
@@ -179,7 +179,7 @@
         <pre><code class="language-text">r = (¹H MAE / 0.36475 + ¹³C MAE / 5.30875) / 2
         点位主分 = 100 / (1 + 3r)
         </code></pre>
-        <p>在首批 10 个分子上，局部环境基线是 25 分。两核 MAE 都减半得到 40 分，都为零得到 100 分。扩充批使用固定的两个误差分母，扩充批的基线得分可以不同。完整首批试跑和两条基线见 <a href="./nmr-shift-prediction-results.html#reference-score">v3 试跑结果</a>。</p>
+        <p>在首批 10 个分子上，局部环境基线是 25 分。两核 MAE 都减半得到 40 分，都为零得到 100 分。扩充批使用固定的两个误差分母，扩充批的基线得分可以不同。</p>
         <p>两种核分别统计。各分项先在母分子内平均，再对母分子等权。方向正确率只在可判方向的位点对上计算。若实测差的绝对值不超过左右两个位点末位报告步长的一半之和，该对只计入差值 MAE。其余位点对比较预测差和实测差是否同号。预测差为零记为方向错误。先算每个分子的同号比例，再对至少有一对可判方向的分子等权平均。</p>
         <div class="table-scroll" tabindex="0" role="region" aria-label="评分表格"><table>
         <thead>
@@ -272,7 +272,7 @@
         </tbody>
         </table></div>
         <p>如果实测值落在下限和上限之间，含端点，就记为覆盖。Winkler 损失等于区间宽度加上实测中心超出区间距离的 40 倍。区间的覆盖、宽度和损失单列，并报告低于下限、高于上限的次数。</p>
-        <p class="case-links"><a href="./nmr-shift-prediction-results.html#v4-results">查看 20 个分子的试跑与基线</a> · <a href="../bench/workflow.html#nmr-uncertainty">区间设计依据</a></p>
+        <p class="case-links"><a href="./nmr-shift-prediction-results.html">查看成绩与答卷</a> · <a href="../bench/workflow.html#nmr-uncertainty">区间设计依据</a></p>
       </section>
 
       <section id="constraints" class="topic-section" aria-labelledby="constraints-heading">
