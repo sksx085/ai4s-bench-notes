@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="从编号分子结构和部分已归属信号预测 80 个 ¹H、¹³C 化学位移及各自的 95% 预测区间。">
+  <title>C10 核磁位移预测 Demo v3 | 每日出题实践</title>
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="./challenge.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="wordmark" href="../index.html" aria-label="AI4S Bench 笔记首页">AI4S <span>Bench Notes</span></a>
+      <nav aria-label="栏目">
+        <a href="../bench.html">Bench 指标</a>
+        <a href="./index.html" aria-current="location">每日出题实践</a>
+        <a href="../papers.html">论文更新</a>
+        <a href="../skills.html">Skills 与插件</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap" id="main" tabindex="-1">
+    <header class="intro intro-topic challenge-intro" id="prediction-v3">
+      <a class="page-back" href="./nmr-shift-prediction-archive.html"><span aria-hidden="true">←</span> 返回历史版本</a>
+      <p class="meta"><time datetime="2026-11-17">2026.11.17</time><span>化学 · 核磁共振 · v3 存档</span></p>
+      <h1>从分子结构预测核磁位移</h1>
+      <p>本页存档 v3 的题面与 10 个测试分子。试跑后采用的点位主分以结果页为准。<a href="./nmr-shift-prediction.html">查看当前 Demo</a></p>
+      <dl class="challenge-stats">
+        <div><dt>公开样例</dt><dd>1</dd></div>
+        <div><dt>测试母分子</dt><dd>10</dd></div>
+        <div><dt>预测位点</dt><dd>80</dd></div>
+      </dl>
+      <a class="challenge-download" href="./resources/nmr-shift-prediction/c10-nmr-demo-v3.zip" download>下载作答包 <span aria-hidden="true">↓</span></a>
+      <p class="case-links"><a href="./nmr-shift-prediction-results.html">查看 v3 三家模型试跑结果 <span aria-hidden="true">→</span></a></p>
+    </header>
+
+    <nav class="challenge-nav" aria-label="题目内容">
+      <a href="#overview">概览</a>
+      <a href="#goal">目标</a>
+      <a href="#background">背景</a>
+      <a href="#input">输入</a>
+      <a href="#output">输出</a>
+      <a href="#scoring">评分</a>
+      <a href="#constraints">约束</a>
+      <a href="#completion">完成标准</a>
+    </nav>
+
+    <article class="topic-content challenge-content" aria-label="C10 核磁位移预测题面">
+      <section id="overview" class="topic-section" aria-labelledby="overview-heading">
+        <h2 id="overview-heading">这道题在做什么（给非专业读者）</h2>
+        <p>给你 10 个分子的编号结构、测量条件和少量已知的氢谱、碳谱信号，请预测其余指定信号在谱上的位置，并为每个预测给出一个 95% 区间。</p>
+        <h3>几个词是什么意思</h3>
+        <div class="table-scroll"><table>
+        <thead>
+        <tr>
+        <th>词</th>
+        <th>通俗解释</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td>氢谱（¹H）和碳谱（¹³C）</td>
+        <td>分别记录氢核和某种碳核的信号。两张谱各有自己的刻度，分开看。</td>
+        </tr>
+        <tr>
+        <td>化学位移（ppm）</td>
+        <td>信号在谱轴上的位置。本题预测信号中心的刻度值。</td>
+        </tr>
+        <tr>
+        <td>位点和归属</td>
+        <td>位点是结构图上的指定位置。把谱上的某个信号对应到这个位置，就叫归属。能共同给出一个信号的等价原子按一个位点处理。</td>
+        </tr>
+        <tr>
+        <td>参考位移</td>
+        <td>题包已经告诉你的实测位置。同一分子的这些已知点可以帮助你估计留出的点。</td>
+        </tr>
+        <tr>
+        <td>95% 预测区间</td>
+        <td>你预计实测信号中心会落入的一段范围。若这类区间与实际误差相符，多次预测中约有 95% 的实测值应落进去。</td>
+        </tr>
+        </tbody>
+        </table></div>
+        <h3>数据长什么样</h3>
+        <p>想象一张表，每行是一个分子的一个氢或碳位点。结构图告诉你位点在哪，位移告诉你信号在谱轴哪一格。题包给了一个填好的样例。正式测试中，每个分子留出 4 个氢位点和 4 个碳位点，一共要填 80 行。</p>
+        <h3>问题是什么</h3>
+        <p>同一分子里，两处结构可能都带甲基，或都紧挨着一个氧原子，信号位置却仍有差别。即使两个预测值都落在合理范围内，也可能把这两个位点的先后顺序弄反。题目同时检查每个位置估得准不准，以及成对的位点能否区分。</p>
+        <h3>为什么值得做</h3>
+        <p>解释核磁谱时，化学家常要在几个相近信号之间判断哪个属于哪个位置。如果预测能缩小合理的范围，就能更有针对性地核对候选归属。预测给出的范围也要够可靠，才知道什么样的偏差值得进一步检查。</p>
+        <h3>要交什么，怎么算分</h3>
+        <p>交一张含 80 行数据的 CSV，每行填一个预测值和两个区间端点。点值越接近实测越好，区间过宽或漏掉实测值都会增加损失。作参照，只按局部化学环境查经验值，氢和碳的平均绝对误差分别为 0.365 和 5.309 ppm。详细的基线、计分方法和分母见下文。</p>
+        <p>下面是正式的技术题面。</p>
+      </section>
+
+      <section id="goal" class="topic-section" aria-labelledby="goal-heading">
+        <h2 id="goal-heading">目标</h2>
+        <p>预测 T01–T10 中各指定 ¹H、¹³C 位点的实测化学位移中心，单位为 ppm。每个位点提交预测分布的中位数和等尾 95% 预测区间，即第 2.5 和第 97.5 百分位。区间两端可以离中位数不同距离。</p>
+        <p>每个分子上两种核各留出 4 个位点。每种核的 4 个位点组成两对，用于核对位移差和方向。提交逐位点预测即可，评分器会从中计算位点差。</p>
+      </section>
+
+      <section id="background" class="topic-section" aria-labelledby="background-heading">
+        <h2 id="background-heading">背景与数据</h2>
+        <p>化学位移取决于核所处的电子和空间环境。相同类型的键、相近的局部结构可以用来估计量级。判断具体位置还要考虑邻近基团、连接方式和立体构型。题册为每个样品列出可确认的溶剂、场强、温度、参照等条件。机器清单以 <code>null</code> 表示原资料未明确给出的字段。</p>
+        <p>样例 D00 单独公开，测试集由 10 个不同母分子组成。测试真值使用补充材料中具有明确原子归属的实验点值，保留来源报告的精度。无法从证据中确定单个位点中心的合并峰和多重峰区间留作资料复核。当前样本的同条件重复测量误差待估。</p>
+      </section>
+
+      <section id="input" class="topic-section" aria-labelledby="input-heading">
+        <h2 id="input-heading">输入（你能用的东西）</h2>
+        <p>解压作答包后，在 <code>C10-NMR-v3/public/</code> 中读取这些文件。题册后半部分按样品列出编号结构、实测参考位移和要预测的位点。</p>
+        <div class="table-scroll"><table>
+        <thead>
+        <tr>
+        <th>文件</th>
+        <th>内容</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td><code>题册.html</code>、<code>题册.md</code></td>
+        <td>同一题面。HTML 可离线打开，含编号结构图。</td>
+        </tr>
+        <tr>
+        <td><code>test/manifest.json</code></td>
+        <td>10 个样品的带原子映射 SMILES、测量条件、已知参考位移、待预测位点和比较对。</td>
+        </tr>
+        <tr>
+        <td><code>test/prediction-template.csv</code></td>
+        <td>80 个待预测键。复制此文件并填写最后三列。</td>
+        </tr>
+        <tr>
+        <td><code>example/</code></td>
+        <td>D00 的输入、参考值和已填写的 <code>prediction-example.csv</code>。样例不计分。</td>
+        </tr>
+        <tr>
+        <td><code>structures/</code></td>
+        <td>样例和测试分子的编号结构图。</td>
+        </tr>
+        <tr>
+        <td><code>score.py</code></td>
+        <td>公共格式自查程序。配合参考值可复算评分。</td>
+        </tr>
+        <tr>
+        <td><code>MANIFEST.json</code></td>
+        <td>包内文件的 SHA-256 校验值。</td>
+        </tr>
+        </tbody>
+        </table></div>
+        <p>图上的 <code>C1</code> 等标签是碳编号。清单中 <code>H:</code> 开头的是氢位点，<code>C:</code> 开头的是碳位点。先用 <code>carbon_labels</code> 查它对应的结构图碳编号，再用 <code>atom_map_ids</code> 查 SMILES 里方括号中冒号后的原子映射号。样例中的 <code>H:6</code> 对应碳编号 1。比较对的 <code>left</code> 和 <code>right</code> 固定了差值的计算顺序。</p>
+      </section>
+
+      <section id="output" class="topic-section" aria-labelledby="output-heading">
+        <h2 id="output-heading">输出（你要交的东西）</h2>
+        <p>提交 UTF-8 的 <code>prediction.csv</code>。保留模板表头。数据部分恰好 80 行，每个 <code>(sample_id, nucleus, site_id)</code> 出现一次，行序不限。</p>
+        <div class="table-scroll"><table>
+        <thead>
+        <tr>
+        <th>列</th>
+        <th>填写内容</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td><code>sample_id</code>、<code>nucleus</code>、<code>site_id</code></td>
+        <td>照录模板的三个键。核种为 <code>1H</code> 或 <code>13C</code>。</td>
+        </tr>
+        <tr>
+        <td><code>point_ppm</code></td>
+        <td>预测中位数。</td>
+        </tr>
+        <tr>
+        <td><code>lower95_ppm</code>、<code>upper95_ppm</code></td>
+        <td>等尾 95% 预测区间的下界和上界。</td>
+        </tr>
+        </tbody>
+        </table></div>
+        <p>后三列只写有限数字，统一采用 ppm，并满足 <code>lower95_ppm &lt;= point_ppm &lt;= upper95_ppm</code>。下面是公开样例的一行，正式提交只填写测试模板中的键。</p>
+        <pre><code class="language-csv">sample_id,nucleus,site_id,point_ppm,lower95_ppm,upper95_ppm
+D00,1H,H:6,8.48,8.33,8.63
+</code></pre>
+      </section>
+
+      <section id="scoring" class="topic-section" aria-labelledby="scoring-heading">
+        <h2 id="scoring-heading">评分</h2>
+        <h3>每个位点怎么算</h3>
+        <p>实测中心为 <code>y</code>，点预测为 <code>p</code>，区间下界和上界分别为 <code>L</code> 和 <code>U</code>。</p>
+        <pre><code class="language-text">绝对误差       = |p − y|
+区间宽度       = U − L
+覆盖           = L ≤ y ≤ U
+Winkler 区间分数 = U − L + 40 × max(L − y, 0) + 40 × max(y − U, 0)
+</code></pre>
+        <p>样例这一行的实测值为 8.48 ppm。上面的预测覆盖实测值，区间分数就是宽度 0.30 ppm。若改报点值 8.15 ppm、区间 [8.00, 8.30]，实测值超过上界 0.18 ppm，区间分数为 0.30 + 40 × 0.18 = 7.50 ppm。</p>
+        <h3>位点差和汇总口径</h3>
+        <p>每对位点都用右位点减左位点。差值误差是预测差与实测差的绝对差。若实测差的绝对值未超过两条记录各自最末报告位所对应增量一半的和，该对仍计差值误差，方向从分母中移出。</p>
+        <p>¹H 和 ¹³C 分开报告。每种核先在同一母分子内平均，再对母分子等权平均。主指标为平均绝对误差（MAE）和 Winkler 区间分数，单位均为 ppm，越低越好。另列覆盖率、区间宽度、上下侧漏报率、差值误差及方向正确率。全测试集每种核各 40 个位点和 20 对差值，其中 ¹H 有 20 对、¹³C 有 19 对计入方向统计。</p>
+        <h3>参考结果与读法</h3>
+        <p>两条基线均在这 10 个分子上评分。局部化学环境基线用结构查经验中心，位点对取均值基线把同一对的两个经验中心取均值。两者均用固定宽度，¹H 为 2.0 ppm，¹³C 为 30.0 ppm。</p>
+        <div class="table-scroll"><table>
+        <thead>
+        <tr>
+        <th>方法</th>
+        <th style="text-align:right">¹H MAE</th>
+        <th style="text-align:right">¹H 覆盖率</th>
+        <th style="text-align:right">¹H Winkler</th>
+        <th style="text-align:right">¹³C MAE</th>
+        <th style="text-align:right">¹³C 覆盖率</th>
+        <th style="text-align:right">¹³C Winkler</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td>局部化学环境</td>
+        <td style="text-align:right">0.365</td>
+        <td style="text-align:right">92.5%</td>
+        <td style="text-align:right">2.34</td>
+        <td style="text-align:right">5.309</td>
+        <td style="text-align:right">95.0%</td>
+        <td style="text-align:right">34.20</td>
+        </tr>
+        <tr>
+        <td>位点对取均值</td>
+        <td style="text-align:right">0.365</td>
+        <td style="text-align:right">90.0%</td>
+        <td style="text-align:right">2.75</td>
+        <td style="text-align:right">5.439</td>
+        <td style="text-align:right">95.0%</td>
+        <td style="text-align:right">33.70</td>
+        </tr>
+        </tbody>
+        </table></div>
+        <p>两个基线的氢位点 MAE 四舍五入后相同。位点对取均值会让每对的预测差都变成零，因此方向正确率也为零。读结果时可以把绝对位移、组间方向和区间质量分别对照。作答和本地评分的耗时各自记录。</p>
+        <p class="case-links"><a href="../bench/nmr-demo-v3.md">数据、评分与计时实现</a> · <a href="../bench/workflow.html#nmr-uncertainty">区间设计依据</a></p>
+      </section>
+
+      <section id="constraints" class="topic-section" aria-labelledby="constraints-heading">
+        <h2 id="constraints-heading">约束</h2>
+        <p>离线作答。可以使用题包和已有化学知识。作答过程中禁止联网检索、查阅外部谱库或已发表的目标位移，以及调用预训练位移预测器、外部模型或其他外部工具。评分只需提交 <code>prediction.csv</code>。</p>
+        <div class="table-scroll"><table>
+        <thead>
+        <tr>
+        <th>无效提交的情形</th>
+        <th>如何检查</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td>文件读取失败或 CSV 格式错误</td>
+        <td>使用 UTF-8 保存文件，按模板保留表头及六列。</td>
+        </tr>
+        <tr>
+        <td>缺少、重复或出现题单外的位点</td>
+        <td>核对三个键与测试模板。</td>
+        </tr>
+        <tr>
+        <td>数值无法解析或包含 NaN、Inf</td>
+        <td>在数值列填写有限数值，不附单位。</td>
+        </tr>
+        <tr>
+        <td>区间端点顺序错误</td>
+        <td>检查下界 ≤ 中位数 ≤ 上界。</td>
+        </tr>
+        </tbody>
+        </table></div>
+        <p>上述失败会返回格式错误。科学指标在有效提交上计算。</p>
+      </section>
+
+      <section id="completion" class="topic-section" aria-labelledby="completion-heading">
+        <h2 id="completion-heading">完成标准</h2>
+        <p>填齐 80 个测试位点。从解压后的 <code>public/</code> 目录运行自查。命令退出码为 0 并显示 <code>valid submission</code> 时，文件已通过格式验证，可以交给出题方评分。</p>
+        <pre><code class="language-sh">python3 score.py --manifest test/manifest.json --predictions prediction.csv
+</code></pre>
+        <p>要核对评分器，可用公开样例复算。结果写入新目录 <code>example-result/</code>，其中的 <code>metrics.json</code> 是汇总指标。</p>
+        <pre><code class="language-sh">python3 score.py --manifest example/manifest.json --predictions example/prediction-example.csv --reference example/reference.csv --output example-result
+</code></pre>
+      </section>
+    </article>
+
+    <footer class="case-links">
+      <a href="./nmr-shift-prediction-archive.html">历史版本</a>
+    </footer>
+  </main>
+</body>
+</html>

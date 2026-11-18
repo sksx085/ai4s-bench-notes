@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="C10 v3 的三家模型试跑，含点位预测主分、分核种区间质量和计时。">
-  <title>C10 核磁位移预测 v3 试跑结果 | 每日出题实践</title>
+  <meta name="description" content="C10 v4 的两条基线和 v3 三家模型试跑，含点位主分、分核种区间质量和计时。">
+  <title>C10 核磁位移预测结果 | 每日出题实践</title>
   <link rel="stylesheet" href="../styles.css">
   <link rel="stylesheet" href="./challenge.css">
   <style>
@@ -34,20 +34,37 @@
 
   <main class="wrap" id="main" tabindex="-1">
     <header class="intro intro-topic">
-      <a class="page-back" href="./nmr-shift-prediction.html"><span aria-hidden="true">←</span> 返回 C10 题面</a>
-      <h1>C10 核磁位移预测 v3 试跑结果</h1>
-      <p>在 10 个测试母分子上比较三家模型的点预测、区间质量与作答耗时。¹H 和 ¹³C 各有 40 个评分位点，公开样例不计分。</p>
+      <a class="page-back" href="./nmr-shift-prediction.html"><span aria-hidden="true">←</span> 返回 v4 题面</a>
+      <h1>C10 核磁位移预测结果</h1>
+      <p>v4 已在 20 个测试母分子上复算两条基线。三家模型的试跑覆盖 v3 原批 T01–T10，¹H 和 ¹³C 各有 40 个评分位点。公开样例不计分。<a href="./nmr-shift-prediction-v3.html">v3 存档题面</a></p>
     </header>
     <nav class="challenge-nav" aria-label="结果页内容">
-      <a href="#reference-score">点位主分</a>
+      <a href="#v4-baselines">v4 基线</a>
+      <a href="#reference-score">v3 点位主分</a>
       <a href="#results">95% 区间质量</a>
       <a href="#protocol">试跑口径与计时</a>
       <a href="#prediction-interval">95% 区间逻辑</a>
     </nav>
 
-    <article class="topic-content challenge-content" aria-label="C10 三模型试跑">
+    <article class="topic-content challenge-content" aria-label="C10 基线与三模型试跑">
+      <section class="topic-section" id="v4-baselines" aria-labelledby="v4-baselines-heading">
+        <h2 id="v4-baselines-heading">v4 两条基线</h2>
+        <p>原批、扩充批和合并批使用同一套点位主分公式及误差量尺。局部化学环境基线用结构查经验值，位点对取均值基线将同一对的两个经验值取平均。本轮复算的是基线，三家模型成绩见下方的 v3 试跑。</p>
+        <div class="table-scroll" tabindex="0" aria-label="v4 按批比较点位主分">
+          <table class="result-table">
+            <caption>固定量尺下的点位主分</caption>
+            <thead><tr><th scope="col">测试批次</th><th scope="col">母分子数</th><th scope="col">局部化学环境</th><th scope="col">位点对取均值</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">原批 T01–T10</th><td>10</td><td>25.00</td><td>24.76</td></tr>
+              <tr><th scope="row">扩充批 T11–T20</th><td>10</td><td>19.17</td><td>18.53</td></tr>
+              <tr><th scope="row">合并 T01–T20</th><td>20</td><td>21.70</td><td>21.20</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
       <section class="topic-section" id="reference-score" aria-labelledby="reference-score-heading">
-        <h2 id="reference-score-heading">点位预测主分</h2>
+        <h2 id="reference-score-heading">v3 三家模型的点位主分</h2>
         <p>主分衡量模型把信号中心估得有多准。先对每种核的 MAE 按母分子等权汇总，再除以该核种的局部化学环境基线 MAE。两个比值等权平均为 <var>r</var>。氢和碳的基线分别为 0.36475 和 5.30875 ppm。</p>
         <pre><code>r = (¹H MAE / 0.36475 + ¹³C MAE / 5.30875) / 2
 点位主分 = 100 / (1 + 3r)</code></pre>
@@ -86,7 +103,7 @@
       </section>
 
       <section class="topic-section" id="results" aria-labelledby="results-heading">
-        <h2 id="results-heading">95% 区间质量</h2>
+        <h2 id="results-heading">v3 试跑的 95% 区间质量</h2>
         <p>区间单独比较 Winkler 损失、覆盖率和宽度。Winkler 越低越好。两种核分别报告，每种核有 40 个评分位点。</p>
         <div class="table-scroll" tabindex="0" aria-label="¹H · 40 个测试位点">
           <table class="result-table">

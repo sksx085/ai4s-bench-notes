@@ -1,0 +1,36 @@
+{
+  "title": "把核磁位移填空扩到 20 个分子",
+  "topic": "NMR-bench",
+  "kind": "Demo 封存",
+  "summary": "保留首批 10 个分子，加入 10 个有实验归属的分子。预测 160 个信号中心及各自的 95% 预测区间。",
+  "challenges": [
+    {
+      "label": "C10 核磁位移预测 Demo v4",
+      "href": "./nmr-shift-prediction.html"
+    }
+  ],
+  "sections": [
+    {
+      "heading": "题面设计",
+      "text": "每个分子提供编号结构、可确认的采集条件和少量参考位移。每种核留出四个位点，组成两对。扩充批包含桥环、芳香杂环和含卤螺环等不同结构。"
+    },
+    {
+      "heading": "给 AI 的任务",
+      "text": "为每个留出位置填预测中位数和等尾 95% 预测区间的两端。点位主分使用冻结的两核归一化 MAE。方向正确率先在分子内算，再对母分子等权平均。"
+    },
+    {
+      "heading": "作者核验",
+      "text": "完成来源与编号复核、切分检查、格式自查和评分复算。20 个分子的两条基线已重算，三家模型的试跑成绩仍对应原批 10 个分子。"
+    }
+  ],
+  "links": [
+    {
+      "label": "查看 v4 基线与 v3 试跑",
+      "href": "./nmr-shift-prediction-results.html"
+    },
+    {
+      "label": "查看历史题面",
+      "href": "./nmr-shift-prediction-archive.html"
+    }
+  ]
+}
