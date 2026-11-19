@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="先用普通水实测找出两组薄膜结构，再用重水实测筛选，预测混合液中的 99 个测点。满分 100 分。">
+  <title>预测聚合物薄膜在混合液中的中子反射率 | 每日出题实践</title>
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="./challenge.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="wordmark" href="../index.html" aria-label="AI4S Bench 笔记首页">AI4S <span>Bench Notes</span></a>
+      <nav aria-label="栏目">
+        <a href="../bench.html">Bench 指标</a>
+        <a href="./index.html" aria-current="location">每日出题实践</a>
+        <a href="../papers.html">论文更新</a>
+        <a href="../skills.html">Skills 与插件</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap" id="main" tabindex="-1">
+    <header class="intro intro-topic challenge-intro">
+      <a class="page-back" href="./index.html#practice-2026-11-19-neutron-reflectometry"><span aria-hidden="true">←</span> 返回每日出题实践</a>
+      <h1>预测聚合物薄膜在混合液中的中子反射率</h1>
+      <p>两轮挑战，依次使用普通水和重水的实测曲线。</p>
+      <a class="challenge-download" href="./resources/neutron-reflectometry/neutron-reflectometry-multimode-round1.zip" download>下载首轮作答包 <span aria-hidden="true">↓</span></a>
+    </header>
+
+    <nav class="challenge-nav" aria-label="题目内容">
+      <a href="#overview">概览</a>
+      <a href="#goal">目标</a>
+      <a href="#background">背景</a>
+      <a href="#input">输入</a>
+      <a href="#output">输出</a>
+      <a href="#scoring">评分</a>
+      <a href="#constraints">约束</a>
+      <a href="#completion">完成标准</a>
+    </nav>
+
+    <article class="topic-content challenge-content" aria-label="题面">
+      <section id="overview" class="topic-section" aria-labelledby="overview-heading">
+        <h2 id="overview-heading">1. Overview｜研究什么</h2>
+        <p><strong>实验员想知道薄膜里有多少水。</strong> 他们把覆有聚合物薄膜的硅片放进装有普通水的测量池，用中子照射薄膜，记录有多大比例的中子被反射回来。这些读数画在一起，就是一条中子反射率曲线。膜有多厚、膜本身和膜里的水怎样散射中子，都会影响这条曲线。只看普通水里测到的结果，两套不同的薄膜结构都说得通，推出来的含水量范围却不同。</p>
+        <p><strong>为什么要换重水？</strong> 普通水和重水对中子的散射不同。换成重水后，原来都说得通的两套结构可能给出不同的反射率曲线。用同一片薄膜在重水里测到的曲线，就能比较哪套解释更符合实验。</p>
+        <p><strong>你要做什么？</strong> 第一轮，找出两套能解释普通水实测的结构，给出各自可能的含水量范围，并提前提交它们在重水和混合液里的预测。第二轮，你会拿到重水实测曲线。看哪一组在自己的含水量范围内能把这条曲线解释得更好。更新这一组，再预测换成普通水和重水的混合液后会测到怎样的反射曲线。评分时，预测和混合液实验的 99 个实测点逐一比较。</p>
+        <p><strong>人能在哪里发力。</strong> 选手可以尝试以下优化思路。</p>
+        <ol>
+        <li><strong>首轮先减少变量，再分两侧搜索。</strong> 普通水曲线里，干聚合物的散射和膜里的水可以互相补偿。先把两者合成一个待拟合量，也就是湿膜的散射长度密度（SLD）。在题面分界两侧分别试几个起点，拟合两层厚度、湿膜 SLD 和背景。每侧找到一组合格解后，再由该组的湿膜 SLD 算出完整含水区间。</li>
+        <li><strong>把普通水的背景直接算出来。</strong> 如果按第 6 节的标准化 RMS 拟合普通水，给定两层厚度和湿膜 SLD 后，背景就是实测与无背景预测之差的加权平均，权重用 <code>1/dR²</code>。把结果限制在允许范围内，搜索时就少调一个参数。</li>
+        <li><strong>重水先扫完整区间，再细找低误差的位置。</strong> 拿到重水实测后，保留每组首轮的结构条件。在含水区间的两端和中间取几个值，每次按评分规则拟合重水背景和倍率。再从几个误差较小的位置出发做连续优化，把细化后的结果和端点一起比较。</li>
+        <li><strong>从重水筛出的结果出发，联合调整两条曲线。</strong> 用优选组在重水里的最佳拟合作为初值，在该组所在一侧，用同一套薄膜参数拟合普通水和重水。若两条曲线的误差此消彼长，可以把各自的标准化 RMS 除以各自通过线，优先压低两者中较大的比值。用更新后的结构计算混合液预测。</li>
+        </ol>
+      </section>
+
+      <section id="goal" class="topic-section" aria-labelledby="goal-heading">
+        <h2 id="goal-heading">2. Goal｜预测目标与两轮任务</h2>
+        <p><strong>预测同一片薄膜换到普通水和重水的混合液后，在 99 个指定测点上的中子反射率。</strong> 混合液只发放测点坐标，实测反射率全程留给评分方。总分满分 100 分，其中混合液预测占 40 分，用这 99 个点的对数反射率误差计分。入榜条件和其他采分点见第 6 节。</p>
+        <ol>
+        <li><strong>第一轮找出两组解释，锁定预测。</strong> 两组都要能解释普通水的实测曲线，并且分处第 3 节划定的两个拟合区域。给出每组完整的含水比例范围（按体积计）。在拿到重水实测前，提交并锁定每个范围两端在重水和混合液中的预测曲线。</li>
+        <li><strong>第二轮用重水实测比较两组，再更新结构。</strong> 比较时，固定每组首轮确定的氧化层厚度、聚合物膜厚度、湿膜在普通水中的有效散射长度密度和普通水测量的背景。两组按同一规则拟合重水测量的背景和倍率，在各自的完整含水比例范围内寻找最符合重水实测的解，报告对应的含水比例和拟合误差。按第 6 节的误差标准选出一组，再用普通水和重水的实测一起更新这组结构。更新后的结构须留在该组的拟合区域。评分方用同一套更新结构复算普通水和重水曲线，并生成最终的混合液预测。</li>
+        </ol>
+      </section>
+
+      <section id="background" class="topic-section" aria-labelledby="background-heading">
+        <h2 id="background-heading">3. Background｜为什么要换一种水</h2>
+        <p><strong>实验测到了什么。</strong> 中子从硅片一侧照向薄膜。沿入射方向，依次经过硅衬底、表面的二氧化硅层、浸在液体里的聚合物膜，最后到外面的液体。实验归档记录了同一片薄膜在普通水（H₂O）、重水（D₂O）和两者混合液中的三条反射率曲线，每条 99 点。每个点有测量坐标 <code>Q</code>、反射率 <code>R</code> 和档案报告的不确定度 <code>dR</code>。本题逐点保留这些数值。</p>
+        <p><strong>为什么普通水里有两组解释。</strong> 中子在不同层的交界处发生反射，反射波叠加后形成测到的信号。实验只记录叠加后的强度，几种不同的层厚和材料组合可以给出很接近的曲线。用本题的层模型拟合普通水实测，可以在两个分开的区域里各找到合格解。用来分开这两组的是湿膜在普通水中的散射长度密度（SLD），也就是每单位体积的材料对中子散射的贡献。两组须分处 <strong>0.90 × 10⁻⁶ Å⁻²</strong> 两侧。把湿膜的 SLD 固定在这个分界上，再调厚度和背景，两种数值搜索找到的最低标准化误差（第 6 节）都约为 6.09，高于通过线 2.5。这个分界来自对普通水实测的拟合分析。</p>
+        <p><strong>为什么每组还有一个含水比例范围。</strong> 湿膜的 SLD 同时取决于干聚合物和膜里的液体。模型按体积把两者加权平均。膜里普通水多一点，可以用更高的干聚合物 SLD 补回来。只要湿膜 SLD、两层厚度和普通水测量背景都相同，这一组内的普通水计算曲线就相同。干聚合物 SLD 的允许范围决定了这组可以容纳多少水。</p>
+        <p><strong>为什么换成重水能帮助区分。</strong> 重水和普通水对中子的散射不同。换液既改变膜外的液体，也改变膜内液体对散射的贡献。在本题模型里，膜内液体占的比例越大，换成重水后湿膜的 SLD 变化就越大。因此，在普通水里都说得通的解释，可以在重水里给出不同的曲线。</p>
+        <p>已有研究只用这片薄膜的普通水曲线拟合时，得到两组解释。把同一薄膜的重水曲线也纳入拟合后，其中一组失去支持。本题在第二轮用重水实测比较首轮锁定的两组，再用混合液实测检验更新后的结构能否预测第三种条件。</p>
+        <p><strong>本题采用的模型。</strong> 三种液体下共用两层厚度、干聚合物 SLD 和膜内液体体积分数。聚合物层按均匀层处理，膜内液体采用外部液体的名义 SLD。厚度、干聚合物 SLD 和含液率由拟合得到。混合液排名的真值来自实测曲线。</p>
+        <div class="table-scroll" tabindex="0" role="region" aria-label="背景表格"><table>
+        <thead>
+        <tr>
+        <th scope="col">模型约定</th>
+        <th scope="col">取值或用法</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td>材料的名义 SLD</td>
+        <td>硅 2.07，二氧化硅 3.47，普通水 −0.56，重水 6.36，混合液 3.50，单位均为 10⁻⁶ Å⁻²</td>
+        </tr>
+        <tr>
+        <td>湿膜的 SLD</td>
+        <td><code>(1-fraction)*dry_sld + fraction*solvent_sld</code>，其中 <code>fraction</code> 是膜内液体的体积分数</td>
+        </tr>
+        <tr>
+        <td>界面和仪器分辨率</td>
+        <td>界面粗糙度固定为 3 Å。计算曲线按半高全宽为 <code>0.05*Q</code> 的高斯分布展宽，细节见 <code>physics.py</code></td>
+        </tr>
+        <tr>
+        <td>背景与倍率</td>
+        <td>第一轮三种液体均用普通水的拟合背景和倍率 1。第二轮可单独拟合重水的背景和倍率，最终混合液预测用更新后的普通水背景和倍率 1</td>
+        </tr>
+        </tbody>
+        </table></div>
+      </section>
+
+      <section id="input" class="topic-section" aria-labelledby="input-heading">
+        <h2 id="input-heading">4. Input｜你会拿到什么</h2>
+        <div class="table-scroll" tabindex="0" role="region" aria-label="输入表格"><table>
+        <thead>
+        <tr>
+        <th scope="col">发放时间</th>
+        <th scope="col">文件</th>
+        <th scope="col">内容</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td>第一轮</td>
+        <td><code>round1/h2o.csv</code></td>
+        <td>普通水实测 99 点，含 <code>point_id, q_A_inv, R, dR</code></td>
+        </tr>
+        <tr>
+        <td>第一轮</td>
+        <td><code>round1/d2o_q.csv</code></td>
+        <td>重水的 99 个测点坐标，含 <code>point_id, q_A_inv</code></td>
+        </tr>
+        <tr>
+        <td>第一轮</td>
+        <td><code>round1/mix_q.csv</code></td>
+        <td>混合液的 99 个测点坐标，含 <code>point_id, q_A_inv</code></td>
+        </tr>
+        <tr>
+        <td>第一轮</td>
+        <td><code>physics.py</code></td>
+        <td>NumPy 计算工具。给定一套结构可计算反射率、求完整含水比例范围</td>
+        </tr>
+        <tr>
+        <td>第二轮，首轮封存后</td>
+        <td><code>round2/d2o.csv</code></td>
+        <td>重水实测 99 点，含 <code>point_id, q_A_inv, R, dR</code>，顺序和坐标与首轮重水坐标表一致</td>
+        </tr>
+        </tbody>
+        </table></div>
+        <p><code>point_id</code> 是各文件里的测点编号。Q 是沿膜法线方向的动量转移，单位 Å⁻¹，按各文件的顺序递增。R 和 dR 为无量纲量，dR 是档案报告的逐点标准差。少数实验反射率略高于 1，按原值保留。混合液的 R 和 dR 全程由评分方保管。</p>
+      </section>
+
+      <section id="output" class="topic-section" aria-labelledby="output-heading">
+        <h2 id="output-heading">5. Output｜每轮交什么</h2>
+        <p>每轮交一个不超过 64 KiB 的 UTF-8 JSON 文件。字段名按下表填写，键名不可重复。数值必须有限，层厚用 Å，SLD 用 10⁻⁶ Å⁻²，体积分数用 0–1 的小数。所有反射率数组按对应坐标文件的行序填写，数值下限为 10⁻³⁰⁰。</p>
+        <div class="table-scroll" tabindex="0" role="region" aria-label="输出表格"><table>
+        <thead>
+        <tr>
+        <th scope="col">文件</th>
+        <th scope="col">字段</th>
+        <th scope="col">要填什么</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td><code>round1.json</code></td>
+        <td><code>families.A.family</code>、<code>families.B.family</code></td>
+        <td>每组四个数，分别为氧化层厚度 <code>oxide_A</code>、聚合物膜厚度 <code>polymer_A</code>、普通水中的湿膜 SLD <code>effective_sld</code>、普通水背景 <code>h2o_background</code></td>
+        </tr>
+        <tr>
+        <td><code>round1.json</code></td>
+        <td>每组的 <code>fraction_interval</code></td>
+        <td>完整可行区间 <code>[lo, hi]</code>。端点由该组的 <code>effective_sld</code> 和干聚合物 SLD 的允许范围决定</td>
+        </tr>
+        <tr>
+        <td><code>round1.json</code></td>
+        <td>每组的 <code>locked_predictions</code></td>
+        <td><code>d2o</code> 和 <code>mix</code> 各含 <code>lower</code>、<code>upper</code> 两个 99 元数组，分别对应含水区间的下端和上端。两组合计八条曲线</td>
+        </tr>
+        <tr>
+        <td><code>round2.json</code></td>
+        <td><code>comparisons.A</code>、<code>comparisons.B</code></td>
+        <td>各组在完整区间内拟合重水后，报告最佳拟合时的 <code>fraction</code> 和 <code>weighted_log_rms</code></td>
+        </tr>
+        <tr>
+        <td><code>round2.json</code></td>
+        <td><code>favored_family</code></td>
+        <td>按第 6 节的误差规则选 <code>&quot;A&quot;</code> 或 <code>&quot;B&quot;</code></td>
+        </tr>
+        <tr>
+        <td><code>round2.json</code></td>
+        <td><code>final_structure</code></td>
+        <td>更新后的一套结构及仪器参数，共七个数。填写 <code>oxide_A, polymer_A, dry_sld, fraction, h2o_background, d2o_background, d2o_scale</code></td>
+        </tr>
+        </tbody>
+        </table></div>
+        <p>A、B 的命名可以互换，第二轮沿用首轮命名。计算锁定曲线时，使用从结构参数算出的未舍入区间端点，例如直接调用 <code>physics.py</code> 的 <code>fraction_limits</code>。第二轮申报含水比例也按这个复算区间核验。最终 99 点混合液预测由评分方用 <code>final_structure</code> 计算。</p>
+        <div class="table-scroll" tabindex="0" role="region" aria-label="输出表格"><table>
+        <thead>
+        <tr>
+        <th scope="col">参数</th>
+        <th scope="col">允许范围（含端点）</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td><code>oxide_A</code>、<code>polymer_A</code></td>
+        <td>1–50 Å、200–300 Å</td>
+        </tr>
+        <tr>
+        <td><code>effective_sld</code>、<code>dry_sld</code></td>
+        <td>−0.56–2.00、0.10–2.00，单位均为 10⁻⁶ Å⁻²。首轮两组的 <code>effective_sld</code> 须分处 0.90 两侧</td>
+        </tr>
+        <tr>
+        <td><code>fraction</code></td>
+        <td>0–1</td>
+        </tr>
+        <tr>
+        <td><code>h2o_background</code>、<code>d2o_background</code></td>
+        <td>9×10⁻⁹–3×10⁻⁵，无量纲</td>
+        </tr>
+        <tr>
+        <td><code>d2o_scale</code></td>
+        <td>0.90–1.10</td>
+        </tr>
+        </tbody>
+        </table></div>
+      </section>
+
+      <section id="scoring" class="topic-section" aria-labelledby="scoring-heading">
+        <h2 id="scoring-heading">6. Scoring｜怎么判分</h2>
+        <p><strong>满分 100 分，共 15 个采分点。</strong> 首轮找出两组解释占 30 分，重水筛选占 20 分，更新结构占 10 分，预测混合液占 40 分。通过两轮科学核验的答卷按总分排名，同分时看混合液整条曲线的误差，越小越靠前。其他答卷保留已获得的分数和核验原因。</p>
+        <div class="table-scroll" tabindex="0" role="region" aria-label="评分表格"><table class="challenge-score-table">
+        <thead>
+        <tr>
+        <th scope="col">采分点</th>
+        <th scope="col" style="text-align:right">满分</th>
+        <th scope="col">得分条件</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td>1. 低 SLD 组拟合普通水</td>
+        <td style="text-align:right">5</td>
+        <td>湿膜 SLD 低于 0.90 × 10⁻⁶ Å⁻²，普通水两个端点预测的标准化 RMS 均 ≤ 2.5</td>
+        </tr>
+        <tr>
+        <td>2. 高 SLD 组拟合普通水</td>
+        <td style="text-align:right">5</td>
+        <td>湿膜 SLD 高于 0.90 × 10⁻⁶ Å⁻²，普通水两个端点预测的标准化 RMS 均 ≤ 2.5</td>
+        </tr>
+        <tr>
+        <td>3. 低 SLD 组的完整含水区间</td>
+        <td style="text-align:right">5</td>
+        <td>第 1 项通过，两端点与独立复算相差均 ≤ 10⁻⁵，提交区间宽度 &gt; 10⁻⁵</td>
+        </tr>
+        <tr>
+        <td>4. 高 SLD 组的完整含水区间</td>
+        <td style="text-align:right">5</td>
+        <td>第 2 项通过，两端点与独立复算相差均 ≤ 10⁻⁵，提交区间宽度 &gt; 10⁻⁵</td>
+        </tr>
+        <tr>
+        <td>5. 低 SLD 组锁定重水预测</td>
+        <td style="text-align:right">2.5</td>
+        <td>第 3 项通过，两个端点的重水预测都能复算，最大绝对对数差 ≤ 10⁻⁴ dex</td>
+        </tr>
+        <tr>
+        <td>6. 高 SLD 组锁定重水预测</td>
+        <td style="text-align:right">2.5</td>
+        <td>第 4 项通过，两个端点的重水预测都能复算，最大绝对对数差 ≤ 10⁻⁴ dex</td>
+        </tr>
+        <tr>
+        <td>7. 低 SLD 组锁定混合液预测</td>
+        <td style="text-align:right">2.5</td>
+        <td>第 3 项通过，两个端点的混合液预测都能复算，最大绝对对数差 ≤ 10⁻⁴ dex</td>
+        </tr>
+        <tr>
+        <td>8. 高 SLD 组锁定混合液预测</td>
+        <td style="text-align:right">2.5</td>
+        <td>第 4 项通过，两个端点的混合液预测都能复算，最大绝对对数差 ≤ 10⁻⁴ dex</td>
+        </tr>
+        <tr>
+        <td>9. 复现低 SLD 组的重水结果</td>
+        <td style="text-align:right">5</td>
+        <td>申报的含水比例在首轮锁定区间内。申报误差、申报比例处的复算误差、完整区间内的最小复算误差，三者两两相差均 ≤ 0.02</td>
+        </tr>
+        <tr>
+        <td>10. 复现高 SLD 组的重水结果</td>
+        <td style="text-align:right">5</td>
+        <td>同第 9 项，在高 SLD 组上独立检验</td>
+        </tr>
+        <tr>
+        <td>11. 用重水实测选出一组</td>
+        <td style="text-align:right">10</td>
+        <td>第 9、10 项均通过，优选组的最小误差至多比两组中的更小值高 0.02</td>
+        </tr>
+        <tr>
+        <td>12. 更新结构延续优选解释</td>
+        <td style="text-align:right">4</td>
+        <td>第 11 项通过，且更新结构在普通水中的湿膜 SLD 仍与优选组位于分界的同一侧</td>
+        </tr>
+        <tr>
+        <td>13. 更新结构拟合普通水</td>
+        <td style="text-align:right">3</td>
+        <td>第 12 项通过，更新后的普通水预测和实测之间的标准化 RMS ≤ 2.5</td>
+        </tr>
+        <tr>
+        <td>14. 同一更新结构拟合重水</td>
+        <td style="text-align:right">3</td>
+        <td>第 12 项通过，更新后的重水预测和实测之间的标准化 RMS ≤ 3.0</td>
+        </tr>
+        <tr>
+        <td>15. 预测混合液 99 点实测</td>
+        <td style="text-align:right">40</td>
+        <td>第 1–14 项及两轮提交核验均通过，按下文的误差公式连续得分</td>
+        </tr>
+        </tbody>
+        </table></div>
+        <p>第 1–8 项按 SLD 分界两侧计分，A、B 的命名可以互换。同侧有两组提交时，只计得分较高的一组。同分时，优先计入重水锁定预测通过的一组。首轮两侧均完整通过并封存后，才发放重水实测并开始第 9–15 项。</p>
+        <p><strong>混合液预测分。</strong> 在 99 个原始测点上，以更新结构的预测 <code>pred_R</code> 和实测 <code>R</code> 计算 <code>E = mean(abs(log10(pred_R) - log10(R)))</code>，单位是 dex。误差 ≤ 0.05 dex 得 40 分，≥ 0.17 dex 得 0 分，中间按 <code>40 * (0.17 - E) / (0.17 - 0.05)</code> 计分。例如 E = 0.08 dex 时，本项得 30 分。报告还列出三个 Q 区间的误差（Q ≤ 0.05、0.05 &lt; Q ≤ 0.10、Q &gt; 0.10 Å⁻¹）、对数均方根误差、最大绝对对数误差和标准化 RMS。</p>
+        <p><strong>标准化 RMS</strong> 先把每点反射率误差除以档案报告的不确定度 <code>dR</code>，再算均方根，即 <code>sqrt(mean(((pred_R-R)/dR)**2))</code>。</p>
+        <p><strong>重水筛选用加权对数 RMS</strong>，即 <code>sqrt(mean(((ln(pred_R)-ln(R))*R/dR)**2))</code>。按第 2 节固定每组的首轮参数，在各自的完整含水区间内，用第 3 节的关系求出对应的干聚合物 SLD，并在相同边界下拟合重水背景和倍率。评分方从 11 个等距含水比例开始，再在连续区间内优化。锁定端点用于核验首轮的计算，报告中同时给出它们与重水实测的误差。</p>
+      </section>
+
+      <section id="constraints" class="topic-section" aria-labelledby="constraints-heading">
+        <h2 id="constraints-heading">7. Constraints｜作答时能用什么</h2>
+        <ul>
+        <li>两轮都在断网环境中作答。可以使用当轮发放的材料和本地科学计算工具，包括已有的优化库、自写程序和随题提供的 <code>physics.py</code>。</li>
+        <li>禁止访问外部网站、调用联网模型或接口、调取完整实验档案及其副本或派生数据，或读取评分方的私有文件和他人答卷。</li>
+        <li>首轮提交经核验并封存后，才可读取第二轮重水实测。首轮封存的结构、区间和预测不得回改。第二轮通过 <code>final_structure</code> 提交更新。</li>
+        </ul>
+      </section>
+
+      <section id="completion" class="topic-section" aria-labelledby="completion-heading">
+        <h2 id="completion-heading">8. Completion criteria｜做到什么可以提交</h2>
+        <ol>
+        <li><strong>完成首轮。</strong> <code>round1.json</code> 中有两组分别通过普通水核验的解释、两个完整含水区间，以及与坐标逐点对应的八条预测。若未通过，评分方返回首轮已得分和原因，可以更正后重交。两组完整通过后，评分方封存答卷并发放重水实测。</li>
+        <li><strong>完成第二轮。</strong> <code>round2.json</code> 中有两组在完整含水区间内的重水拟合结果、优选组和一套更新结构。提交后，评分方返回核验结果。通过核验的答卷按总分入榜。证据不足的答卷会收到已获分数和原因，能复算的误差也会一并返回。</li>
+        <li><strong>确认收到终轮结果。</strong> <code>score.json</code> 记录总分、各项得分、核验、误差与是否入榜。结构可计算时，评分方还给出 <code>final_prediction.csv</code>，其中包含 <code>point_id, q_A_inv, pred_R</code> 三列。文件超限、JSON 无法解析或键名重复时，收件程序返回错误，停在当前轮。第二轮提交经正式评分后，会话结束。</li>
+        </ol>
+      </section>
+    </article>
+  </main>
+</body>
+</html>

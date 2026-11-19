@@ -75,3 +75,11 @@
 .challenge-content th[scope="row"] {
   font-weight: 620;
 }
+
+.challenge-score-table th:first-child {
+  width: 32%;
+}
+
+.challenge-score-table :is(th, td):nth-child(2) {
+  white-space: nowrap;
+}

@@ -2,6 +2,7 @@
 
 import json
 import os
+import re
 from datetime import date
 from html import escape
 from pathlib import Path
@@ -39,16 +40,19 @@ def read_links(entry, key):
 
 def read_entry(path):
     try:
-        day = date.fromisoformat(path.stem)
-        if day.isoformat() != path.stem:
-            raise ValueError("文件名须为 YYYY-MM-DD.json")
+        name = re.fullmatch(r"(\d{4}-\d{2}-\d{2})(?:-([a-z0-9]+(?:-[a-z0-9]+)*))?", path.stem)
+        if not name:
+            raise ValueError("文件名须为 YYYY-MM-DD.json 或 YYYY-MM-DD-英文短名.json")
+        day = date.fromisoformat(name[1]).isoformat()
         entry = json.loads(path.read_text(encoding="utf-8"))
         fields = {
             key: escape(text_field(entry, key))
             for key in ("title", "topic", "kind", "summary")
         }
         direct_link = "href" in entry
-        href = safe_href(text_field(entry, "href")) if direct_link else f"./{day.isoformat()}.html"
+        if name[2] and not direct_link:
+            raise ValueError("带英文短名的记录须用 href 指向题面")
+        href = safe_href(text_field(entry, "href")) if direct_link else f"./{day}.html"
         raw_sections = entry.get("sections", [])
         if not isinstance(raw_sections, list) or (not direct_link and not raw_sections):
             raise ValueError("独立记录的 sections 须为至少包含一项的数组")
@@ -63,7 +67,8 @@ def read_entry(path):
 
     return dict(
         fields,
-        day=day.isoformat(),
+        day=day,
+        anchor=f"practice-{path.stem}",
         href=href,
         direct_link=direct_link,
         sections=sections,
@@ -88,7 +93,7 @@ def challenge_links(entry, padding):
 
 
 def archive_item(entry):
-    return f"""<li id="practice-{entry['day']}">
+    return f"""<li id="{entry['anchor']}">
   <p class="meta">{entry_meta(entry)}</p>
   <h3><a href="{entry['href']}">{entry['title']}</a></h3>
   <p>{entry['summary']}</p>

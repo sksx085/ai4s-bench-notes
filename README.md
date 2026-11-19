@@ -11,7 +11,7 @@
 
 ## 新增每日出题实践
 
-1. 按新日期保存 `practice/entries/YYYY-MM-DD.json`，填写标题、主题、记录类型和摘要。独立记录用 `sections` 填各段标题与正文，已有题面则用 `href` 填入相对路径，由目录直接链接到题面。
+1. 按新日期保存 `practice/entries/YYYY-MM-DD.json`，填写标题、主题、记录类型和摘要。独立记录用 `sections` 填各段标题与正文，已有题面则用 `href` 填入相对路径。同一天有多道题时，可用 `practice/entries/YYYY-MM-DD-英文短名.json` 保存额外的题面链接。
 2. 在站点目录运行 `python3 scripts/build_practice.py`。脚本会为独立记录生成 `practice/YYYY-MM-DD.html`，并按日期倒序更新[实践目录](practice/index.html)。链接同一题面的任务记录只展示日期最新的一条。
 
 日期页的内容由 JSON 决定。更新正文时编辑源文件后重跑脚本。[出题思路和提示词](practice/ideas.html)在独立页面编辑。
