@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="根据配位几何摘要，预测 458 个镝配合物在点电荷晶场模型下的第一激发能隙及其 95% 预测区间。">
+  <title>点电荷模拟能级预测 | 每日出题实践</title>
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="./challenge.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="wordmark" href="../index.html" aria-label="AI4S Bench 笔记首页">AI4S <span>Bench Notes</span></a>
+      <nav aria-label="栏目">
+        <a href="../bench.html">Bench 指标</a>
+        <a href="./index.html" aria-current="location">每日出题实践</a>
+        <a href="../papers.html">论文更新</a>
+        <a href="../skills.html">Skills 与插件</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap" id="main" tabindex="-1">
+    <header class="intro intro-topic challenge-intro">
+      <a class="page-back" href="./index.html"><span aria-hidden="true">←</span> 返回每日出题实践</a>
+      <p class="meta"><time datetime="2026-11-19">2026.11.19</time><span>化学 · 镧系 · v1.3</span></p>
+      <h1>点电荷模拟能级预测</h1>
+      <p><strong>给什么</strong>　458 个镝配合物的配位几何摘要，以及 40 个带参考能隙的样本。</p>
+      <p><strong>预测什么</strong>　点电荷模型下的第一激发能隙，也就是最低两对能级之间的能量差，单位为 cm⁻¹。为每个预测值给出 95% 预测区间。</p>
+      <p><strong>交什么</strong>　包含 458 行预测的 <code>geometry-predictions.csv</code> 和一份 <code>method.md</code>。</p>
+      <a class="challenge-download" href="./resources/dy-ladder-prediction/dy-ladder-geometry-v1.3.zip" download>下载作答包 <span aria-hidden="true">↓</span></a>
+      <p class="case-links"><a href="./dy-ladder-prediction-results.html#geometry">查看本任务成绩 <span aria-hidden="true">→</span></a></p>
+    </header>
+
+    <nav class="challenge-nav" aria-label="题目内容">
+      <a href="#purpose">任务目的</a>
+      <a href="#files">输入</a>
+      <a href="#submit">提交</a>
+      <a href="#score">评分</a>
+    </nav>
+
+    <article class="topic-content challenge-content" aria-label="点电荷模拟能级预测题面">
+      <section id="purpose" class="topic-section" aria-labelledby="purpose-heading">
+        <h2 id="purpose-heading">任务目的</h2>
+        <p>配位原子到镝离子的距离和相对方向都会影响晶场。这里保留每个分子的配位距离，为其重排配位原子的方向，并在重排后的几何上计算点电荷能级。任务考察少量几何摘要能否支持逐分子的能隙预测，以及预测区间需要多宽才能反映余下的不确定性。</p>
+        <p>计算使用 Dy³⁺ 的基态多重态 <code>J = 15/2</code>。距 Dy 3.2 Å 内的配位原子各取电荷 −1 e，Stevens 晶场算符的阶数为 2、4、6。径向积分和屏蔽因子取自 Edvardsson 与 Klintenberg（1998），换算遵循 Scheie（2021），1 meV 对应 8.065543937 cm⁻¹。参考值取最低两个 Kramers 双重态之间的能量差。</p>
+        <p>每个分子的重排方向由出题方固定。来源表提供原始晶体坐标及该构型的电子结构能级。三个径向和可以匹配原始晶体坐标，用该坐标重算的结果见评分区对照。</p>
+      </section>
+
+      <section id="files" class="topic-section" aria-labelledby="files-heading">
+        <h2 id="files-heading">输入文件</h2>
+        <div class="table-scroll"><table>
+          <thead><tr><th scope="col">文件</th><th scope="col">内容</th></tr></thead>
+          <tbody>
+            <tr><th scope="row"><code>geometry-cases.csv</code></th><td>458 个测试组成的配位几何摘要，编号为 <code>CF-001</code> 至 <code>CF-458</code>。</td></tr>
+            <tr><th scope="row"><code>geometry-support.csv</code></th><td>40 个样本的同类摘要和第一激发能隙，五个邻域类别各 8 个。</td></tr>
+            <tr><th scope="row"><code>source/</code></th><td>原始晶体坐标和对应的来源表。</td></tr>
+            <tr><th scope="row"><code>geometry-prediction-template.csv</code></th><td>包含全部测试编号的提交模板。</td></tr>
+            <tr><th scope="row"><code>check_geometry.py</code></th><td>检查预测 CSV 的格式。</td></tr>
+          </tbody>
+        </table></div>
+        <h3>几何摘要</h3>
+        <div class="table-scroll"><table>
+          <thead><tr><th scope="col">列</th><th scope="col">含义</th></tr></thead>
+          <tbody>
+            <tr><th scope="row"><code>family_bin</code></th><td>3.2 Å 内按元素归类的邻域类别，包括氧、氮、碳、碳氮、卤素。</td></tr>
+            <tr><th scope="row"><code>n_donors</code></th><td>距 Dy 3.2 Å 内的配位原子数。</td></tr>
+            <tr><th scope="row"><code>d_min_A</code>、<code>d_max_A</code></th><td>Dy 到配位原子的最小、最大距离，单位为 Å。</td></tr>
+            <tr><th scope="row"><code>radial_3</code>、<code>radial_5</code>、<code>radial_7</code></th><td>Dy–配位原子距离的 −3、−5、−7 次方之和。</td></tr>
+            <tr><th scope="row"><code>axiality</code>、<code>rhombicity</code></th><td>在重排后的几何上计算的轴性和横向不对称度。</td></tr>
+          </tbody>
+        </table></div>
+        <p>四极张量的组成项为 <code>(3 rₐrᵦ − δₐᵦr²) / R³</code>，每个配位原子电荷取 −1 e。按绝对值从大到小排列本征值 λ₁、λ₂、λ₃。轴性取绝对值最大的本征值，横向不对称度取 <code>(λ₂ − λ₃) / λ₁</code>。</p>
+        <p>测试集按氧、氮、碳、碳氮、卤素分成 48、214、44、94、58 个组成。硫和磷类别、电子结构任务的 21 个支持组成及 v1.0 公开的 14 个测试组成已排除。</p>
+      </section>
+
+      <section id="submit" class="topic-section" aria-labelledby="submit-heading">
+        <h2 id="submit-heading">提交</h2>
+        <p>用 UTF-8 保存 <code>geometry-predictions.csv</code>，按模板填写。每个测试编号一行，能隙非负，且区间下界 ≤ 点预测 ≤ 区间上界。区间下界允许为负。</p>
+        <pre><code>case_id,kd_cm1_1,lower95_cm1,upper95_cm1</code></pre>
+        <p>另附 UTF-8 的 <code>method.md</code>，在「输入列」「程序入口」「适用边界」三个标题下分别写明所用数据、复现命令或函数，以及方法的局限。</p>
+        <p>从作答包的 <code>public/</code> 目录运行格式检查。CSV 通过时返回 <code>"status": "accepted"</code>。</p>
+        <pre><code>python3 check_geometry.py geometry-predictions.csv</code></pre>
+        <p>可以使用作答包和本地计算工具。提交文件各不超过 1 MiB，格式检查限 1 分钟和 1 GB 内存。作答环境不调用外部模型接口。使用预训练模型时，在方法说明中记录训练数据。</p>
+      </section>
+
+      <section id="score" class="topic-section" aria-labelledby="score-heading">
+        <h2 id="score-heading">评分</h2>
+        <p>本任务按 458 个测试组成计算九项指标，包括第一激发 MAE、Winkler、覆盖率、平均区间宽度、上下侧漏报率、Spearman 等级相关、中位绝对误差和最大绝对误差。Winkler 为区间宽度加上 40 倍的区间外距离，再对所有组成取平均。MAE 和 Winkler 的单位均为 cm⁻¹，越低越好。</p>
+        <p>任务分是九项指标换算成百分制后的等权平均。误差、区间宽度和漏报率以全支持集中位数提交的对应指标为 0 分锚，指标为 0 时得 100 分。覆盖率以同一参考提交为 0 分锚，覆盖率为 1 时得 100 分。Spearman 为 1 时得 100 分，非正值或无定义时记 0 分。</p>
+        <div class="table-scroll"><table>
+          <thead><tr><th scope="col">对照</th><th scope="col">MAE</th><th scope="col">Winkler</th><th scope="col">Spearman</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">支持集同档中位数</th><td>105.30</td><td>836.70</td><td>0.135</td></tr>
+            <tr><th scope="row">40 个支持样本的线性拟合</th><td>93.75</td><td>682.16</td><td>0.537</td></tr>
+            <tr><th scope="row">用原始晶体方向重算</th><td>203.16</td><td>—</td><td>0.006</td></tr>
+          </tbody>
+        </table></div>
+        <p>同档中位数对照用该档支持值的最小值和最大值构成区间。线性拟合使用八列数值摘要，含截距，点预测截断到非负。预测区间按支持集留一残差的第 1 和第 39 个顺序统计量平移，并扩至包含点预测。</p>
+      </section>
+
+      <section class="topic-section" aria-labelledby="sources-heading">
+        <h2 id="sources-heading">数据来源</h2>
+        <p>晶体坐标和来源表来自 Frangoulis、Mariano 等公开的晶体筛选。<a href="https://doi.org/10.5281/zenodo.19387958">Zenodo 数据</a> · <a href="https://arxiv.org/abs/2604.03019">论文</a></p>
+      </section>
+    </article>
+  </main>
+</body>
+</html>
