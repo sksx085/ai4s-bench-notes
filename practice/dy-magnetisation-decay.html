@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="用六个温度的实测磁矩曲线，预测同一样品在 6 K 和 16 K 降场后的磁矩。">
+  <title>预测镝配合物的实测磁化衰减曲线 | 每日出题实践</title>
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="./challenge.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="wordmark" href="../index.html" aria-label="AI4S Bench 笔记首页">AI4S <span>Bench Notes</span></a>
+      <nav aria-label="栏目">
+        <a href="../bench.html">Bench 指标</a>
+        <a href="./index.html" aria-current="location">每日出题实践</a>
+        <a href="../papers.html">论文更新</a>
+        <a href="../skills.html">Skills 与插件</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap" id="main" tabindex="-1">
+    <header class="intro intro-topic challenge-intro">
+      <a class="page-back" href="./index.html"><span aria-hidden="true">←</span> 返回每日出题实践</a>
+      <p class="meta"><time datetime="2026-11-19">2026.11.19</time><span>化学 · 镧系 · 开发试测</span></p>
+      <h1>预测镝配合物的实测磁化衰减曲线</h1>
+      <p>用六个温度的实测磁矩曲线，预测同一样品在 6 K 和 16 K 降场后的磁矩。</p>
+      <a class="challenge-download" href="./resources/dy-magnetisation-decay/dy-magnetisation-input.zip" download>下载作答包 <span aria-hidden="true">↓</span></a>
+    </header>
+
+    <nav class="challenge-nav" aria-label="题目内容">
+      <a href="#overview">概览</a>
+      <a href="#goal">目标</a>
+      <a href="#background">背景</a>
+      <a href="#input">输入</a>
+      <a href="#output">提交</a>
+      <a href="#scoring">评分</a>
+      <a href="#constraints">约束</a>
+      <a href="#completion">交卷前确认</a>
+    </nav>
+
+    <article class="topic-content challenge-content" aria-label="题面">
+      <section id="overview" class="topic-section" aria-labelledby="overview-heading">
+        <h2 id="overview-heading">一、这道题在做什么</h2>
+        <p><strong>先把样品磁化，再观察磁矩怎样减弱。</strong> 曼彻斯特大学团队对同一份镝单分子磁体样品做了八次完整的温度实验。每次先施加强磁场，再把磁场降到校准后的近零场。随后，磁强计连续记录样品的磁矩。有些温度下磁矩降得快，有些温度下数小时后仍有可测的磁矩。研究人员由此比较不同温度下磁化消退的过程。</p>
+        <p><strong>用已知温度的实验预测留出温度。</strong> 作答者拿到部分温度下的实测曲线，以及留出温度、降场条件和要预测的采样时刻。要回答的是，在同一份样品、同一套测量步骤下，换一个温度以后，磁矩会怎么随时间变化。</p>
+        <p><strong>难点在于快降和慢尾都要估得准。</strong> 实验最初的磁矩可能变化很快，后段的变化却能持续很久。预测要对上指定时刻的磁矩，既要跟上前段的变化，也要估好后段还剩多少。</p>
+        <p><strong>交一张磁矩预测表和一份方法说明。</strong> 每行对应一个实验和一个指定采样时刻，填写预测磁矩，单位是 emu。评分逐点对照该时刻的原始仪器读数。每个留出温度作为一个完整实验计入评估。</p>
+        <p><a href="https://doi.org/10.1039/D3CP01278F">原始实验论文</a> · <a href="https://doi.org/10.48420/22203130.v2">原始实验归档 v2</a></p>
+      </section>
+
+      <section id="goal" class="topic-section" aria-labelledby="goal-heading">
+        <h2 id="goal-heading">二、Goal｜目标</h2>
+        <p><strong>预测留出温度下的磁矩曲线。</strong> 已知同一份镝配合物样品在几个温度下的实测曲线。换一个温度，按同样的步骤把磁场降到近零后，样品在各个时刻还剩多少磁矩？把降场后首个落在校准目标场范围内的观测点记作 0 秒。在 0 到 17,000 秒内，为题包指定的每个采样时刻提交一个磁矩预测值，单位为 emu。</p>
+        <p><strong>按整个温度实验留出。</strong> 首版拟在题包中提供六个温度的实测曲线，留出另外两个温度的整条曲线。两个测试温度均处于这六个温度覆盖的范围内。题包给出测试温度、降场条件和采样时刻。测试曲线的磁矩读数由评测方保管，起始点也一样。评分时逐点对照磁强计的原始读数，并分别报告两个温度的误差。</p>
+        <p><strong>作答方式。</strong> 用题包和本地计算工具离线完成。可以对公开曲线做插值、拟合或建立模型。作答期间不得查阅原始实验归档或调用外部服务。</p>
+      </section>
+
+      <section id="background" class="topic-section" aria-labelledby="background-heading">
+        <h2 id="background-heading">三、Background｜实验背景与数据来源</h2>
+        <p><strong>测的是什么样品。</strong> 这是一种镝单分子磁体，化学式为 [Dy(Dtp)₂][Al{OC(CF₃)₃}₄]。在配合物阳离子中，Dy³⁺ 夹在两个含磷的五元环配体之间。这样的配位环境使磁矩倾向于沿特定方向取向。研究团队取了 31.5 mg 多晶样品，用正二十烷固定。下文的磁矩指磁强计沿测量方向读到的整份样品的净磁矩，单位是 emu。<a href="https://doi.org/10.1021/jacs.9b11515">配合物结构论文</a> · <a href="https://doi.org/10.1039/D3CP01278F">磁化衰减实验，§3</a></p>
+        <p><strong>先用强场磁化，再连续测量。</strong> 研究人员从 2 K 开始，在 +7 T 下保持 30 分钟，再以 700 Oe/s 降场。超导磁体在降场后会留下微弱的残余磁场。这组实验把仪器设在 +22 Oe 来抵消它，使样品所处的磁场接近零。Quantum Design MPMS3 磁强计在振动样品模式（VSM）下连续记录磁矩。2 K 下的长时测量约为 6 小时，随后在 4、6、9、13、16、20 和 23 K 重复同样的磁化和降场步骤，每个温度在近零场记录约 5 小时。<a href="https://doi.org/10.1039/D3CP01278F">磁化衰减实验，§4.2</a></p>
+        <p><strong>温度为什么会改变衰减。</strong> 降场后，样品起初仍保留一部分沿原磁场方向的磁矩。随着分子磁矩逐渐改变取向，整份样品的净磁矩随时间减弱，这就是磁弛豫。分子和晶格的振动可以促使镝离子在不同磁状态之间跃迁。升温时，这些振动更容易被激发，磁矩改变取向的速率也会随之变化。在很低的温度下，磁矩也可能通过量子隧穿改变取向。不同过程的贡献随温度而变，衰减的快慢和曲线形状都可能发生变化。<a href="https://doi.org/10.1021/jacs.9b11515">配合物磁学研究</a> · <a href="https://doi.org/10.1039/D3CP01278F">磁化衰减实验，§4.4</a></p>
+        <p><strong>曲线从哪里来。</strong> 曼彻斯特大学把这些仪器记录发布在 Figshare。题目取自 v2 归档 <code>DCDecayData.zip</code> 的 <code>FullDecays</code> 目录，每个温度对应同一份样品的一次长时测量。把降场后进入校准目标场范围的第一个记录点设为时间零点，取八条曲线都覆盖的前 17,000 秒。横轴是各次采样距零点的时间，纵轴是仪器原始记录的 <code>Moment (emu)</code>。<a href="https://doi.org/10.48420/22203130.v2">原始实验归档 v2（CC BY 4.0）</a></p>
+      </section>
+
+      <section id="input" class="topic-section" aria-labelledby="input-heading">
+        <h2 id="input-heading">四、Input｜题包里有什么</h2>
+        <p>下载并解压 <a href="./resources/dy-magnetisation-decay/dy-magnetisation-input.zip" download>dy-magnetisation-input.zip</a>，打开 <code>dy-magnetisation-input/</code>。先读实验说明，再用六个已知温度的实测磁矩曲线，预测测试表指定的时刻。</p>
+        <div class="table-scroll"><table>
+        <thead>
+        <tr>
+        <th scope="col">文件</th>
+        <th scope="col">内容</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td><code>protocol.md</code></td>
+        <td>说明样品、仪器、磁化和降场步骤，以及如何确定计时起点。仪器的 +22 Oe 设定用于补偿剩磁，使样品处接近零场。</td>
+        </tr>
+        <tr>
+        <td><code>support_curves.csv</code></td>
+        <td>2、4、9、13、20、23 K 的六条实测曲线，共 190,507 行。每行给出一次采样的时刻和仪器记录的磁矩。</td>
+        </tr>
+        <tr>
+        <td><code>test_times.csv</code></td>
+        <td>6 K 和 16 K 的预测清单，分别有 31,752 行和 31,759 行。每行给出一个实验的设定温度和待预测的采样时刻。</td>
+        </tr>
+        </tbody>
+        </table></div>
+        <p><strong>两张 CSV 怎样读。</strong> 文件用 UTF-8 编码，首行为列名。两张表共用前四列，支持曲线表另有一列磁矩。</p>
+        <div class="table-scroll"><table>
+        <thead>
+        <tr>
+        <th scope="col">列名</th>
+        <th scope="col">含义</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td><code>run_id</code></td>
+        <td>温度实验的编号，例如 <code>R01</code>。每个编号对应同一份样品在一个设定温度下的测量。</td>
+        </tr>
+        <tr>
+        <td><code>point_id</code></td>
+        <td>该实验内的采样点编号，从 0 开始，按采样顺序递增。<code>run_id</code> 和 <code>point_id</code> 合起来标识一个点。</td>
+        </tr>
+        <tr>
+        <td><code>nominal_temperature_K</code></td>
+        <td>该次实验的设定温度，单位 K，同一实验的每行都使用这个值。</td>
+        </tr>
+        <tr>
+        <td><code>elapsed_time_s</code></td>
+        <td>从降到目标场范围时的首个观测点算起，经过的秒数。每条曲线有自己的采样时刻，取 0 至 17,000 秒内实际记录的点。</td>
+        </tr>
+        <tr>
+        <td><code>moment_emu</code></td>
+        <td>该时刻的仪器原始磁矩读数，单位 emu，仅在 <code>support_curves.csv</code> 中提供。</td>
+        </tr>
+        </tbody>
+        </table></div>
+        <p>下面两行取自 2 K 的支持曲线。<code>R01</code> 的第 0 个点在 0 秒，第 1 个点在 0.58722 秒。</p>
+        <pre><code class="language-csv">run_id,point_id,nominal_temperature_K,elapsed_time_s,moment_emu
+        R01,0,2,0.00000,0.300697500924104
+        R01,1,2,0.58722,0.29811618531255
+        </code></pre>
+        <p><strong>测试时能看到什么。</strong> 作答者可以读取六条支持曲线和实验说明。两个测试实验各自提供编号、设定温度和采样时刻。测试磁矩和相关拟合参数由评测方保管，0 秒的磁矩也在其中。</p>
+        <p>作答包大小为 3,496,483 字节。SHA-256 为 <code>801dc060c9ee387e89b8ec33cf4eff1a12bb1a55eebd1958bcfbd3f5cdefb4f4</code>。</p>
+      </section>
+
+      <section id="output" class="topic-section" aria-labelledby="output-heading">
+        <h2 id="output-heading">五、Output｜要交什么</h2>
+        <p>在 <code>outputs/</code> 目录里交两份文件。</p>
+        <div class="table-scroll"><table>
+        <thead>
+        <tr>
+        <th scope="col">文件</th>
+        <th scope="col">内容</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td><code>predictions.csv</code></td>
+        <td>6 K 和 16 K 的磁矩预测。<code>test_times.csv</code> 的每个采样点对应一行，共 63,511 个数据行。</td>
+        </tr>
+        <tr>
+        <td><code>method.md</code></td>
+        <td>简短的方法说明，让读者能用同一份作答包复现你的预测。</td>
+        </tr>
+        </tbody>
+        </table></div>
+        <p><code>predictions.csv</code> 使用 UTF-8，首行的三个列名按下列顺序填写。</p>
+        <div class="table-scroll"><table>
+        <thead>
+        <tr>
+        <th scope="col">列名</th>
+        <th scope="col">填什么</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td><code>run_id</code></td>
+        <td>原样填写 <code>test_times.csv</code> 中的实验编号。</td>
+        </tr>
+        <tr>
+        <td><code>point_id</code></td>
+        <td>原样填写同一行的采样点编号。<code>run_id</code> 和 <code>point_id</code> 合起来确定一个采样点。</td>
+        </tr>
+        <tr>
+        <td><code>moment_emu</code></td>
+        <td>这个时刻的预测磁矩，单位 emu。填写一个有限实数，普通小数和科学计数法均可。</td>
+        </tr>
+        </tbody>
+        </table></div>
+        <p><code>test_times.csv</code> 里的每对编号必须恰好出现一次，行序不限。直接保留程序输出的有效数字即可。手动导出时建议保留至少 8 位小数或相当的科学计数法精度，以免长尾的小信号在导出时丢失。程序按双精度浮点数读取。</p>
+        <p>以下两行只演示格式，数值是示意值。</p>
+        <pre><code class="language-csv">run_id,point_id,moment_emu
+        R03,0,0.12345678
+        R06,0,9.87654321e-2
+        </code></pre>
+        <p><code>method.md</code> 使用以下三个二级标题，每节写几句即可。</p>
+        <ul>
+        <li><strong>输入与预处理</strong>　用到了哪些表或字段，如何处理时间网格、变换或异常值。</li>
+        <li><strong>预测方法</strong>　如何从六条支持曲线得到 6 K 和 16 K 的预测，关键参数怎样确定。如果用了物理或统计假设，简述其适用范围。</li>
+        <li><strong>复现</strong>　写出运行命令或可重复的操作步骤，以及关键软件版本。使用随机方法时注明种子。</li>
+        </ul>
+      </section>
+
+      <section id="scoring" class="topic-section" aria-labelledby="scoring-heading">
+        <h2 id="scoring-heading">六、Scoring｜怎么判分</h2>
+        <p><strong>满分 100 分。</strong> 6 K 和 16 K 各自按下表的 11 个采分点计分。每个温度的分项得分相加后，两个温度各占总成绩的 50%。评分器按 <code>run_id</code> 和 <code>point_id</code> 对齐实测点，以提交磁矩减去仪器原始读数得到误差 <var>e<sub>i</sub></var>，单位 emu。</p>
+        <p><strong>时间加权怎么算。</strong> 对一个时段，取落在其中的实测时刻，按时间排序。设相应坐标为 <var>x<sub>i</sub></var>，对某个量 <var>g<sub>i</sub></var> 的加权平均记为 <var>A<sub>x</sub>(g)</var>。用相邻点的平均值乘坐标间隔，求和后除以首尾坐标差。按秒加权时取 <var>x<sub>i</sub> = t<sub>i</sub></var>。按对数时间加权时取 <var>x<sub>i</sub></var> = ln(1 + <var>t<sub>i</sub></var> / 1 s)。1 秒使 0 秒也能纳入计算。各段只使用区间内实际采到的点，端点按表中所写的开闭范围归属。</p>
+        <div class="table-scroll"><table>
+        <thead>
+        <tr>
+        <th scope="col">项</th>
+        <th scope="col">采分点</th>
+        <th scope="col" style="text-align:right">满分</th>
+        <th scope="col">每条曲线怎么算</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td>1</td>
+        <td>整条曲线的对数时间 MAE</td>
+        <td style="text-align:right">37</td>
+        <td>在对数时间坐标上取 <var>A<sub>x</sub>(|e|)</var>。</td>
+        </tr>
+        <tr>
+        <td>2</td>
+        <td>整条曲线的按秒 MAE</td>
+        <td style="text-align:right">8</td>
+        <td>在秒坐标上取 <var>A<sub>t</sub>(|e|)</var>。</td>
+        </tr>
+        <tr>
+        <td>3</td>
+        <td>整条曲线的对数时间 RMSE</td>
+        <td style="text-align:right">7</td>
+        <td>取 √<span>(<var>A<sub>x</sub>(e<sup>2</sup>)</var>)</span>，反映较大的局部偏差。</td>
+        </tr>
+        <tr>
+        <td>4</td>
+        <td>起点误差</td>
+        <td style="text-align:right">5</td>
+        <td>取 0 秒误差的绝对值。</td>
+        </tr>
+        <tr>
+        <td>5</td>
+        <td>最初 10 秒误差</td>
+        <td style="text-align:right">7</td>
+        <td>在 [0,10] 秒内计算按秒 MAE。</td>
+        </tr>
+        <tr>
+        <td>6</td>
+        <td>10 到 100 秒误差</td>
+        <td style="text-align:right">8</td>
+        <td>在 (10,100] 秒内计算按秒 MAE。</td>
+        </tr>
+        <tr>
+        <td>7</td>
+        <td>100 到 1,000 秒误差</td>
+        <td style="text-align:right">7</td>
+        <td>在 (100,1000] 秒内计算按秒 MAE。</td>
+        </tr>
+        <tr>
+        <td>8</td>
+        <td>1,000 到 10,000 秒误差</td>
+        <td style="text-align:right">6</td>
+        <td>在 (1000,10000] 秒内计算按秒 MAE。</td>
+        </tr>
+        <tr>
+        <td>9</td>
+        <td>10,000 到 17,000 秒误差</td>
+        <td style="text-align:right">5</td>
+        <td>在 (10000,17000] 秒内计算按秒 MAE。</td>
+        </tr>
+        <tr>
+        <td>10</td>
+        <td>长尾偏差</td>
+        <td style="text-align:right">3</td>
+        <td>在 (10000,17000] 秒内先取有符号的按秒平均误差 <var>A<sub>t</sub>(e)</var>，再取其绝对值。分温度结果附上正负方向。</td>
+        </tr>
+        <tr>
+        <td>11</td>
+        <td>磁矩衰减量误差</td>
+        <td style="text-align:right">7</td>
+        <td>各自以自己的 0 秒值为起点，比较两条曲线在各时刻的磁矩变化。按对数时间计算 <var>A<sub>x</sub>(|e<sub>i</sub> − e<sub>0</sub>|)</var>。</td>
+        </tr>
+        <tr>
+        <td></td>
+        <td><strong>合计</strong></td>
+        <td style="text-align:right"><strong>100</strong></td>
+        <td></td>
+        </tr>
+        </tbody>
+        </table></div>
+        <p><strong>怎样把误差换成得分。</strong> 对每个温度、每个采分点，设满分为 <var>w</var>，本次误差为 <var>E</var>，相邻温度线性插值在同一采分点上的误差为 <var>B</var>。22 个 <var>B</var> 值在评分前固定。</p>
+        <p><strong>该项得分</strong> = <var>wB</var> / (<var>B</var> + 1.5<var>E</var>)</p>
+        <p>例如第 1 项满分 37。预测误差等于插值误差时得 <strong>14.80 分</strong>，误差减半时得 <strong>21.14 分</strong>，误差为零时得 <strong>37 分</strong>。总分 <strong>40 分</strong>对应插值基线。每一点按实测偏差连续计误差，所有分项计算完毕再将总分显示到小数点后两位。</p>
+        <p>按未舍入的百分制总分排序。总分相同时，对比两温度等权的整条曲线对数时间 MAE，误差小者在前。成绩同时保留每个温度的分项得分和 emu 误差。格式有误时先返回校验错误，修正后再评分。</p>
+        <p><strong>开发基线。</strong> 最近温度基线使用最近的支持曲线。相邻温度线性插值先分别在两个支持温度的实测时间线上做线性插值，再按标称温度插值。请求时刻若略超出支持曲线末点，取该曲线的最后一个记录值。</p>
+        <div class="table-scroll"><table>
+        <thead>
+        <tr>
+        <th scope="col">基线</th>
+        <th scope="col" style="text-align:right">6 K 得分</th>
+        <th scope="col" style="text-align:right">16 K 得分</th>
+        <th scope="col" style="text-align:right">总分 / 100</th>
+        <th scope="col" style="text-align:right">整条曲线对数时间 MAE，emu</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td>全程预测零磁矩</td>
+        <td style="text-align:right">4.72</td>
+        <td style="text-align:right">4.28</td>
+        <td style="text-align:right">4.50</td>
+        <td style="text-align:right">0.117303</td>
+        </tr>
+        <tr>
+        <td>最近支持温度</td>
+        <td style="text-align:right">10.72</td>
+        <td style="text-align:right">7.64</td>
+        <td style="text-align:right">9.18</td>
+        <td style="text-align:right">0.015311</td>
+        </tr>
+        <tr>
+        <td>相邻温度线性插值</td>
+        <td style="text-align:right">40.00</td>
+        <td style="text-align:right">40.00</td>
+        <td style="text-align:right">40.00</td>
+        <td style="text-align:right">0.001471</td>
+        </tr>
+        </tbody>
+        </table></div>
+      </section>
+
+      <section id="constraints" class="topic-section" aria-labelledby="constraints-heading">
+        <h2 id="constraints-heading">七、Constraints｜作答约束</h2>
+        <ul>
+        <li>作答在本地离线完成。可用作答包、已有科学知识、本地编辑器、计算器、电子表格、程序语言和预装的通用数值库。</li>
+        <li>可以用支持曲线拟合、插值或建模。若要调参，可在六个已公开温度中按整条曲线留出验证。</li>
+        <li>作答期间不得联网、调用外部 API 或使用包外数据。论文与数据出处供溯源。不得从原始实验归档、论文图表、镜像或其他已有作答提取 6 K 和 16 K 的磁矩或拟合结果。</li>
+        <li>保持 <code>test_times.csv</code> 中的编号和采样点集合。可在内部重采样或拟合，最后要给出原清单指定的每一点。</li>
+        </ul>
+      </section>
+
+      <section id="completion" class="topic-section" aria-labelledby="completion-heading">
+        <h2 id="completion-heading">八、Completion criteria｜交卷前确认</h2>
+        <ol>
+        <li>
+        <p><code>outputs/</code> 里有 <code>predictions.csv</code> 和 <code>method.md</code>。方法说明的三个标题下均有内容。</p>
+        </li>
+        <li>
+        <p>保存 <a href="./resources/dy-magnetisation-decay/check_submission.py" download>格式预检脚本</a>，在脚本所在目录运行以下命令。两个路径可以换成你实际解压数据和保存答案的位置。</p>
+        <pre><code class="language-bash">python3 check_submission.py dy-magnetisation-input/test_times.csv outputs
+        </code></pre>
+        </li>
+        <li>
+        <p>脚本输出 <code>63511</code> 表示所有编号和数值均可读取，方法说明齐全，可以提交两份文件。评测方返回 6 K、16 K 的分项结果，以及两个温度等权汇总的百分制总分。</p>
+        </li>
+        </ol>
+      </section>
+    </article>
+  </main>
+</body>
+</html>
