@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="由 14 个单核镝配合物的邻域箱和基态 gz 分档，预测同一套 CASSCF 筛选留出的第一激发能量及 95% 区间。">
-  <title>镝配合物能级预测任务 v1.1 | 每日出题实践</title>
+  <meta name="description" content="由 498 个单核镝配合物的邻域箱和基态 gz 分档，预测同一套 CASSCF 筛选留出的第一激发能量及 95% 区间。">
+  <title>镝配合物能级预测任务 v1.2 | 每日出题实践</title>
   <link rel="stylesheet" href="../styles.css">
   <link rel="stylesheet" href="./challenge.css">
   <style>
@@ -37,15 +37,15 @@
   <main class="wrap" id="main" tabindex="-1">
     <header class="intro intro-topic challenge-intro" id="dy-ladder">
       <a class="page-back" href="./index.html"><span aria-hidden="true">←</span> 返回每日出题实践</a>
-      <p class="meta"><time datetime="2026-11-18">2026.11.18</time><span>化学 · 镧系 · 预测 v1.1</span></p>
+      <p class="meta"><time datetime="2026-11-19">2026.11.19</time><span>化学 · 镧系 · 预测 v1.2</span></p>
       <h1>镝配合物能级预测任务</h1>
       <dl class="challenge-stats">
         <div><dt>公开样例</dt><dd>1</dd></div>
-        <div><dt>测试分子</dt><dd>14</dd></div>
-        <div><dt>主预测</dt><dd>14</dd></div>
+        <div><dt>测试分子</dt><dd>498</dd></div>
+        <div><dt>主预测</dt><dd>498</dd></div>
       </dl>
-      <a class="challenge-download" href="./resources/dy-ladder-prediction/dy-ladder-prediction-v1.1.zip" download>下载作答包 <span aria-hidden="true">↓</span></a>
-      <p class="case-links"><a href="./dy-ladder-prediction-results.html">查看三家模型试测结果 <span aria-hidden="true">→</span></a></p>
+      <a class="challenge-download" href="./resources/dy-ladder-prediction/dy-ladder-prediction-v1.2.zip" download>下载作答包 <span aria-hidden="true">↓</span></a>
+      <p class="case-links"><a href="./dy-ladder-prediction-results.html">查看 v1.1 的 14 分子试测 <span aria-hidden="true">→</span></a></p>
     </header>
 
     <nav class="challenge-nav" aria-label="题目内容">
@@ -62,7 +62,8 @@
     <article class="topic-content challenge-content" aria-label="镝能级预测题面">
       <section id="overview" class="topic-section" aria-labelledby="overview-heading">
         <h2 id="overview-heading">这道题在做什么（给非专业读者）</h2>
-        <p>已知 21 个含镝分子的结构、基态磁性和低能级。另有 14 个分子，只给出镝周围有哪些类型的原子，以及基态最强磁响应的 g 值是否达到 19。请预测最低两对能级的间距，并给出 95% 预测区间。</p>
+        <p>这张库能回答的问题只有一个。在同一套孤立分子 CASSCF 筛查里，只知道镝周围 3.2 Å 内的元素档，以及基态 gz 是否已经达到 19，第一激发双重态还有多高。同时给出这个数的 95% 预测区间。</p>
+        <p>库里没有另外三列，本题也不判它们：交流磁化率有没有慢弛豫、下一支具体配体该怎么改、以及在有限次数的 CASSCF 里能不能把各向异性做高。现有标签是已经算完的能级和 g。</p>
         <h3>几个词是什么意思</h3>
         <div class="table-scroll"><table>
           <thead>
@@ -79,19 +80,19 @@
           </tbody>
         </table></div>
         <h3>数据长什么样</h3>
-        <p>支持分子有坐标、基态 g 和八对双重态的能量。测试分子只有编号、邻域箱和 gz 分档。作答包里有一个填好的样例，用的是支持集里的 SUP-01，不计入 14 个测试分子。</p>
+        <p>支持分子有坐标、基态 g 和八对双重态的能量。测试分子只有编号、邻域箱和 gz 分档。作答包里有一个填好的样例，用的是支持集里的 SUP-01，不计入 498 个测试分子。</p>
         <h3>问题是什么</h3>
-        <p>同一个邻域、同一种轴向分档里，第一激发能量仍然可以差得很远。题目按 14 个分子的协议能级分别判分。给定相同分档的样本允许提交相同预测。</p>
+        <p>同一个邻域、同一种轴向分档里，第一激发能量仍然可以差得很远。主预测按 498 个元素组成分别判分。给定相同分档的样本允许提交相同预测。</p>
         <h3>为什么值得做</h3>
-        <p>这 14 个能级是同一套 CASSCF 筛选里留出的输出。精确坐标和六位小数的 g 能把公开表里的那一行认出来，所以这两样不作为测试输入。要判断的是：只靠邻域箱和 gz 是否达到 19，能把协议输出估到多准。</p>
+        <p>630 条合格记录的第一激发能量中位数是 97.6 cm⁻¹，最高 570.4 cm⁻¹。同一元素档里这个间距仍然差得很远，所以只改第一配位层的元素类别定不下来这套协议的各向异性。精确坐标和六位小数的 g 能把公开表里的那一行认出来，那是在读已经算完的格子，所以这两样不作为测试输入。</p>
         <h3>要交什么，怎么算分</h3>
-        <p>交 14 行预测和一份 <code>method.md</code>。点值看平均绝对误差（MAE），区间看 Winkler 分数。两项均以 cm⁻¹ 计，越低越好。全支持集中位数、支持集同档上中位数、来源表同档上中位数的第一激发 MAE 分别为 63.5、71.1、43.0 cm⁻¹。</p>
+        <p>交 498 行预测和一份 <code>method.md</code>。点值看平均绝对误差（MAE），区间看 Winkler 分数。两项均以 cm⁻¹ 计，越低越好。全支持集中位数、支持集同档上中位数、来源表同档上中位数的第一激发 MAE 分别为 74.1、82.4、52.9 cm⁻¹。</p>
       </section>
 
       <section id="goal" class="topic-section" aria-labelledby="goal-heading">
         <h2 id="goal-heading">目标</h2>
-        <p>预测 <code>DY-01</code> 到 <code>DY-14</code> 在同一套计算协议下的七个激发双重态能量，单位 cm⁻¹，相对基态。主点值是 <code>kd_cm1_1</code>。同时为这个数提交等尾 95% 预测区间的下界和上界。两端到点值的距离可以不同。</p>
-        <p>可以用 21 个支持分子的几何、g 和完整能级，加上 14 个测试分子的邻域箱和 gz 分档。也可以读取来源公开表。表里同一个邻域箱、同一个 gz 分档有多个分子，读到的是这一组能级，不是测试编号对应的单独一行。不要把这个计算能级写成实验测到的磁弛豫时间。</p>
+        <p>预测 <code>DY-001</code> 到 <code>DY-498</code> 在同一套计算协议下的七个激发双重态能量，单位 cm⁻¹，相对基态。主点值是 <code>kd_cm1_1</code>。同时为这个数提交等尾 95% 预测区间的下界和上界。两端到点值的距离可以不同。</p>
+        <p>可以用 21 个支持分子的几何、g 和完整能级，加上 498 个测试分子的邻域箱和 gz 分档。也可以读取来源公开表。表里同一个邻域箱、同一个 gz 分档有多个分子，读到的是这一组能级，不是测试编号对应的单独一行。不要把这个计算能级写成实验测到的磁弛豫时间，不要交一条配体改法，也不要交“再算多少个分子”的预算。</p>
       </section>
 
       <section id="background" class="topic-section" aria-labelledby="background-heading">
@@ -100,12 +101,12 @@
         <p>电子结构计算使用 ORCA 5。标量相对论用 Douglas–Kroll–Hess（DKH），自旋–轨道耦合的 picture-change 修正保留到二阶。基组是 DKH-def2-TZVPP；比 Kr 重的原子用 SARC-DKH-TZVPP。活性空间是镝的 4f 壳层，9 个电子、7 个轨道，做 21 个根、多重度 6 的态平均 CASSCF。来源流程会先指定电荷和自旋多重度。这两项没有进入公开发布的表，本题也不提供。</p>
         <p>经本题筛选后有 630 条记录。同一元素组成只留一条时得到 545 个分子。这些分子的第一激发能量中位数是 97.6 cm⁻¹，最高 570.4 cm⁻¹。许多轴向分子的有效 <code>gz</code> 接近 20，这是纯 <code>|±15/2⟩</code> 双重态写成有效自旋 1/2 时的上限，等于 <code>2 g_J |M_J|</code>，其中 <code>g_J = 4/3</code>。</p>
         <p>邻域箱只按距离 Dy 3.2 Å 以内的非氢原子计数。分子式里更远的原子不算进这个箱。同一个箱不是同一类配体。优先级是 P，其次 S，其次卤素（F、Cl、Br、I），其次同时有 C 和 N，然后是 C、N，最后是只有 O。</p>
-        <p>支持集 21 个分子，七个邻域箱各约 3 个，按该箱第一激发能量的低、中、高位置选取。测试集从其余分子中按邻域箱抽取，每箱 2 个。抽样排除了旧版测试集和当前支持集中的元素组成，编号与来源顺序无关。电荷、质子化状态、溶剂、抗衡离子和 g 张量的方向没有单独给出。</p>
+        <p>支持集 21 个分子，七个邻域箱各约 3 个，按该箱第一激发能量的低、中、高位置选取。测试集在排除支持集和旧版测试集的元素组成之后，纳入每个剩余不少于 8 个元素组成的分档里的全部分子，共 498 个。实际最少的一档还有 12 个。硫的两档排除后剩 5 个和 4 个，磷的两档剩 0 个和 3 个，这两箱不进入主预测。编号在每个分档内打乱。计分数目是：只有氧 31 和 25，氮 74 和 148，碳 22 和 30，同时有碳和氮 27 和 75，卤素 12 和 54。电荷、质子化状态、溶剂、抗衡离子和 g 张量的方向没有单独给出。</p>
       </section>
 
       <section id="input" class="topic-section" aria-labelledby="input-heading">
         <h2 id="input-heading">输入（你能用的东西）</h2>
-        <p>解压作答包后，在 <code>dy-ladder-prediction-v1.1/public/</code> 中读取这些文件。测试参考能级和测试坐标不在包内。</p>
+        <p>解压作答包后，在 <code>dy-ladder-prediction-v1.2/public/</code> 中读取这些文件。测试参考能级和测试坐标不在包内。</p>
         <div class="table-scroll"><table>
           <thead>
             <tr><th>文件</th><th>内容</th></tr>
@@ -115,20 +116,20 @@
             <tr><td><code>structures/SUP-01.xyz</code> … <code>SUP-21.xyz</code></td><td>支持分子坐标，单位 Å。注释里没有能量，也没有来源编号。</td></tr>
             <tr><td><code>support.csv</code></td><td><code>case_id</code>、<code>family_bin</code>、<code>n_atoms</code>、<code>n_neighbors_3p2A</code>、<code>neighbor_counts</code>、<code>formula</code>、基态 <code>gx, gy, gz, g_trans</code>，以及 <code>kd_cm1_0</code> … <code>kd_cm1_7</code>。<code>n_atoms</code> 是原子数。<code>n_neighbors_3p2A</code> 是 3.2 Å 内的非氢、非 Dy 原子数。<code>neighbor_counts</code> 按元素记录这些原子的数量。</td></tr>
             <tr><td><code>cases.csv</code></td><td>测试分子的 <code>case_id</code>、<code>family_bin</code>、<code>gz_at_least_19</code>。没有坐标、分子式、原子数、邻原子计数、g 本征值或能级。</td></tr>
-            <tr><td><code>prediction-template.csv</code></td><td>14 行空表。复制后填写。</td></tr>
+            <tr><td><code>prediction-template.csv</code></td><td>498 行空表。复制后填写。</td></tr>
             <tr><td><code>example/</code></td><td>SUP-01 的已填写预测和方法说明样例。样例不计分。</td></tr>
             <tr><td><code>check_submission.py</code></td><td>同时检查预测表和 <code>method.md</code>。不读取参考能级。</td></tr>
             <tr><td><code>manifest.json</code></td><td>分子数、测试公开列和版本。</td></tr>
           </tbody>
         </table></div>
-        <p>支持集的第一激发能量从 15.3 到 402.5 cm⁻¹，中位数 97.7 cm⁻¹。按邻域箱和 gz 分档筛选，并排除已公开的支持与旧测试分子组成后，每个测试编号至少还对应 3 个候选组成。</p>
+        <p>支持集的第一激发能量从 15.3 到 402.5 cm⁻¹，中位数 97.7 cm⁻¹。按邻域箱和 gz 分档筛选，并排除已公开的支持与旧测试分子组成后，每个计分分档至少还有 12 个元素组成。</p>
       </section>
 
       <section id="output" class="topic-section" aria-labelledby="output-heading">
         <h2 id="output-heading">输出（你要交的东西）</h2>
         <p>提交 UTF-8 的 <code>predictions.csv</code>，每个测试分子一行。列如下。</p>
         <pre><code class="language-text">case_id,kd_cm1_1,lower95_cm1,upper95_cm1,kd_cm1_2,kd_cm1_3,kd_cm1_4,kd_cm1_5,kd_cm1_6,kd_cm1_7</code></pre>
-        <p><code>kd_cm1_1</code> 是第一激发能量。后面六个是更高双重态，都必须相对基态、不小于 0，并且从低到高。<code>lower95_cm1 ≤ kd_cm1_1 ≤ upper95_cm1</code>。下界可以低于 0。<code>DY-01</code> 到 <code>DY-14</code> 各出现一次，行序不限。</p>
+        <p><code>kd_cm1_1</code> 是第一激发能量。后面六个是更高双重态，都必须相对基态、不小于 0，并且从低到高。<code>lower95_cm1 ≤ kd_cm1_1 ≤ upper95_cm1</code>。下界可以低于 0。<code>DY-001</code> 到 <code>DY-498</code> 各出现一次，行序不限。</p>
         <p>另交同目录的 UTF-8 <code>method.md</code>。它要有三个二级标题，标题下面都要有文字：<code>输入列</code>、<code>程序入口</code>、<code>适用边界</code>。格式检查只确认标题存在并且标题下不是空白。</p>
         <p>下面是公开样例的一行。SUP-01 的第一激发能量是 23.4 cm⁻¹。正式提交只填写测试模板。</p>
         <pre><code class="language-csv">case_id,kd_cm1_1,lower95_cm1,upper95_cm1,kd_cm1_2,kd_cm1_3,kd_cm1_4,kd_cm1_5,kd_cm1_6,kd_cm1_7
@@ -138,27 +139,27 @@ SUP-01,23.4000,23.4000,23.4000,91.2000,216.6000,274.9000,329.8000,376.7000,515.8
 
       <section id="scoring" class="topic-section" aria-labelledby="scoring-heading">
         <h2 id="scoring-heading">评分</h2>
-        <p>两个主结果都保留 cm⁻¹，不合成百分制。点值主结果是 14 个分子等权的第一激发 MAE。区间主结果是同一组分子的 Winkler 分数。名义覆盖是 95%，所以漏到区间外 1 cm⁻¹，要加上 40 cm⁻¹。这里评的是对协议输出的预测区间，不是测量噪声。</p>
+        <p>两个主结果都保留 cm⁻¹，不合成百分制。点值主结果是 498 个分子等权的第一激发 MAE。区间主结果是同一组分子的 Winkler 分数。名义覆盖是 95%，所以漏到区间外 1 cm⁻¹，要加上 40 cm⁻¹。这里评的是对协议输出的预测区间，不是测量噪声。</p>
         <pre><code class="language-text">绝对误差 = |点值 − 参考值|
 区间宽度 = 上界 − 下界
 覆盖     = 下界 ≤ 参考值 ≤ 上界
 Winkler  = 区间宽度 + 40 × 落在区间外的距离</code></pre>
-        <p>全部预测都相同，等级相关没有定义，记为空，不记成 0。14 行没有全部通过自查时，不计算这些误差。</p>
+        <p>全部预测都相同，等级相关没有定义，记为空，不记成 0。498 行没有全部通过自查时，不计算这些误差。</p>
         <div class="table-scroll"><table class="score-metrics">
           <thead>
             <tr><th>序号</th><th>评价量</th><th>计算口径</th><th>单位</th></tr>
           </thead>
           <tbody>
-            <tr><td>1</td><td>第一激发误差</td><td>14 个分子 MAE。点值主结果</td><td>cm⁻¹</td></tr>
-            <tr><td>2</td><td>第一激发区间分数</td><td>Winkler 的 14 分子平均。区间主结果</td><td>cm⁻¹</td></tr>
+            <tr><td>1</td><td>第一激发误差</td><td>498 个分子 MAE。点值主结果</td><td>cm⁻¹</td></tr>
+            <tr><td>2</td><td>第一激发区间分数</td><td>Winkler 的 498 分子平均。区间主结果</td><td>cm⁻¹</td></tr>
             <tr><td>3</td><td>覆盖率</td><td>参考值落在闭区间内的分子比例</td><td>比例</td></tr>
-            <tr><td>4</td><td>区间宽度</td><td>14 个区间宽度的平均</td><td>cm⁻¹</td></tr>
+            <tr><td>4</td><td>区间宽度</td><td>498 个区间宽度的平均</td><td>cm⁻¹</td></tr>
             <tr><td>5</td><td>下侧漏报</td><td>参考值低于下界的比例</td><td>比例</td></tr>
             <tr><td>6</td><td>上侧漏报</td><td>参考值高于上界的比例</td><td>比例</td></tr>
             <tr><td>7</td><td>最高双重态</td><td><code>kd_cm1_7</code> 的 MAE</td><td>cm⁻¹</td></tr>
             <tr><td>8</td><td>七个激发双重态</td><td>7 个能级放在一起的 MAE</td><td>cm⁻¹</td></tr>
             <tr><td>9</td><td>等级相关</td><td>第一激发能量的 Spearman。全并列时为空</td><td>无量纲</td></tr>
-            <tr><td>10</td><td>第一激发中位绝对误差</td><td>14 个绝对误差的中位数</td><td>cm⁻¹</td></tr>
+            <tr><td>10</td><td>第一激发中位绝对误差</td><td>498 个绝对误差的中位数</td><td>cm⁻¹</td></tr>
             <tr><td>11</td><td>最差分子</td><td>第一激发绝对误差的最大值</td><td>cm⁻¹</td></tr>
           </tbody>
         </table></div>
@@ -178,28 +179,28 @@ Winkler  = 区间宽度 + 40 × 落在区间外的距离</code></pre>
           <tbody>
             <tr>
               <td>全支持集中位数，第一激发区间为支持集范围 15.3–402.5 cm⁻¹</td>
-              <td style="text-align:right">63.5</td>
-              <td style="text-align:right">387.2</td>
-              <td style="text-align:right">1.000</td>
+              <td style="text-align:right">74.1</td>
+              <td style="text-align:right">467.5</td>
+              <td style="text-align:right">0.940</td>
               <td style="text-align:right">无定义</td>
             </tr>
             <tr>
               <td>支持集同档上中位数，第一激发区间为支持集同档最小到最大</td>
-              <td style="text-align:right">71.1</td>
-              <td style="text-align:right">865.1</td>
-              <td style="text-align:right">0.500</td>
-              <td style="text-align:right">0.725</td>
+              <td style="text-align:right">82.4</td>
+              <td style="text-align:right">1270.1</td>
+              <td style="text-align:right">0.384</td>
+              <td style="text-align:right">0.661</td>
             </tr>
             <tr>
               <td>来源表同档上中位数，第一激发区间为来源表同档最小到最大</td>
-              <td style="text-align:right">43.0</td>
-              <td style="text-align:right">232.8</td>
+              <td style="text-align:right">52.9</td>
+              <td style="text-align:right">325.0</td>
               <td style="text-align:right">1.000</td>
-              <td style="text-align:right">0.844</td>
+              <td style="text-align:right">0.675</td>
             </tr>
           </tbody>
         </table></div>
-        <p>第三组的区间覆盖同档所有来源记录，覆盖率因此为 1。它的 Winkler 分数等于平均宽度 232.8 cm⁻¹。这组对照描述可从来源表获得的分布信息。</p>
+        <p>第三组的区间覆盖同档所有来源记录，覆盖率因此为 1。它的 Winkler 分数等于平均宽度 325.0 cm⁻¹。这组对照描述可从来源表获得的分布信息。</p>
       </section>
 
       <section id="constraints" class="topic-section" aria-labelledby="constraints-heading">
@@ -212,7 +213,7 @@ Winkler  = 区间宽度 + 40 × 落在区间外的距离</code></pre>
           </thead>
           <tbody>
             <tr><td>文件读取失败或 CSV 格式错误</td><td>使用 UTF-8 保存文件，按模板保留 10 列及其表头。</td></tr>
-            <tr><td>缺少、重复或出现题单外的分子</td><td>核对 <code>DY-01</code> 到 <code>DY-14</code>。样例编号 <code>SUP-01</code> 不能代替测试行。</td></tr>
+            <tr><td>缺少、重复或出现题单外的分子</td><td>核对 <code>DY-001</code> 到 <code>DY-498</code>。样例编号 <code>SUP-01</code> 不能代替测试行。</td></tr>
             <tr><td>数值无法解析或包含 NaN、Inf</td><td>在数值列填写有限数值，不附单位。</td></tr>
             <tr><td>区间没有罩住点值，或能量反序</td><td>检查下界 ≤ 第一激发 ≤ 上界，并且七个激发能量从低到高、不小于 0。</td></tr>
             <tr><td>没有方法说明，或三个标题缺失、标题下为空白</td><td><code>method.md</code> 与预测表放在同一目录，标题为「输入列」「程序入口」「适用边界」。</td></tr>
@@ -223,9 +224,9 @@ Winkler  = 区间宽度 + 40 × 落在区间外的距离</code></pre>
 
       <section id="completion" class="topic-section" aria-labelledby="completion-heading">
         <h2 id="completion-heading">完成标准</h2>
-        <p>填齐 14 个测试分子，并写好 <code>method.md</code>。从解压后的 <code>public/</code> 目录运行格式自查。输出 <code>"status": "accepted"</code> 时，预测表和方法说明都已通过格式验证。测试参考和评分程序不在作答包里。出题方对收件通过的文件计算上面 11 项；未完成的文件只保留缺项，不产生主结果。</p>
+        <p>填齐 498 个测试分子，并写好 <code>method.md</code>。从解压后的 <code>public/</code> 目录运行格式自查。输出 <code>"status": "accepted"</code> 时，预测表和方法说明都已通过格式验证。测试参考和评分程序不在作答包里。出题方对收件通过的文件计算上面 11 项；未完成的文件只保留缺项，不产生主结果。</p>
         <pre><code class="language-sh">python3 check_submission.py predictions.csv</code></pre>
-        <p>交卷前可以用公开样例核对区间公式。样例复算为 0，不代替 14 个测试分子的分数。脚本只读取支持集里的 SUP-01。</p>
+        <p>交卷前可以用公开样例核对区间公式。样例复算为 0，不代替 498 个测试分子的分数。脚本只读取支持集里的 SUP-01。</p>
         <pre><code class="language-sh">python3 example/rescore_example.py example/prediction-example.csv</code></pre>
         <p>晶体结构筛选表和坐标来自 Frangoulis、Mariano 等，Zenodo <a href="https://doi.org/10.5281/zenodo.19387958">10.5281/zenodo.19387958</a>，CC-BY-4.0。论文见 <a href="https://arxiv.org/abs/2604.03019">arXiv:2604.03019</a>，期刊版 <a href="https://doi.org/10.1021/jacs.6c12194">10.1021/jacs.6c12194</a>。本题只用晶体来源的分子。能量和 g 没有改单位。3.2 Å 邻域箱和 <code>gz ≥ 19</code> 的分档是本题加上的。</p>
       </section>
