@@ -76,6 +76,29 @@
           </div>
           <a class="action download" href="./downloads/ai4s-challenge-design-0.1.0.zip" download aria-label="下载 AI4S 科研挑战设计 ZIP">下载 ZIP <span aria-hidden="true">↓</span></a>
         </article>
+        <article class="entry skill" id="ai4s-scoring-rule" aria-labelledby="scoring-rule-title">
+          <div>
+            <h2 id="scoring-rule-title">AI4S 评分规则</h2>
+            <p class="meta"><code>ai4s-scoring-rule</code><span>v0.1.0</span></p>
+            <p>规定一道科学题的分数怎么构成。采分点要落在可单独失败的维度上，权重按对结论的重要性分配，对外用百分制。</p>
+            <dl class="skill-facts">
+              <dt>适用场景</dt>
+              <dd>出题时写计分，改总分口径，或核对题面、评分器和结果页是不是同一条规则。</dd>
+              <dt>预期交付</dt>
+              <dd>一张计分合同。每行是一个采分点，写明维度、部位、通行准则、权重、0 分锚和 100 分锚。不提供某一学科的判据。</dd>
+            </dl>
+            <details class="install">
+              <summary>安装说明</summary>
+              <p>核对 ZIP 的 SHA-256。完整解压后，把 <code>ai4s-scoring-rule/</code> 文件夹放进 Codex 的 Skills 目录。开启新会话，在消息中调用 <code>$ai4s-scoring-rule</code>。</p>
+              <a href="./downloads/ai4s-scoring-rule-0.1.0.zip.sha256" download>下载 SHA-256 校验文件</a>
+            </details>
+            <details class="install">
+              <summary>调用示例</summary>
+              <p>请用 <code>$ai4s-scoring-rule</code> 审阅这道题的计分。列出维度和采分点，按对结论的重要性加权，并核对题面与结果页是否同一条规则。</p>
+            </details>
+          </div>
+          <a class="action download" href="./downloads/ai4s-scoring-rule-0.1.0.zip" download aria-label="下载 AI4S 评分规则 ZIP">下载 ZIP <span aria-hidden="true">↓</span></a>
+        </article>
         <article class="entry skill" id="catalysis-inverse-bench" aria-labelledby="catalysis-skill-title">
           <div>
             <h2 id="catalysis-skill-title">催化机制反演出题</h2>
