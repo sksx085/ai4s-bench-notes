@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="由 498 个单核镝配合物的邻域箱和基态 gz 分档，预测同一套 CASSCF 筛选留出的第一激发能量及 95% 区间。">
-  <title>镝配合物能级预测任务 v1.2 | 每日出题实践</title>
+  <title>镝配合物能级预测任务 v1.3 | 每日出题实践</title>
   <link rel="stylesheet" href="../styles.css">
   <link rel="stylesheet" href="./challenge.css">
   <style>
@@ -37,14 +37,14 @@
   <main class="wrap" id="main" tabindex="-1">
     <header class="intro intro-topic challenge-intro" id="dy-ladder">
       <a class="page-back" href="./index.html"><span aria-hidden="true">←</span> 返回每日出题实践</a>
-      <p class="meta"><time datetime="2026-11-19">2026.11.19</time><span>化学 · 镧系 · 预测 v1.2</span></p>
+      <p class="meta"><time datetime="2026-11-19">2026.11.19</time><span>化学 · 镧系 · 预测 v1.3</span></p>
       <h1>镝配合物能级预测任务</h1>
       <dl class="challenge-stats">
         <div><dt>公开样例</dt><dd>1</dd></div>
-        <div><dt>测试分子</dt><dd>498</dd></div>
-        <div><dt>主预测</dt><dd>498</dd></div>
+        <div><dt>CASSCF 表</dt><dd>498</dd></div>
+        <div><dt>配位表</dt><dd>458</dd></div>
       </dl>
-      <a class="challenge-download" href="./resources/dy-ladder-prediction/dy-ladder-prediction-v1.2.zip" download>下载作答包 <span aria-hidden="true">↓</span></a>
+      <a class="challenge-download" href="./resources/dy-ladder-prediction/dy-ladder-prediction-v1.3.zip" download>下载作答包 <span aria-hidden="true">↓</span></a>
       <p class="case-links"><a href="./dy-ladder-prediction-results.html">查看 v1.1 的 14 分子试测 <span aria-hidden="true">→</span></a></p>
     </header>
 
@@ -54,6 +54,7 @@
       <a href="#background">背景</a>
       <a href="#input">输入</a>
       <a href="#output">输出</a>
+      <a href="#geometry">配位表</a>
       <a href="#scoring">评分</a>
       <a href="#constraints">约束</a>
       <a href="#completion">完成标准</a>
@@ -62,7 +63,7 @@
     <article class="topic-content challenge-content" aria-label="镝能级预测题面">
       <section id="overview" class="topic-section" aria-labelledby="overview-heading">
         <h2 id="overview-heading">这道题在做什么（给非专业读者）</h2>
-        <p>这张库能回答的问题只有一个。在同一套孤立分子 CASSCF 筛查里，只知道镝周围 3.2 Å 内的元素档，以及基态 gz 是否已经达到 19，第一激发双重态还有多高。同时给出这个数的 95% 预测区间。</p>
+        <p>本题有两张分开计分的表。第一张沿用 v1.2：在同一套孤立分子 CASSCF 筛查里，只根据镝周围 3.2 Å 内的元素档，以及基态 gz 是否已经达到 19，预测第一激发双重态和 95% 区间。第二张给每个分子自己的配位摘要，预测一份点电荷晶场模型的第一激发能量和 95% 区间。第二张 458 行的公开输入互不相同。</p>
         <p>库里没有另外三列，本题也不判它们：交流磁化率有没有慢弛豫、下一支具体配体该怎么改、以及在有限次数的 CASSCF 里能不能把各向异性做高。现有标签是已经算完的能级和 g。</p>
         <h3>几个词是什么意思</h3>
         <div class="table-scroll"><table>
@@ -86,7 +87,7 @@
         <h3>为什么值得做</h3>
         <p>630 条合格记录的第一激发能量中位数是 99.95 cm⁻¹。同一元素组成只留一条后有 545 个分子，中位数是 97.6 cm⁻¹。最高都是 570.4 cm⁻¹。同一元素档里这个间距仍然差得很远。精确坐标和六位小数的 g 能把公开表里的那一行认出来，所以这两样不作为测试输入。498 行测试输入只有 10 种组合。同档共用一个点值时，用该档测试组成的中位数，第一激发 MAE 是 52.25 cm⁻¹。只低于来源表同档基线的 52.9 cm⁻¹，还没有超过这个分档统计。</p>
         <h3>要交什么，怎么算分</h3>
-        <p>交 498 行预测和一份 <code>method.md</code>。点值看平均绝对误差（MAE），区间看 Winkler 分数。两项均以 cm⁻¹ 计，越低越好。全支持集中位数、支持集同档上中位数、来源表同档上中位数的第一激发 MAE 分别为 74.1、82.4、52.9 cm⁻¹。用公开资料重建 10 个测试档后，同档中位数和经验分位区间是 52.25 与 311.38 cm⁻¹。</p>
+        <p>交 <code>predictions.csv</code>、<code>geometry-predictions.csv</code> 和一份 <code>method.md</code>。两张表都用 cm⁻¹ 计的 MAE 和 Winkler 分数，越低越好，不合成百分制。CASSCF 表上，全支持集中位数、支持集同档上中位数、来源表同档上中位数的第一激发 MAE 分别为 74.1、82.4、52.9 cm⁻¹。用公开资料重建 10 个测试档后，同档中位数和经验分位区间是 52.25 与 311.38 cm⁻¹。配位表上，只按元素档取支持集中位数的 MAE 是 105.30 cm⁻¹；用配位摘要做支持集线性拟合的 MAE 是 93.75 cm⁻¹。</p>
       </section>
 
       <section id="goal" class="topic-section" aria-labelledby="goal-heading">
@@ -106,7 +107,7 @@
 
       <section id="input" class="topic-section" aria-labelledby="input-heading">
         <h2 id="input-heading">输入（你能用的东西）</h2>
-        <p>解压作答包后，在 <code>dy-ladder-prediction-v1.2/public/</code> 中读取这些文件。测试参考能级和测试坐标不在包内。</p>
+        <p>解压作答包后，在 <code>dy-ladder-prediction-v1.3/public/</code> 中读取这些文件。测试参考能级、测试坐标和配位表的方向都不在包内。</p>
         <div class="table-scroll"><table>
           <thead>
             <tr><th>文件</th><th>内容</th></tr>
@@ -118,7 +119,11 @@
             <tr><td><code>cases.csv</code></td><td>测试分子的 <code>case_id</code>、<code>family_bin</code>、<code>gz_at_least_19</code>。没有坐标、分子式、原子数、邻原子计数、g 本征值或能级。</td></tr>
             <tr><td><code>prediction-template.csv</code></td><td>498 行空表。复制后填写。</td></tr>
             <tr><td><code>example/</code></td><td>SUP-01 的已填写预测和方法说明样例。样例不计分。</td></tr>
-            <tr><td><code>check_submission.py</code></td><td>同时检查预测表和 <code>method.md</code>。不读取参考能级。</td></tr>
+            <tr><td><code>geometry-support.csv</code></td><td><code>GS-01</code> 到 <code>GS-40</code> 的配位摘要和点电荷第一激发。五个邻域箱各 8 个。</td></tr>
+            <tr><td><code>geometry-cases.csv</code></td><td><code>CF-001</code> 到 <code>CF-458</code> 的配位摘要。没有方向，也没有参考能量。</td></tr>
+            <tr><td><code>geometry-prediction-template.csv</code></td><td>458 行空表。</td></tr>
+            <tr><td><code>check_submission.py</code></td><td>检查 CASSCF 预测表和 <code>method.md</code>。不读取参考能级。</td></tr>
+            <tr><td><code>check_geometry.py</code></td><td>检查配位表预测。不读取参考能量。</td></tr>
             <tr><td><code>manifest.json</code></td><td>分子数、测试公开列和版本。</td></tr>
           </tbody>
         </table></div>
@@ -135,6 +140,25 @@
         <pre><code class="language-csv">case_id,kd_cm1_1,lower95_cm1,upper95_cm1,kd_cm1_2,kd_cm1_3,kd_cm1_4,kd_cm1_5,kd_cm1_6,kd_cm1_7
 SUP-01,23.4000,23.4000,23.4000,91.2000,216.6000,274.9000,329.8000,376.7000,515.8000</code></pre>
         <p>这一行盖住公开参考值，区间宽度为 0，区间分数也是 0。若把第一激发改成 10.0、区间改成 0.0 到 20.0，参考值高出上界 3.4 cm⁻¹，区间分数是 20 + 40 × 3.4 = 156。</p>
+        <p>配位表另交 <code>geometry-predictions.csv</code>。列为 <code>case_id,kd_cm1_1,lower95_cm1,upper95_cm1</code>。点值不小于 0，区间要罩住点值，下界可以低于 0。<code>CF-001</code> 到 <code>CF-458</code> 各出现一次。</p>
+      </section>
+
+      <section id="geometry" class="topic-section" aria-labelledby="geometry-heading">
+        <h2 id="geometry-heading">配位几何表</h2>
+        <p>CASSCF 表的 498 行只有 10 种公开输入。同档共用一个点值时，第一激发 MAE 最低是 52.25 cm⁻¹。配位表用来区分会不会使用每个分子自己的配位摘要。</p>
+        <p>参考值是 Dy³⁺ 基态多重态 <code>J = 15/2</code> 的点电荷晶场第一激发。3.2 Å 内每个配位原子电荷取 -1 e。Stevens 算符取 n = 2、4、6。径向积分用 Edvardsson 与 Klintenberg（1998）的 Dy³⁺ 一行，参数换算与 Scheie（2021）对 Hutchings 立方体的实现一致。能量由 meV 乘 8.065543937 写成 cm⁻¹。</p>
+        <p>距离取晶体坐标里的 Dy–配位原子距离。方向是每个分子一份冻结重排，不在公开文件里。公开摘要在重排后的几何上计算。<code>radial_3</code>、<code>radial_5</code>、<code>radial_7</code> 可以认出晶体坐标那一行；用晶体方向重算点电荷，得到的是下表第三行，不是参考值。</p>
+        <div class="table-scroll"><table>
+          <thead>
+            <tr><th>对照</th><th>第一激发 MAE</th><th>Winkler</th><th>等级相关</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>支持集同档中位数，区间为该档 8 个支持值的最小到最大</td><td style="text-align:right">105.30</td><td style="text-align:right">836.70</td><td style="text-align:right">0.135</td></tr>
+            <tr><td>支持集线性拟合，点值低于 0 时记为 0</td><td style="text-align:right">93.75</td><td style="text-align:right">682.16</td><td style="text-align:right">0.537</td></tr>
+            <tr><td>认出晶体坐标后，用晶体方向计算同一模型</td><td style="text-align:right">203.16</td><td style="text-align:right">—</td><td style="text-align:right">0.006</td></tr>
+          </tbody>
+        </table></div>
+        <p>线性拟合只用 <code>GS-01</code> 到 <code>GS-40</code>。列是常数项、配位原子数、最短和最长距离、三个径向和、轴性和不对称度。测试集按氧、氮、碳、氮加碳、卤素有 48、214、44、94、58 个。93.75 cm⁻¹ 是这条拟合的结果。用测试参考按档取中位数是 103.45 cm⁻¹，仍高于这条拟合。</p>
       </section>
 
       <section id="scoring" class="topic-section" aria-labelledby="scoring-heading">
@@ -231,8 +255,9 @@ Winkler  = 区间宽度 + 40 × 落在区间外的距离</code></pre>
 
       <section id="completion" class="topic-section" aria-labelledby="completion-heading">
         <h2 id="completion-heading">完成标准</h2>
-        <p>填齐 498 个测试分子，并写好 <code>method.md</code>。从解压后的 <code>public/</code> 目录运行格式自查。输出 <code>"status": "accepted"</code> 时，预测表和方法说明都已通过格式验证。测试参考和评分程序不在作答包里。出题方对收件通过的文件计算上面 11 项；未完成的文件只保留缺项，不产生主结果。</p>
-        <pre><code class="language-sh">python3 check_submission.py predictions.csv</code></pre>
+        <p>填齐 498 个 CASSCF 测试分子和 458 个配位表分子，并写好 <code>method.md</code>。两个格式自查都要返回 <code>"status": "accepted"</code>。测试参考和评分程序不在作答包里。</p>
+        <pre><code class="language-sh">python3 check_submission.py predictions.csv
+python3 check_geometry.py geometry-predictions.csv</code></pre>
         <p>交卷前可以用公开样例核对区间公式。样例复算为 0，不代替 498 个测试分子的分数。脚本只读取支持集里的 SUP-01。</p>
         <pre><code class="language-sh">python3 example/rescore_example.py example/prediction-example.csv</code></pre>
         <p>晶体结构筛选表和坐标来自 Frangoulis、Mariano 等，Zenodo <a href="https://doi.org/10.5281/zenodo.19387958">10.5281/zenodo.19387958</a>，CC-BY-4.0。论文见 <a href="https://arxiv.org/abs/2604.03019">arXiv:2604.03019</a>，期刊版 <a href="https://doi.org/10.1021/jacs.6c12194">10.1021/jacs.6c12194</a>。本题只用晶体来源的分子。能量和 g 没有改单位。3.2 Å 邻域箱和 <code>gz ≥ 19</code> 的分档是本题加上的。</p>
