@@ -93,7 +93,7 @@
       <section id="goal" class="topic-section" aria-labelledby="goal-heading">
         <h2 id="goal-heading">目标</h2>
         <p>预测 <code>DY-001</code> 到 <code>DY-498</code> 在同一套计算协议下的七个激发双重态能量，单位 cm⁻¹，相对基态。主点值是 <code>kd_cm1_1</code>。同时为这个数提交等尾 95% 预测区间的下界和上界。两端到点值的距离可以不同。</p>
-        <p>可以用 21 个支持分子的几何、g 和完整能级，加上 498 个测试分子的邻域箱和 gz 分档。也可以读取来源公开表。表里同一个邻域箱、同一个 gz 分档有多个分子，读到的是这一组能级，不是测试编号对应的单独一行。不要把这个计算能级写成实验测到的磁弛豫时间，不要交一条配体改法，也不要交“再算多少个分子”的预算。</p>
+        <p>可以用 21 个支持分子的几何、g 和完整能级，加上 498 个测试分子的邻域箱和 gz 分档。作答包里的 <code>source/DB_Compounds.txt</code> 是来源表，<code>source/DB/&lt;来源编号&gt;.xyz</code> 是对应坐标。表里同一个邻域箱、同一个 gz 分档有多个分子，读到的是这一组能级，不是测试编号对应的单独一行。不要把这个计算能级写成实验测到的磁弛豫时间，不要交一条配体改法，也不要交“再算多少个分子”的预算。</p>
       </section>
 
       <section id="background" class="topic-section" aria-labelledby="background-heading">
@@ -107,7 +107,7 @@
 
       <section id="input" class="topic-section" aria-labelledby="input-heading">
         <h2 id="input-heading">输入（你能用的东西）</h2>
-        <p>解压作答包后，在 <code>dy-ladder-prediction-v1.3/public/</code> 中读取这些文件。测试参考能级、测试坐标和配位表的方向都不在包内。</p>
+        <p>解压作答包后，在 <code>dy-ladder-prediction-v1.3/public/</code> 中读取这些文件。来源表和来源坐标在 <code>source/</code>。<code>cases.csv</code> 只有测试编号、邻域箱和 gz 分档，没有来源编号。配位表的密封方向和测试参考能级不在包内。</p>
         <div class="table-scroll"><table>
           <thead>
             <tr><th>文件</th><th>内容</th></tr>
@@ -124,6 +124,8 @@
             <tr><td><code>geometry-prediction-template.csv</code></td><td>458 行空表。</td></tr>
             <tr><td><code>check_submission.py</code></td><td>检查 CASSCF 预测表和 <code>method.md</code>。不读取参考能级。</td></tr>
             <tr><td><code>check_geometry.py</code></td><td>检查配位表预测。不读取参考能量。</td></tr>
+            <tr><td><code>source/DB_Compounds.txt</code></td><td>来源表。631 行，无表头。每行是来源编号、8 个能级（基态为 0，cm⁻¹）、8 个双重态各 3 个 g 主值。基态 <code>gz</code> 是第 12 个数（从 1 数，含编号）。本题筛到 630 条。测试编号不在这张表里。</td></tr>
+            <tr><td><code>source/DB/&lt;来源编号&gt;.xyz</code></td><td>同一来源编号的晶体坐标，631 个文件。用它按 3.2 Å 规则算邻域箱。文件名不是测试编号。</td></tr>
             <tr><td><code>manifest.json</code></td><td>分子数、测试公开列和版本。</td></tr>
           </tbody>
         </table></div>
@@ -242,7 +244,7 @@ Winkler  = 区间宽度 + 40 × 落在区间外的距离</code></pre>
 
       <section id="constraints" class="topic-section" aria-labelledby="constraints-heading">
         <h2 id="constraints-heading">约束</h2>
-        <p>可以使用作答包、已有化学知识，以及处理这些文件的本地通用计算工具，不限于 Python、NumPy 和 SciPy。可以读取本题点名的来源公开表。测试输入对不上唯一一行，读表得到的是同一档的一组能级。不调用外部模型接口。若使用预训练模型，在 <code>method.md</code> 的「输入列」写明训练数据。</p>
+        <p>可以使用作答包、已有化学知识，以及处理这些文件的本地通用计算工具，不限于 Python、NumPy 和 SciPy。来源表是作答包里的 <code>source/DB_Compounds.txt</code>，坐标在 <code>source/DB/</code>。测试输入对不上唯一一行，读表得到的是同一档的一组能级。不调用外部模型接口。若使用预训练模型，在 <code>method.md</code> 的「输入列」写明训练数据。</p>
         <p>组织方不提供训练算力，也不运行选手程序。交付的是预测文件。<code>predictions.csv</code> 不超过 1 MiB，<code>method.md</code> 不超过 1 MiB。格式检查的运行上限为 1 分钟、1 GB 内存。</p>
         <div class="table-scroll"><table>
           <thead>
