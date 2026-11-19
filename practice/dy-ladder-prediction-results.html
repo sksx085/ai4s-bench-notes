@@ -39,12 +39,15 @@
       <a class="page-back" href="./dy-ladder-prediction.html"><span aria-hidden="true">←</span> 返回题面</a>
       <p class="meta"><time datetime="2026-11-19">2026.11.19</time><span>镧系 · v1.3</span></p>
       <h1>镝配合物能级预测结果</h1>
-      <p>0 分是支持集中位数，100 分是第一激发 MAE 为 0。</p>
+      <p>总分是 CASSCF 和配位几何两列的平均。</p>
     </header>
 
     <article class="topic-content result-content">
       <section class="topic-section result-card" id="results" aria-labelledby="results-heading">
         <h2 id="results-heading">分数</h2>
+        <p>CASSCF 只提供邻域箱和 gz 是否达到 19，一共 10 种输入，测的是同档能量能不能报准。</p>
+        <p>配位几何给每个分子自己的配位摘要，测的是能不能把分子分开。</p>
+        <p>0 分等于每个分子都报支持集中位数。100 分等于第一激发误差为 0。基线是现成统计：CASSCF 用来源表同档中位数，配位几何用支持集线性拟合。上界是公开输入能达到的分数。</p>
         <div class="table-scroll result-scroll" tabindex="0" role="region" aria-label="三家模型的百分制分数">
           <table class="measure-table">
             <thead>
@@ -52,7 +55,7 @@
                 <th scope="col">模型</th>
                 <th scope="col">CASSCF</th>
                 <th scope="col">配位几何</th>
-                <th scope="col">平均</th>
+                <th scope="col">总分</th>
               </tr>
             </thead>
             <tbody>
@@ -64,6 +67,9 @@
             </tbody>
           </table>
         </div>
+        <p>Kimi 总分 38.8。配位几何 54.7，接近上界 59.4，分子被分开了。CASSCF 23.0，基线是 28.6，10 个档没有拉开。</p>
+        <p>DeepSeek 总分 9.9。CASSCF 为 0，498 个分子共用一个预测。配位几何 19.8，基线是 13.7。</p>
+        <p>GLM 5.3 总分 9.5。CASSCF 为 0，第一激发全部写成 0。配位几何 19.0，基线是 13.7。</p>
       </section>
     </article>
   </main>
