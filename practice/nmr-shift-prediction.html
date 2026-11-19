@@ -175,11 +175,11 @@
 
       <section id="scoring" class="topic-section" aria-labelledby="scoring-heading">
         <h2 id="scoring-heading">评分</h2>
-        <p><strong>只有点位主分用于排名。</strong> 两种核先分别求位点 MAE，再各自除以首批局部化学环境基线的 MAE。两种归一化误差等权。</p>
-        <pre><code class="language-text">r = (¹H MAE / 0.36475 + ¹³C MAE / 5.30875) / 2
-        点位主分 = 100 / (1 + 3r)
+        <p><strong>排名看顺序分，主结果表列出两种差值 MAE。</strong> 计入局部环境规则给出同一个经验值、并且实测差超过报告精度的位点对。T02 的 H:8–H:9、C:8–C:9 与 T03 的 H:14–H:15、C:14–C:15 不进入这项。分母冻结为 0.263 ppm 和 4.578 ppm，下一批不再重算。基线在这批对子上是 25 分；换一批分子后可以离开 25 分。结果见 <a href="./nmr-shift-prediction-results.html#order-score">顺序分</a>。</p>
+        <pre><code class="language-text">r = (¹H 差值 MAE / 0.263 + ¹³C 差值 MAE / 4.578) / 2
+        顺序分 = 100 / (1 + 3r)
         </code></pre>
-        <p>在首批 10 个分子上，局部环境基线是 25 分。两核 MAE 都减半得到 40 分，都为零得到 100 分。扩充批使用固定的两个误差分母，扩充批的基线得分可以不同。</p>
+        <p>位点 MAE 单列，不用于排名。它的分母仍是 0.36475 和 5.30875。</p>
         <p>两种核分别统计。各分项先在母分子内平均，再对母分子等权。方向正确率只在可判方向的位点对上计算。若实测差的绝对值不超过左右两个位点末位报告步长的一半之和，该对只计入差值 MAE。其余位点对比较预测差和实测差是否同号。预测差为零记为方向错误。先算每个分子的同号比例，再对至少有一对可判方向的分子等权平均。</p>
         <div class="table-scroll" tabindex="0" role="region" aria-label="评分表格"><table>
         <thead>
@@ -195,7 +195,7 @@
         <td>1</td>
         <td>点位主分</td>
         <td>20 个母分子，两核等权</td>
-        <td>唯一排名分，越高越好</td>
+        <td>单列，不用于排名</td>
         </tr>
         <tr>
         <td>2</td>
@@ -286,7 +286,7 @@
         <p>填完测试模板，在 <code>public/</code> 目录运行以下命令。退出码为 0 且显示 <code>valid submission</code> 时即可提交。</p>
         <pre><code class="language-sh">python3 score.py --manifest test/manifest.json --predictions prediction.csv
         </code></pre>
-        <p>出题方用同一脚本和作者侧参考值计算各核种分项，再按第 6 节的固定公式计算点位主分。D00 可用于练习格式检查和分项复算。在首次运行时，选择一个尚不存在的输出目录。</p>
+        <p>出题方用同一脚本和作者侧参考值计算各核种分项。排名看顺序分，主结果表列出两种差值 MAE。D00 可用于练习格式检查和分项复算。在首次运行时，选择一个尚不存在的输出目录。</p>
         <pre><code class="language-sh">python3 score.py --manifest example/manifest.json \
           --predictions example/prediction-example.csv \
           --reference example/reference.csv \

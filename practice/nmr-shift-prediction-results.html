@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="20 个测试分子的点位主分、95% 区间、耗时和全部计分答卷。">
+  <meta name="description" content="排名看顺序分，主结果表列出两种差值 MAE。分母冻结为 0.263 和 4.578 ppm。">
   <title>核磁位移预测任务结果 | 每日出题实践</title>
   <link rel="stylesheet" href="../styles.css">
   <link rel="stylesheet" href="./challenge.css">
@@ -29,22 +29,44 @@
       <a class="page-back" href="./nmr-shift-prediction.html"><span aria-hidden="true">←</span> 返回题面</a>
       <p class="meta"><time datetime="2026-11-18">2026.11.18</time></p>
       <h1>核磁位移预测结果</h1>
-      <p>20 个测试分子，每个分子预测 4 个 ¹H 位点和 4 个 ¹³C 位点。三家模型与两条基线共用同一套评分规则。</p>
+      <p>排名看顺序分，主结果表列出两种差值 MAE。分母冻结为 0.263 ppm 和 4.578 ppm，下一批不再重算。基线在这 20 个分子的同一经验值对子上是 25 分；换一批分子后可以离开 25 分。</p>
     </header>
 
     <nav class="challenge-nav" aria-label="结果页内容">
-      <a href="#point-results">点位主分</a>
+      <a href="#order-score">顺序分</a>
+      <a href="#point-results">旁列：位点 MAE</a>
       <a href="#interval-results">95% 预测区间</a>
       <a href="#timing">作答与评分耗时</a>
       <a href="#answers">逐分子答卷</a>
     </nav>
 
     <article class="topic-content result-content">
+      <section class="topic-section result-card" id="order-score" aria-labelledby="order-heading">
+        <h2 id="order-heading">顺序分</h2>
+        <p class="result-note">排名看顺序分，主结果表列出两种差值 MAE。计入局部环境规则给出同一个经验值、并且实测差超过报告精度的位点对。T02 的 H:8–H:9、C:8–C:9 和 T03 的 H:14–H:15、C:14–C:15 不进入这项。这是已保存的 20 个分子答卷，没有重新请求模型。</p>
+        <pre><code>r = (¹H 差值 MAE / 0.263 + ¹³C 差值 MAE / 4.578) / 2
+顺序分 = 100 / (1 + 3r)</code></pre>
+        <div class="table-scroll result-scroll" tabindex="0" role="region" aria-label="顺序分与两种差值 MAE">
+          <table class="measure-table point-table">
+            <caption>顺序分与两种差值 MAE</caption>
+            <thead><tr><th scope="col">方法</th><th scope="col">顺序分</th><th scope="col">¹H 差值 MAE</th><th scope="col">¹³C 差值 MAE</th></tr></thead>
+            <tbody>
+              <tr class="best"><th scope="row">deepseek-v4-pro</th><td><strong>27.54</strong></td><td>0.252</td><td>3.639</td></tr>
+              <tr class="baseline"><th scope="row">局部化学环境基线</th><td>25.00</td><td>0.263</td><td>4.578</td></tr>
+              <tr class="baseline"><th scope="row">位点对取均值基线</th><td>25.00</td><td>0.263</td><td>4.578</td></tr>
+              <tr><th scope="row">GLM-5.3</th><td>22.29</td><td>0.199</td><td>7.172</td></tr>
+              <tr><th scope="row">kimi-3.1-pro</th><td>20.34</td><td>0.296</td><td>6.809</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="result-note">分母 0.263 和 4.578 已冻结。下一批分子继续用这两个数，基线可以离开 25 分。</p>
+      </section>
+
       <section class="topic-section result-card" id="point-results" aria-labelledby="points-heading">
         <span id="v4-results" class="result-anchor" aria-hidden="true"></span>
         <span id="v4-baselines" class="result-anchor" aria-hidden="true"></span>
-        <h2 id="points-heading">点位主分</h2>
-        <p class="result-note">合并批 T01–T20。MAE 单位为 ppm，方向正确率按母分子等权平均，计入统计的位点对为 ¹H 38 对，¹³C 39 对。</p>
+        <h2 id="points-heading">旁列：位点 MAE</h2>
+        <p class="result-note">这一节不用于排名。合并批 T01–T20 的位点 MAE 仍列在这里。排名看顺序分，主结果表列出两种差值 MAE。</p>
         <div class="table-scroll result-scroll" tabindex="0" role="region" aria-label="合并批 T01–T20点位主分和方向">
   <table class="measure-table point-table">
     <thead><tr><th scope="col">模型或基线</th><th scope="col">点位主分</th><th scope="col">¹H MAE</th><th scope="col">¹³C MAE</th><th scope="col">¹H 方向</th><th scope="col">¹³C 方向</th></tr></thead>
@@ -256,9 +278,9 @@
 
       <details class="result-card result-method" id="method">
         <summary>评分公式与试跑协议</summary>
-        <p>先在母分子内计算两核 MAE，再对母分子等权。两核 MAE 分别除以固定的 ppm 量尺后等权合成。只有点位主分用于排名。</p>
-        <pre><code>r = (¹H MAE / 0.36475 + ¹³C MAE / 5.30875) / 2
-点位主分 = 100 / (1 + 3r)</code></pre>
+        <p>排名看顺序分，主结果表列出两种差值 MAE。分母冻结为 0.263 和 4.578。位点 MAE 单列，不用于排名。</p>
+        <pre><code>r = (¹H 差值 MAE / 0.263 + ¹³C 差值 MAE / 4.578) / 2
+顺序分 = 100 / (1 + 3r)</code></pre>
         <p>三家只收到作答包的公开材料，每个分子独立请求，无检索或工具调用，统一输出上限为 65,536 tokens。D00 只用于演示格式，不计分。</p>
         <p>首轮有效答卷为 deepseek-v4-pro 15/20、GLM-5.3 19/20、kimi-3.1-pro 20/20。T19 的多次回复缺少表头，三家统一增加公开表头提示后重跑，均采用该次计分答卷。</p>
         <p>接口模型名为 <code>deepseek-v4-pro</code>、<code>kimi-k3.1-pro</code> 和 <code>glm-5.3</code>。</p>
