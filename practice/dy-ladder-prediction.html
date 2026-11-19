@@ -87,7 +87,7 @@
         <h3>为什么值得做</h3>
         <p>630 条合格记录的第一激发能量中位数是 99.95 cm⁻¹。同一元素组成只留一条后有 545 个分子，中位数是 97.6 cm⁻¹。最高都是 570.4 cm⁻¹。同一元素档里这个间距仍然差得很远。精确坐标和六位小数的 g 能把公开表里的那一行认出来，所以这两样不作为测试输入。498 行测试输入只有 10 种组合。同档共用一个点值时，用该档测试组成的中位数，第一激发 MAE 最低是 52.25 cm⁻¹。这就是该档统计。来源表同档基线是 52.9 cm⁻¹。MAE 仍高于 52.25 cm⁻¹ 的提交，还没有超过这个分档统计。</p>
         <h3>要交什么，怎么算分</h3>
-        <p>交 <code>predictions.csv</code>、<code>geometry-predictions.csv</code> 和一份 <code>method.md</code>。两张表都用 cm⁻¹ 计的 MAE 和 Winkler 分数，越低越好，不合成百分制。CASSCF 表上，全支持集中位数、支持集同档上中位数、来源表同档上中位数的第一激发 MAE 分别为 74.1、82.4、52.9 cm⁻¹。用公开资料重建 10 个测试档后，同档中位数和经验分位区间是 52.25 与 311.38 cm⁻¹。配位表上，只按元素档取支持集中位数的 MAE 是 105.30 cm⁻¹；用配位摘要做支持集线性拟合的 MAE 是 93.75 cm⁻¹。</p>
+        <p>交 <code>predictions.csv</code>、<code>geometry-predictions.csv</code> 和一份 <code>method.md</code>。总分是两张表的平均。CASSCF 先把 11 项各自换成百分再平均，配位表用对应的 9 项。0 分是支持集中位数，100 分是该项的理想值。</p>
       </section>
 
       <section id="goal" class="topic-section" aria-labelledby="goal-heading">
@@ -158,24 +158,25 @@ SUP-01,23.4000,23.4000,23.4000,91.2000,216.6000,274.9000,329.8000,376.7000,515.8
             <tr><td>认出晶体坐标后，用晶体方向计算同一模型</td><td style="text-align:right">203.16</td><td style="text-align:right">—</td><td style="text-align:right">0.006</td></tr>
           </tbody>
         </table></div>
-        <p>线性拟合只用 <code>GS-01</code> 到 <code>GS-40</code>。列是常数项、配位原子数、最短和最长距离、三个径向和、轴性和不对称度。测试集按氧、氮、碳、氮加碳、卤素有 48、214、44、94、58 个。93.75 cm⁻¹ 是这条拟合的结果。用测试参考按档取中位数是 103.45 cm⁻¹，仍高于这条拟合。</p>
+        <p>线性拟合只用 <code>GS-01</code> 到 <code>GS-40</code>。列是常数项、配位原子数、最短和最长距离、三个径向和、轴性和不对称度。测试集按氧、氮、碳、氮加碳、卤素有 48、214、44、94、58 个。93.75 cm⁻¹ 是这条拟合的第一激发 MAE。配位表分是 9 项百分的平均，9 项里没有最高双重态和七个激发双重态。</p>
       </section>
 
       <section id="scoring" class="topic-section" aria-labelledby="scoring-heading">
         <h2 id="scoring-heading">评分</h2>
-        <p>两个主结果都保留 cm⁻¹，不合成百分制。点值主结果是 498 个分子等权的第一激发 MAE。区间主结果是同一组分子的 Winkler 分数。名义覆盖是 95%，所以漏到区间外 1 cm⁻¹，要加上 40 cm⁻¹。这里评的是对协议输出的预测区间，不是测量噪声。</p>
+        <p>总分是 CASSCF 表分和配位表分的平均。表分不是只取第一激发 MAE，也不是只取 Winkler。</p>
+        <p>CASSCF 有 11 项。每一项先换成百分，再取平均，得到表分。误差、Winkler、区间宽度和漏报：0 分等于支持集中位数的成绩，100 分等于 0。覆盖率：0 分等于支持集中位数的覆盖率，100 分等于 1。等级相关：原始值仍记为空，不记成 0；换算时，空或不超过 0 记 0 分，1 记 100 分。配位表没有七个能级，用其余 9 项按同一规则平均。</p>
+        <p>名义覆盖是 95%，所以漏到区间外 1 cm⁻¹，Winkler 要加上 40 cm⁻¹。区间评的是协议输出，不是测量噪声。498 行或 458 行没有全部通过自查时，不计算这些项，也不把缺项记成 0 分。</p>
         <pre><code class="language-text">绝对误差 = |点值 − 参考值|
 区间宽度 = 上界 − 下界
 覆盖     = 下界 ≤ 参考值 ≤ 上界
 Winkler  = 区间宽度 + 40 × 落在区间外的距离</code></pre>
-        <p>全部预测都相同，等级相关没有定义，记为空，不记成 0。498 行没有全部通过自查时，不计算这些误差。</p>
         <div class="table-scroll"><table class="score-metrics">
           <thead>
             <tr><th>序号</th><th>评价量</th><th>计算口径</th><th>单位</th></tr>
           </thead>
           <tbody>
-            <tr><td>1</td><td>第一激发误差</td><td>498 个分子 MAE。点值主结果</td><td>cm⁻¹</td></tr>
-            <tr><td>2</td><td>第一激发区间分数</td><td>Winkler 的 498 分子平均。区间主结果</td><td>cm⁻¹</td></tr>
+            <tr><td>1</td><td>第一激发误差</td><td>498 个分子的 MAE</td><td>cm⁻¹</td></tr>
+            <tr><td>2</td><td>第一激发区间分数</td><td>Winkler 的 498 分子平均</td><td>cm⁻¹</td></tr>
             <tr><td>3</td><td>覆盖率</td><td>参考值落在闭区间内的分子比例</td><td>比例</td></tr>
             <tr><td>4</td><td>区间宽度</td><td>498 个区间宽度的平均</td><td>cm⁻¹</td></tr>
             <tr><td>5</td><td>下侧漏报</td><td>参考值低于下界的比例</td><td>比例</td></tr>
@@ -198,6 +199,7 @@ Winkler  = 区间宽度 + 40 × 落在区间外的距离</code></pre>
               <th style="text-align:right">Winkler</th>
               <th style="text-align:right">覆盖率</th>
               <th style="text-align:right">等级相关</th>
+              <th style="text-align:right">11 项平均</th>
             </tr>
           </thead>
           <tbody>
@@ -207,6 +209,7 @@ Winkler  = 区间宽度 + 40 × 落在区间外的距离</code></pre>
               <td style="text-align:right">467.5</td>
               <td style="text-align:right">0.940</td>
               <td style="text-align:right">无定义</td>
+              <td style="text-align:right">0</td>
             </tr>
             <tr>
               <td>支持集同档上中位数，第一激发区间为支持集同档最小到最大</td>
@@ -214,6 +217,7 @@ Winkler  = 区间宽度 + 40 × 落在区间外的距离</code></pre>
               <td style="text-align:right">1270.1</td>
               <td style="text-align:right">0.384</td>
               <td style="text-align:right">0.661</td>
+              <td style="text-align:right">15.2</td>
             </tr>
             <tr>
               <td>来源表同档上中位数，第一激发区间为来源表同档最小到最大</td>
@@ -221,6 +225,7 @@ Winkler  = 区间宽度 + 40 × 落在区间外的距离</code></pre>
               <td style="text-align:right">325.0</td>
               <td style="text-align:right">1.000</td>
               <td style="text-align:right">0.675</td>
+              <td style="text-align:right">48.5</td>
             </tr>
             <tr>
               <td>重建测试档的中位数，区间为第 ⌈0.025n⌉ 与第 ⌈0.975n⌉ 个</td>
@@ -228,10 +233,11 @@ Winkler  = 区间宽度 + 40 × 落在区间外的距离</code></pre>
               <td style="text-align:right">311.38</td>
               <td style="text-align:right">0.976</td>
               <td style="text-align:right">0.687</td>
+              <td style="text-align:right">38.8</td>
             </tr>
           </tbody>
         </table></div>
-        <p>第三组的区间覆盖同档所有来源记录，覆盖率因此为 1。它的 Winkler 分数等于平均宽度 325.0 cm⁻¹。第四组 52.25 cm⁻¹ 是同档共用一个点值时，这 498 个分子上的最小第一激发 MAE，也就是这个分档统计。它低于第三组的 52.9 cm⁻¹。MAE 仍高于 52.25 cm⁻¹ 的提交，还没有超过这个分档统计。</p>
+        <p>第一行是 0 分锚，所以 11 项平均是 0。第四行的第一激发 MAE 最低，是 52.25 cm⁻¹。第三行的区间盖住同档全部来源记录，覆盖率和两侧漏报都换成 100 分，11 项平均是 48.5，高于第四行的 38.8。</p>
       </section>
 
       <section id="constraints" class="topic-section" aria-labelledby="constraints-heading">

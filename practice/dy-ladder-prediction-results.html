@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="镝配合物能级预测 v1.3：DeepSeek、GLM、Kimi 的百分制分数。">
+  <meta name="description" content="镝配合物能级预测 v1.3：11 项与 9 项百分的平均分。">
   <title>镝配合物能级预测结果 | 每日出题实践</title>
   <link rel="stylesheet" href="../styles.css">
   <link rel="stylesheet" href="./challenge.css">
@@ -39,37 +39,66 @@
       <a class="page-back" href="./dy-ladder-prediction.html"><span aria-hidden="true">←</span> 返回题面</a>
       <p class="meta"><time datetime="2026-11-19">2026.11.19</time><span>镧系 · v1.3</span></p>
       <h1>镝配合物能级预测结果</h1>
-      <p>总分是 CASSCF 和配位几何两列的平均。</p>
+      <p>总分是两张表的平均。CASSCF 是 11 项百分的平均，配位几何是 9 项百分的平均。0 分是支持集中位数，100 分是该项的理想值。</p>
     </header>
 
     <article class="topic-content result-content">
       <section class="topic-section result-card" id="results" aria-labelledby="results-heading">
-        <h2 id="results-heading">分数</h2>
-        <p>CASSCF 只提供邻域箱和 gz 是否达到 19，一共 10 种输入，测的是同档能量能不能报准。</p>
-        <p>配位几何给每个分子自己的配位摘要，测的是能不能把分子分开。</p>
-        <p>0 分等于每个分子都报支持集中位数。100 分等于第一激发误差为 0。基线是现成统计：CASSCF 用来源表同档中位数，配位几何用支持集线性拟合。上界是公开输入能达到的分数。</p>
-        <div class="table-scroll result-scroll" tabindex="0" role="region" aria-label="三家模型的百分制分数">
+        <h2 id="results-heading">总分</h2>
+        <div class="table-scroll result-scroll" tabindex="0" role="region" aria-label="两张表的平均分">
           <table class="measure-table">
             <thead>
               <tr>
                 <th scope="col">模型</th>
-                <th scope="col">CASSCF</th>
-                <th scope="col">配位几何</th>
+                <th scope="col">CASSCF · 11 项</th>
+                <th scope="col">配位几何 · 9 项</th>
                 <th scope="col">总分</th>
               </tr>
             </thead>
             <tbody>
-              <tr><th scope="row">DeepSeek</th><td>0.0</td><td>19.8</td><td>9.9</td></tr>
-              <tr><th scope="row">GLM 5.3</th><td>0.0</td><td>19.0</td><td>9.5</td></tr>
-              <tr class="best"><th scope="row">Kimi</th><td>23.0</td><td>54.7</td><td>38.8</td></tr>
-              <tr class="baseline"><th scope="row">基线</th><td>28.6</td><td>13.7</td><td>21.2</td></tr>
-              <tr class="baseline"><th scope="row">上界</th><td>29.5</td><td>59.4</td><td>44.4</td></tr>
+              <tr><th scope="row">DeepSeek</th><td>9.5</td><td>17.6</td><td>13.6</td></tr>
+              <tr><th scope="row">GLM 5.3</th><td>13.6</td><td>21.3</td><td>17.5</td></tr>
+              <tr class="best"><th scope="row">Kimi</th><td>25.1</td><td>45.1</td><td>35.1</td></tr>
+              <tr class="baseline"><th scope="row">基线<small>来源表 / 线性</small></th><td>48.5</td><td>15.5</td><td>32.0</td></tr>
             </tbody>
           </table>
         </div>
-        <p>Kimi 总分 38.8。配位几何 54.7，接近上界 59.4，分子被分开了。CASSCF 23.0，基线是 28.6，10 个档没有拉开。</p>
-        <p>DeepSeek 总分 9.9。CASSCF 为 0，498 个分子共用一个预测。配位几何 19.8，基线是 13.7。</p>
-        <p>GLM 5.3 总分 9.5。CASSCF 为 0，第一激发全部写成 0。配位几何 19.0，基线是 13.7。</p>
+        <p>Kimi 总分 35.1，高于基线 32.0，差在配位几何。CASSCF 的 11 项平均是 25.1，来源表基线是 48.5。</p>
+      </section>
+
+      <section class="topic-section result-card" id="eleven" aria-labelledby="eleven-heading">
+        <h2 id="eleven-heading">CASSCF 的 11 项</h2>
+        <p>每一格都是百分。空的等级相关按 0 分进入平均。</p>
+        <div class="table-scroll result-scroll" tabindex="0" role="region" aria-label="11 项百分">
+          <table class="measure-table">
+            <thead>
+              <tr>
+                <th scope="col">项</th>
+                <th scope="col">DeepSeek</th>
+                <th scope="col">GLM 5.3</th>
+                <th scope="col">Kimi</th>
+                <th scope="col">来源表</th>
+                <th scope="col">分档中位数</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">第一激发误差</th><td>0</td><td>0</td><td>23.0</td><td>28.6</td><td>29.5</td></tr>
+              <tr><th scope="row">区间分数</th><td>0</td><td>0</td><td>0</td><td>30.5</td><td>33.4</td></tr>
+              <tr><th scope="row">覆盖率</th><td>0</td><td>0</td><td>16.7</td><td>100</td><td>60.0</td></tr>
+              <tr><th scope="row">区间宽度</th><td>0.2</td><td>49.4</td><td>5.0</td><td>16.1</td><td>22.2</td></tr>
+              <tr><th scope="row">下侧漏报</th><td>100</td><td>100</td><td>100</td><td>100</td><td>53.8</td></tr>
+              <tr><th scope="row">上侧漏报</th><td>0</td><td>0</td><td>0</td><td>100</td><td>64.7</td></tr>
+              <tr><th scope="row">最高双重态</th><td>0</td><td>0.2</td><td>3.5</td><td>14.4</td><td>14.8</td></tr>
+              <tr><th scope="row">七个激发</th><td>0</td><td>0</td><td>7.6</td><td>17.6</td><td>18.2</td></tr>
+              <tr><th scope="row">等级相关</th><td>0</td><td>0</td><td>73.1</td><td>67.5</td><td>68.7</td></tr>
+              <tr><th scope="row">中位绝对误差</th><td>0</td><td>0</td><td>34.7</td><td>46.2</td><td>49.4</td></tr>
+              <tr><th scope="row">最差分子</th><td>4.4</td><td>0</td><td>12.7</td><td>12.7</td><td>12.3</td></tr>
+              <tr class="baseline"><th scope="row">11 项平均</th><td>9.5</td><td>13.6</td><td>25.1</td><td>48.5</td><td>38.8</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>分档中位数的第一激发是 29.5，高于来源表的 28.6。来源表的覆盖率和两侧漏报是 100，所以 11 项平均是 48.5，高于分档中位数的 38.8。</p>
+        <p>DeepSeek 和 GLM 的第一激发都是 0。GLM 的 13.6 来自更窄的区间 49.4，以及下侧漏报 100。Kimi 的 25.1 里，等级相关是 73.1，区间分数是 0。</p>
       </section>
     </article>
   </main>
