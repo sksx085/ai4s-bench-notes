@@ -45,7 +45,7 @@
         <div><dt>配位表</dt><dd>458</dd></div>
       </dl>
       <a class="challenge-download" href="./resources/dy-ladder-prediction/dy-ladder-prediction-v1.3.zip" download>下载作答包 <span aria-hidden="true">↓</span></a>
-      <p class="case-links"><a href="./dy-ladder-prediction-results.html">查看 v1.3 三家模型试测 <span aria-hidden="true">→</span></a></p>
+      <p class="case-links"><a href="./dy-ladder-prediction-results.html">查看模型分数 <span aria-hidden="true">→</span></a></p>
     </header>
 
     <nav class="challenge-nav" aria-label="题目内容">
@@ -87,7 +87,7 @@
         <h3>为什么值得做</h3>
         <p>630 条合格记录的第一激发能量中位数是 99.95 cm⁻¹。同一元素组成只留一条后有 545 个分子，中位数是 97.6 cm⁻¹。最高都是 570.4 cm⁻¹。同一元素档里这个间距仍然差得很远。精确坐标和六位小数的 g 能把公开表里的那一行认出来，所以这两样不作为测试输入。498 行测试输入只有 10 种组合。同档共用一个点值时，用该档测试组成的中位数，第一激发 MAE 是 52.25 cm⁻¹。只低于来源表同档基线的 52.9 cm⁻¹，还没有超过这个分档统计。</p>
         <h3>要交什么，怎么算分</h3>
-        <p>交 <code>predictions.csv</code>、<code>geometry-predictions.csv</code> 和一份 <code>method.md</code>。两张表都用 cm⁻¹ 计的 MAE 和 Winkler 分数，越低越好。题面不计百分制总分。CASSCF 表上，全支持集中位数、支持集同档上中位数、来源表同档上中位数的第一激发 MAE 分别为 74.1、82.4、52.9 cm⁻¹。用公开资料重建 10 个测试档后，同档中位数和经验分位区间是 52.25 与 311.38 cm⁻¹。配位表上，只按元素档取支持集中位数的 MAE 是 105.30 cm⁻¹；用配位摘要做支持集线性拟合的 MAE 是 93.75 cm⁻¹。<a href="./dy-ladder-prediction-results.html">2026.11.19 的三家模型试测</a>把同一批 MAE 另记成阅读用百分：0 分是支持集中位数，100 分是第一激发 MAE 为 0。</p>
+        <p>交 <code>predictions.csv</code>、<code>geometry-predictions.csv</code> 和一份 <code>method.md</code>。两张表都用 cm⁻¹ 计的 MAE 和 Winkler 分数，越低越好，不合成百分制。CASSCF 表上，全支持集中位数、支持集同档上中位数、来源表同档上中位数的第一激发 MAE 分别为 74.1、82.4、52.9 cm⁻¹。用公开资料重建 10 个测试档后，同档中位数和经验分位区间是 52.25 与 311.38 cm⁻¹。配位表上，只按元素档取支持集中位数的 MAE 是 105.30 cm⁻¹；用配位摘要做支持集线性拟合的 MAE 是 93.75 cm⁻¹。</p>
       </section>
 
       <section id="goal" class="topic-section" aria-labelledby="goal-heading">

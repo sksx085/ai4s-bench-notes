@@ -3,14 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="镝配合物能级预测 v1.3 的 DeepSeek、GLM、Kimi 试测。两张表的第一激发 MAE、Winkler，以及 0 到 100 的阅读分数。">
+  <meta name="description" content="镝配合物能级预测 v1.3：DeepSeek、GLM、Kimi 的百分制分数。">
   <title>镝配合物能级预测结果 | 每日出题实践</title>
   <link rel="stylesheet" href="../styles.css">
   <link rel="stylesheet" href="./challenge.css">
   <link rel="stylesheet" href="./nmr-results.css">
   <style>
-    #results h3, #raw h3 { margin-block-start: 1rem; }
-
     @media (max-width: 40rem) {
       .results-page .measure-table { min-width: 0; }
       .results-page .measure-table :is(th, td) {
@@ -18,11 +16,6 @@
         font-size: .8rem;
         white-space: normal;
         overflow-wrap: anywhere;
-      }
-      .results-page .measure-table thead th:nth-child(3) { white-space: nowrap; }
-      .results-page .measure-table th small {
-        display: block;
-        margin-inline-start: 0;
       }
     }
   </style>
@@ -46,73 +39,31 @@
       <a class="page-back" href="./dy-ladder-prediction.html"><span aria-hidden="true">←</span> 返回题面</a>
       <p class="meta"><time datetime="2026-11-19">2026.11.19</time><span>镧系 · v1.3</span></p>
       <h1>镝配合物能级预测结果</h1>
-      <p>v1.3 公开包。DeepSeek、GLM、Kimi 各交一份通过格式检查的答卷。CASSCF 表 498 个分子，配位表 458 个分子。阅读用百分在四舍五入前按两表平均。</p>
+      <p>0 分是支持集中位数，100 分是第一激发 MAE 为 0。</p>
     </header>
-
-    <nav class="challenge-nav" aria-label="结果页内容">
-      <a href="#results">百分制</a>
-      <a href="#raw">原始误差</a>
-      <a href="#method">试测方法</a>
-    </nav>
 
     <article class="topic-content result-content">
       <section class="topic-section result-card" id="results" aria-labelledby="results-heading">
-        <h2 id="results-heading">阅读用百分</h2>
-        <p class="result-note">0 分等于不优于该表的支持集中位数。100 分等于第一激发 MAE 为 0 cm⁻¹。CASSCF 表的 0 分锚是 74.1 cm⁻¹，配位表是 108.60 cm⁻¹。题面计分仍是 cm⁻¹ 的 MAE 和 Winkler，本表只供这次试测对照。</p>
-        <div class="table-scroll result-scroll" tabindex="0" role="region" aria-label="三家模型与基线的百分制">
-          <table class="measure-table">
-            <thead>
-              <tr><th scope="col">模型或对照</th><th scope="col">CASSCF 表</th><th scope="col">配位表</th><th scope="col">平均</th></tr>
-            </thead>
-            <tbody>
-              <tr><th scope="row">DeepSeek<small>deepseek-v4-pro</small></th><td>0.0</td><td>19.8</td><td>9.9</td></tr>
-              <tr><th scope="row">GLM<small>glm-5.3</small></th><td>0.0</td><td>19.0</td><td>9.5</td></tr>
-              <tr class="best"><th scope="row">Kimi<small>kimi-k3.1-pro</small></th><td><strong>23.0</strong></td><td><strong>54.7</strong></td><td><strong>38.8</strong></td></tr>
-              <tr class="baseline"><th scope="row">强基线<small>来源表分档 / 配位线性</small></th><td>28.6</td><td>13.7</td><td>21.2</td></tr>
-              <tr class="baseline"><th scope="row">可达到上界</th><td>29.5</td><td>59.4</td><td>44.4</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <p>Kimi 两表平均 38.8。DeepSeek 9.9，GLM 9.5。强基线平均 21.2：CASSCF 来源表同档上中位数 MAE 52.9 cm⁻¹，合 28.6 分；配位表支持集线性拟合 MAE 93.75 cm⁻¹，合 13.7 分。支持集同档上中位数的 CASSCF MAE 是 82.4 cm⁻¹，低于 0 分锚，记 0 分。配位表支持集同档中位数 MAE 105.30 cm⁻¹，合 3.0 分。</p>
-        <p>CASSCF 表的可达到上界是 29.5 分。公开输入只有 10 个档，每个档只交一个点值时，第一激发 MAE 最低是 52.25 cm⁻¹。配位表的 59.4 分对应 MAE 44.13 cm⁻¹，来自真实距离上 36 组随机方向的二次先验，是抽样估计。另一套核加权中位数抽样的 MAE 是 78.86 cm⁻¹，更松，不作为上界。100 分要求 MAE 为 0，两张表的公开输入都到不了。</p>
-      </section>
-
-      <section class="topic-section result-card" id="raw" aria-labelledby="raw-heading">
-        <h2 id="raw-heading">原始误差</h2>
-        <p class="result-note">第一激发 MAE 与 Winkler 都以 cm⁻¹ 计，越低越好。Spearman 在全部点预测相同时无定义。Winkler 不并进百分。</p>
-        <div class="table-scroll result-scroll" tabindex="0" role="region" aria-label="第一激发 MAE、Winkler 与 Spearman">
+        <h2 id="results-heading">分数</h2>
+        <div class="table-scroll result-scroll" tabindex="0" role="region" aria-label="三家模型的百分制分数">
           <table class="measure-table">
             <thead>
               <tr>
-                <th scope="col">模型或对照</th>
-                <th scope="col">CASSCF MAE</th>
-                <th scope="col">Winkler</th>
-                <th scope="col">Spearman</th>
-                <th scope="col">配位 MAE</th>
-                <th scope="col">Winkler</th>
-                <th scope="col">Spearman</th>
+                <th scope="col">模型</th>
+                <th scope="col">CASSCF</th>
+                <th scope="col">配位几何</th>
+                <th scope="col">平均</th>
               </tr>
             </thead>
             <tbody>
-              <tr><th scope="row">DeepSeek</th><td>75.91</td><td>641.9</td><td>—</td><td>87.04</td><td>702.1</td><td>0.561</td></tr>
-              <tr><th scope="row">GLM</th><td>124.21</td><td>2201.8</td><td>—</td><td>88.00</td><td>513.5</td><td>0.633</td></tr>
-              <tr class="best"><th scope="row">Kimi</th><td>57.07</td><td>553.0</td><td>0.731</td><td><strong>49.25</strong></td><td><strong>309.2</strong></td><td><strong>0.868</strong></td></tr>
-              <tr class="baseline"><th scope="row">0 分锚</th><td>74.1</td><td>467.5</td><td>—</td><td>108.60</td><td>—</td><td>—</td></tr>
-              <tr class="baseline"><th scope="row">强基线</th><td>52.9</td><td>325.0</td><td>0.675</td><td>93.75</td><td>682.16</td><td>0.537</td></tr>
-              <tr class="baseline"><th scope="row">可达到上界</th><td>52.25</td><td>311.38</td><td>0.687</td><td>44.13</td><td>—</td><td>—</td></tr>
+              <tr><th scope="row">DeepSeek</th><td>0.0</td><td>19.8</td><td>9.9</td></tr>
+              <tr><th scope="row">GLM 5.3</th><td>0.0</td><td>19.0</td><td>9.5</td></tr>
+              <tr class="best"><th scope="row">Kimi</th><td>23.0</td><td>54.7</td><td>38.8</td></tr>
+              <tr class="baseline"><th scope="row">基线</th><td>28.6</td><td>13.7</td><td>21.2</td></tr>
+              <tr class="baseline"><th scope="row">上界</th><td>29.5</td><td>59.4</td><td>44.4</td></tr>
             </tbody>
           </table>
         </div>
-        <p>三家的配位预测都是 458 个不同的点。DeepSeek 的 CASSCF 预测是 498 行同一个数 118.27 cm⁻¹，MAE 75.91，分数为 0。GLM 的 498 个第一激发都是 0，MAE 124.21，区间覆盖率 0.496。Kimi 的 CASSCF 只有两个点值，42.67 与 157.61 cm⁻¹，MAE 57.07，仍高于来源表基线 52.9，也高于分档上界 52.25。</p>
-      </section>
-
-      <section class="topic-section result-card" id="method" aria-labelledby="method-heading">
-        <h2 id="method-heading">试测方法</h2>
-        <p>2026.11.19 11:22–11:36（北京时间）。每家只根据 v1.3 公开包，以及题面允许读取的来源表和坐标，生成一个 Python 脚本。脚本写出两份预测和 <code>method.md</code>。两份文件都通过公开检查器后，用封存参考在本地计分。答卷通过检查后没有再给科学分数或改写脚本。</p>
-        <p>DeepSeek 一次返回，用时 208 秒，模型 deepseek-v4-pro。它没有读来源表。支持集的连续 <code>gz</code> 和测试集的 <code>gz_at_least_19</code> 没有配上，CASSCF 预测退回支持集能级均值。配位表用 5 近邻。</p>
-        <p>Kimi 第一次读取超过 300 秒，第二次在 234 秒返回，模型 kimi-k3.1-pro。它读了来源表，并把文本档名 <code>family_bin</code> 当成数字，498 行只按 <code>gz ≥ 19</code> 分成两档。配位表是按留一误差选过的岭回归。</p>
-        <p>GLM 前两次读取超过 300 秒，第三次在 202 秒返回，模型 glm-5.3。它读了来源表。列名里的 <code>cm1</code> 被当成序号，恒为 0 的基态列 <code>kd_cm1_0</code> 写进了第一激发。配位表是带对数径向特征的岭回归。</p>
-        <p>这次结果是三个模型在 v1.3 两张表上的单次脚本试测。<a href="./dy-ladder-prediction.html#scoring">题面评分规则</a>仍按分子等权的 cm⁻¹ 指标计算。</p>
       </section>
     </article>
   </main>
