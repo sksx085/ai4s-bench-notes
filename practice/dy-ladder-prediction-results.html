@@ -65,7 +65,7 @@
             </thead>
             <tbody>
             <tr><th scope="row">DeepSeek<small>deepseek-v4-pro</small></th><td>42.4</td><td>217.2</td><td>已评分 14/14<br><small>同一会话续接运行器额度</small></td></tr>
-            <tr><th scope="row">GLM<small>glm-5.3</small></th><td>—</td><td>—</td><td>未评分<br><small>两次输出截断，累计额度用尽</small></td></tr>
+            <tr><th scope="row">GLM<small>glm-5.3</small></th><td>39.7</td><td>216.9</td><td>已评分 14/14<br><small>提高输出额度后沿原会话续接</small></td></tr>
             <tr><th scope="row">Kimi<small>kimi-k3.1-pro</small></th><td>42.4</td><td>217.2</td><td>已评分 14/14</td></tr>
             <tr class="baseline"><th scope="row">全支持集中位数</th><td>63.5</td><td>387.2</td><td>基线</td></tr>
             <tr class="baseline"><th scope="row">支持集同档上中位数</th><td>71.1</td><td>865.1</td><td>基线</td></tr>
@@ -75,14 +75,15 @@
         </div>
         <p class="result-note">前两组基线只用 21 个支持分子。公开来源表基线取 630 条记录的同档统计，其中包含测试分子的记录。</p>
         <h3>结果对照</h3>
-        <p>DeepSeek 和 Kimi 的 14 行预测数值完全一致。两家都重算了公开数据中的邻域箱，在同档记录上估计能级中位数，并按经验 Winkler 分数选取区间。两项误差均低于两组只用支持集的基线。相对公开来源表基线，MAE 低 0.54 cm⁻¹，Winkler 低 15.55 cm⁻¹。</p>
-        <p>本次两份有效答卷未拉开差距。GLM 没有交出可评分文件，完成情况单独记录。</p>
+        <p>DeepSeek 和 Kimi 的 14 行预测数值完全一致，两项得分并列。与这两家相比，GLM 的第一激发 MAE 低 2.71 cm⁻¹，Winkler 低 0.38 cm⁻¹。</p>
+        <p>与公开来源表同档上中位数基线相比，GLM 的第一激发 MAE 低 3.25 cm⁻¹，Winkler 低 15.93 cm⁻¹。</p>
+        <p>三家各有一次有效交卷，比较覆盖同一批 14 个分子。GLM 续接时获得了额外输出额度。</p>
       </section>
 
       <section class="topic-section result-card" id="method" aria-labelledby="method-heading">
         <h2 id="method-heading">评分与试测方法</h2>
         <p>每家在一次独立会话中作答整份题。收件时须填齐 14 行，并通过预测文件和方法说明的格式检查。评分采用会话内第一份通过收件检查的答卷，两项指标分别按 14 个分子等权平均。</p>
-        <p>三家使用相同的冻结作答包、题面指定的 Zenodo 晶体库原始文件和断网 Python 环境。DeepSeek 用完初始工具额度后续接原会话。GLM 截断后续接原会话，第二次截断时累计输出额度用尽。续接保留已有作答与工作文件，全程无科学分数反馈。</p>
+        <p>三家使用相同的冻结作答包、题面指定的 Zenodo 晶体库原始文件和断网 Python 环境。DeepSeek 用完初始工具额度后续接原会话。GLM 两次截断后提高输出额度并沿原会话继续，单次输出上限为 65,536 tokens，累计上限为 196,608 tokens，于 2026.11.19 交卷。全程无科学分数反馈。</p>
         <p>MAE 衡量点预测误差。Winkler 计入预测区间宽度，并加上参考值超出区间的距离乘以 40。</p>
         <p>这次结果只反映三个模型在这 14 个分子上的单次试测。</p>
         <p><a href="./dy-ladder-prediction.html#scoring">查看完整评分规则</a></p>
