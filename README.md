@@ -7,7 +7,8 @@
 - [Bench 指标](bench.html)：指标口径、案例分析、制作流程、任务模板与设计笔记在 `bench/` 中单独编辑。
 - [每日出题实践](practice/index.html)：通过日期目录浏览记录，新增方式见下文。
 - [论文更新](papers.html)：按日期倒序插入条目，填写日期、来源、摘要、设计笔记和原文链接。搜索会自动包含新条目。
-- [Skills 与插件](skills.html)：把可分发的文件放到 `downloads/`，在 `skills.html` 里更新版本、下载链接与安装说明。
+- [插件](plugins.html) 提供 Codex 插件包、版本和安装说明。
+- [Skills](skills.html) 提供可独立安装的 Skill。两栏的 ZIP 和 SHA-256 文件都放在 `downloads/`。
 
 ## 新增每日出题实践
 

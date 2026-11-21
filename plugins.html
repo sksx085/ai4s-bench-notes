@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="下载 AI4S 出题工作台 Codex 插件，生成三栏科研题面，核对证据、交付与评分。">
+  <title>插件 | AI4S Bench 笔记</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="wordmark" href="./index.html" aria-label="AI4S Bench 笔记首页">AI4S <span>Bench Notes</span></a>
+      <nav aria-label="栏目">
+        <a href="./bench.html">Bench 指标</a>
+        <a href="./practice/index.html">每日出题实践</a>
+        <a href="./papers.html">论文更新</a>
+        <a href="./plugins.html" aria-current="page">插件</a>
+        <a href="./skills.html">Skills</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap" id="main" tabindex="-1">
+    <div class="intro intro-topic">
+      <a class="page-back" href="./index.html#plugins"><span aria-hidden="true">←</span> 返回首页</a>
+      <h1>插件</h1>
+    </div>
+    <div class="topic-content">
+      <div class="entries">
+        <article class="entry skill" id="ai4s-task-workbench" aria-labelledby="workbench-title">
+          <div>
+            <h2 id="workbench-title">AI4S 出题工作台</h2>
+            <p class="meta"><code>ai4s-task-workbench</code><span>v0.2.0</span><span>Codex</span></p>
+            <p>用「问题、解答、约束」生成精简题面，按需补背景。也可核查实验证据、提交格式和判分。</p>
+            <details class="install">
+              <summary>安装到 Codex</summary>
+              <p>核对 SHA-256 后解压。用解压目录的实际路径运行以下两条命令。</p>
+              <p><code>codex plugin marketplace add "/实际路径/ai4s-workbench-marketplace-0.2.0"</code><br>
+                <code>codex plugin add ai4s-task-workbench@ai4s-bench-notes</code></p>
+              <p>开启新会话，选择 AI4S 出题工作台。运行本地脚本需要 Python 3.9 或更新版本。</p>
+              <a href="./downloads/ai4s-task-workbench-plugin-0.2.0.zip.sha256" download>下载 SHA-256 校验文件</a>
+            </details>
+            <p><a href="./skills.html#ai4s-task-workbench">查看独立 Skill 版</a></p>
+          </div>
+          <a class="action download" href="./downloads/ai4s-task-workbench-plugin-0.2.0.zip" download aria-label="下载 AI4S 出题工作台 Codex 插件 ZIP">下载插件 ZIP <span aria-hidden="true">↓</span></a>
+        </article>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="查看用于 AI4S 科研评测的 Codex Skills，查看输入材料、预期交付、安装方法和调用示例。">
-  <title>Skills 与插件 | AI4S Bench 笔记</title>
+  <title>Skills | AI4S Bench 笔记</title>
   <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
@@ -16,7 +16,8 @@
         <a href="./bench.html">Bench 指标</a>
         <a href="./practice/index.html">每日出题实践</a>
         <a href="./papers.html">论文更新</a>
-        <a href="./skills.html" aria-current="page">Skills 与插件</a>
+        <a href="./plugins.html">插件</a>
+        <a href="./skills.html" aria-current="page">Skills</a>
       </nav>
     </div>
   </header>
@@ -24,11 +25,25 @@
   <main class="wrap" id="main" tabindex="-1">
     <div class="intro intro-topic">
       <a class="page-back" href="./index.html#skills"><span aria-hidden="true">←</span> 返回首页</a>
-      <h1>Skills 与插件</h1>
+      <h1>Skills</h1>
       <p>按手头的科研材料和要验证的判断，选择适用的 Codex Skill。</p>
     </div>
     <div class="topic-content">
       <div class="entries">
+        <article class="entry skill" id="ai4s-task-workbench" aria-labelledby="workbench-skill-title">
+          <div>
+            <h2 id="workbench-skill-title">AI4S 出题工作台 Skill</h2>
+            <p class="meta"><code>ai4s-task-workbench</code><span>v0.2.0</span></p>
+            <p>把科研题整理成「问题、解答、约束」。先保留作答必需的信息，再按需加回背景或诊断评分。</p>
+            <details class="install">
+              <summary>安装与调用</summary>
+              <p>解压后将 <code>ai4s-task-workbench/</code> 放入 Codex 的 Skills 目录。新会话使用 <code>$ai4s-task-workbench</code>。本地脚本需要 Python 3.9 或更新版本。</p>
+              <p>已安装工作台插件时，可直接使用内置 Skill。</p>
+              <a href="./downloads/ai4s-task-workbench-skill-0.2.0.zip.sha256" download>下载 SHA-256 校验文件</a>
+            </details>
+          </div>
+          <a class="action download" href="./downloads/ai4s-task-workbench-skill-0.2.0.zip" download aria-label="下载 AI4S 出题工作台 Skill ZIP">下载 ZIP <span aria-hidden="true">↓</span></a>
+        </article>
         <article class="entry skill" id="ai4s-chem-dataset" aria-labelledby="chem-dataset-title">
           <div>
             <h2 id="chem-dataset-title">AI4S_chem_dataset</h2>
@@ -129,7 +144,6 @@
         <ol class="checklist">
           <li><strong>提供原始依据。</strong> 随材料注明图表编号、数据文件、实验条件和单位。机制比较附上可见对照，并说明哪些记录用于留出验证。</li>
           <li><strong>检查产物。</strong> 核对题面能否独立作答、等价解是否受理，以及评分规则能否识别一种实质错解。<a href="./bench/metrics.html#quality">查看 Bench 质量指标</a>。</li>
-          <li><strong>将已有题目续接到项目。</strong> 已安装 TaskFoundry 时，可在现有项目中提供题面、参考解和核验记录，再指定出题、复盘或重设计阶段。</li>
         </ol>
       </section>
     </div>
