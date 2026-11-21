@@ -1,0 +1,16 @@
+{
+  "name": "ai4s-task-workbench",
+  "version": "0.2.0",
+  "description": "用问题、解答和约束起草精简科研题，按需添加阅读辅助，并核对证据、提交格式与评分。",
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "AI4S 出题工作台",
+    "shortDescription": "科研题起草、科学核查与判分",
+    "category": "Productivity",
+    "capabilities": ["Interactive", "Read", "Write"],
+    "defaultPrompt": [
+      "将这道题压成问题、解答、约束三栏，保留作答所需的条件和资料。",
+      "比较精简原题与只补一段背景的版本，核对作答要求。"
+    ]
+  }
+}

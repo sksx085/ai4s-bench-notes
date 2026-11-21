@@ -34,14 +34,18 @@
             <h2 id="workbench-title">AI4S 出题工作台</h2>
             <p class="meta"><code>ai4s-task-workbench</code><span>v0.2.0</span><span>Codex</span></p>
             <p>用「问题、解答、约束」生成精简题面，按需补背景。也可核查实验证据、提交格式和判分。</p>
-            <details class="install">
-              <summary>安装到 Codex</summary>
-              <p>核对 SHA-256 后解压。用解压目录的实际路径运行以下两条命令。</p>
-              <p><code>codex plugin marketplace add "/实际路径/ai4s-workbench-marketplace-0.2.0"</code><br>
-                <code>codex plugin add ai4s-task-workbench@ai4s-bench-notes</code></p>
-              <p>开启新会话，选择 AI4S 出题工作台。运行本地脚本需要 Python 3.9 或更新版本。</p>
-              <a href="./downloads/ai4s-task-workbench-plugin-0.2.0.zip.sha256" download>下载 SHA-256 校验文件</a>
-            </details>
+            <div class="install">
+              <p>在终端运行这一行即可安装。</p>
+              <pre class="install-command"><code id="workbench-install-command">codex plugin marketplace add sksx085/ai4s-bench-notes &amp;&amp; codex plugin add ai4s-task-workbench@ai4s-bench-notes</code></pre>
+              <button class="action download install-copy" id="copy-workbench-install" type="button" hidden>复制命令</button>
+              <span id="workbench-copy-status" role="status"></span>
+              <p>安装后打开新 Codex 会话。运行插件脚本需要 Python 3.9 或更新版本。</p>
+              <details>
+                <summary>ZIP 安装方式</summary>
+                <p>核对 SHA-256 后解压，按包内 README 安装。</p>
+                <a href="./downloads/ai4s-task-workbench-plugin-0.2.0.zip.sha256" download>下载 SHA-256 校验文件</a>
+              </details>
+            </div>
             <p><a href="./skills.html#ai4s-task-workbench">查看独立 Skill 版</a></p>
           </div>
           <a class="action download" href="./downloads/ai4s-task-workbench-plugin-0.2.0.zip" download aria-label="下载 AI4S 出题工作台 Codex 插件 ZIP">下载插件 ZIP <span aria-hidden="true">↓</span></a>
@@ -49,5 +53,21 @@
       </div>
     </div>
   </main>
+  <script>
+    const button = document.getElementById("copy-workbench-install");
+    const status = document.getElementById("workbench-copy-status");
+    if (navigator.clipboard) {
+      button.hidden = false;
+      button.addEventListener("click", async () => {
+        try {
+          const command = document.getElementById("workbench-install-command").textContent;
+          await navigator.clipboard.writeText(command);
+          status.textContent = "已复制";
+        } catch {
+          status.textContent = "请选中命令后手动复制。";
+        }
+      });
+    }
+  </script>
 </body>
 </html>

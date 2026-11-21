@@ -1,0 +1,20 @@
+{
+  "name": "ai4s-bench-notes",
+  "interface": {
+    "displayName": "AI4S Bench 笔记"
+  },
+  "plugins": [
+    {
+      "name": "ai4s-task-workbench",
+      "source": {
+        "source": "local",
+        "path": "./plugins/ai4s-task-workbench"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

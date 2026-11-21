@@ -573,6 +573,26 @@ summary:hover {
   text-decoration: none;
 }
 
+.install-command {
+  padding: .65rem .75rem;
+  border-left: 2px solid var(--accent);
+  background: var(--hover);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  color: var(--ink);
+}
+
+.install-copy {
+  margin-block: .4rem;
+  color: var(--accent);
+  background: transparent;
+  cursor: pointer;
+}
+
+.install-copy[hidden] {
+  display: none;
+}
+
 .install summary {
   width: fit-content;
   padding-block: .5rem;

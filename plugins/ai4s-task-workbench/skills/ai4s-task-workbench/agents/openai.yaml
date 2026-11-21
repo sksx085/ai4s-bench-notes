@@ -1,0 +1,4 @@
+interface:
+  display_name: "AI4S 出题工作台"
+  short_description: "搭建科研题的骨架、核对实验证据并整理可复算的评分规则"
+  default_prompt: "使用 $ai4s-task-workbench 将这道科研题压成问题、解答、约束三栏，并核对作答所需的信息。"
