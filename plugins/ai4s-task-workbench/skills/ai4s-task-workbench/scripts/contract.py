@@ -19,6 +19,8 @@ SECTIONS = {
     "constraints": "Constraints｜作答限制",
     "completion": "Completion criteria｜提交条件",
 }
+SECTION_FIELDS = {*SECTIONS, "precision"}
+CORE_HEADINGS = ("问题", "输入", "输出", "约束", "精度")
 IDENTIFIER = re.compile(r"[a-z][a-z0-9_-]{0,63}\Z")
 NETWORK_ACCESS = {"联网", "联网检索", "上网", "访问互联网", "浏览互联网", "访问外网", "使用互联网",
                   "internet", "internet access", "online access", "web browsing", "online search"}
@@ -174,6 +176,12 @@ def validate_criteria(assessment):
     return criteria
 
 
+def uses_scoring(spec):
+    assessment = spec["assessment"]
+    return bool(assessment.get("scored") or assessment["criteria"] or assessment.get("scorer")
+                or spec["sections"].get("scoring", "").strip())
+
+
 def validate_output(output):
     name = relative(output.get("path"))
     text(output.get("description"), name)
@@ -215,7 +223,7 @@ def validate_spec(spec):
         raise ContractError("title 应为单行")
     text(spec.get("revision"), "revision")
     sections = obj(spec.get("sections"), "sections")
-    if unknown := sections.keys() - SECTIONS.keys():
+    if unknown := sections.keys() - SECTION_FIELDS:
         raise ContractError(f"sections 有未知字段：{'、'.join(sorted(unknown))}")
     for key, value in sections.items():
         text(value, f"sections.{key}", blank=True)
@@ -242,6 +250,10 @@ def validate_spec(spec):
         validate_output(output)
     assessment = obj(spec.get("assessment"), "assessment")
     criteria = validate_criteria(assessment)
+    if "scored" in assessment and type(assessment["scored"]) is not bool:
+        raise ContractError("assessment.scored 应为 true 或 false")
+    if assessment.get("scored") is False and uses_scoring(spec):
+        raise ContractError("assessment.scored 为 false，但题目已声明评分")
     if assessment.get("scorer") is not None:
         relative(assessment["scorer"])
         args = string_list(assessment.get("score_args"), "assessment.score_args")
@@ -264,11 +276,7 @@ def render_submission(output):
     for column in output["columns"]:
         kind = column["type"]
         details = {"number": ["有限数"], "integer": ["整数"], "text": ["非空文本"]}[kind]
-        if kind != "text":
-            details.insert(0, column["unit"])
         details += [f"{'≥' if key == 'min' else '≤'} {column[key]}" for key in ("min", "max") if key in column]
-        if "decimal_places" in column:
-            details.append(f"最多 {column['decimal_places']} 位小数")
         fields.append(f"  - `{column['name']}`（{'，'.join(details)}）。{column['description']}")
     parts.append("  - CSV 表头按以下列顺序填写。")
     parts.extend(fields)
@@ -278,6 +286,23 @@ def render_submission(output):
     else:
         parts.append(f"  - {keys} 的组合每个只填一行。")
     return parts
+
+
+def render_precision(outputs):
+    lines = []
+    for output in outputs:
+        if output["format"] != "csv":
+            continue
+        groups = {}
+        for column in output["columns"]:
+            if column["type"] in {"number", "integer"}:
+                key = (column["unit"], column.get("decimal_places"))
+                groups.setdefault(key, []).append(column["name"])
+        for (unit, places), columns in groups.items():
+            names = "、".join(f"`{column}`" for column in columns)
+            limit = f"，最多 {places} 位小数" if places is not None else ""
+            lines.append(f"- `{output['path']}` 的 {names} 用 {unit}{limit}。")
+    return lines
 
 
 def render_criterion(criterion):
@@ -290,11 +315,13 @@ def render_criterion(criterion):
 
 def render(spec, additions=()):
     sections = {key: value.strip() for key, value in spec["sections"].items()}
-    problem = [sections.get("goal") or "写明给定条件下要回答的问题。", sections.get("input", "")]
+    problem = [sections.get("goal") or "写明要预测、判断或设计什么。"]
     if "background" in additions:
         background = [sections[key] for key in ("overview", "background") if sections.get(key)]
         if background:
             problem.extend(["### 背景", *background])
+    inputs = sections.get("input") or ("作答所需信息见「问题」。" if sections.get("goal") and
+                                      not spec["public"]["files"] else "列出作答者可见的材料及其对应关系。")
     outputs = spec["submission"]
     solution = [sections.get("output", "")]
     if outputs:
@@ -312,17 +339,26 @@ def render(spec, additions=()):
     for items, label in ((rules["allowed"], "可使用"), (forbidden, "禁止")):
         if items:
             access.append(label + "、".join(items) + "。")
-    constraints = ["".join(access)]
-    constraints.extend(sections.get(key, "") for key in ("constraints", "scoring"))
+    constraints = ["".join(access), sections.get("constraints", "")]
+    precision = [sections.get("precision", ""), "\n".join(render_precision(outputs))]
+    if not any(precision):
+        precision = ["按「输出」所列格式填写。" if outputs else "写明单位、保留位数和舍入方式（如适用）。"]
+    scoring = [sections.get("scoring", "")]
     criteria = spec["assessment"]["criteria"]
-    for role, heading in (("primary", "### 主评分"), ("diagnostic", "### 诊断评分")):
-        if role == "diagnostic" and "diagnostics" not in additions:
-            continue
-        lines = [line for item in criteria if item["role"] == role for line in render_criterion(item)]
+    primary = [line for item in criteria if item["role"] == "primary" for line in render_criterion(item)]
+    if primary:
+        scoring.append("\n".join(primary))
+    elif not scoring[0]:
+        scoring.append("写明主指标、误差汇总和适用的判分容差。")
+    if "diagnostics" in additions:
+        lines = [line for item in criteria if item["role"] == "diagnostic" for line in render_criterion(item)]
         if lines:
-            constraints.extend([heading, "\n".join(lines)])
+            scoring.extend(["### 诊断评分", "\n".join(lines)])
     body = [f"# {spec['title']}"]
-    for heading, paragraphs in (("问题", problem), ("解答", solution), ("约束", constraints)):
+    content = list(zip(CORE_HEADINGS, (problem, [inputs], solution, constraints, precision)))
+    if uses_scoring(spec):
+        content.append(("评分", scoring))
+    for heading, paragraphs in content:
         body.extend([f"## {heading}", *(p for p in paragraphs if p)])
     return "\n\n".join(body) + "\n"
 

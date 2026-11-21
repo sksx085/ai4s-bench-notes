@@ -3,8 +3,8 @@
 import re
 
 from contract import (
-    ContractError, SECTIONS, array, choice, digest, expected_keys, file_digest, identifier,
-    local_file, number, obj, public_brief, read_json, string_list, text, validate_spec,
+    CORE_HEADINGS, ContractError, SECTIONS, array, choice, digest, expected_keys, file_digest, identifier,
+    local_file, number, obj, public_brief, read_json, string_list, text, uses_scoring, validate_spec,
 )
 
 
@@ -120,6 +120,7 @@ def audit(spec, root, additions=()):
     brief = public_brief(spec, root, additions)
     review, evidence, paths, ancestry, claims, private = load_review(spec, root)
     scorer = spec["assessment"].get("scorer")
+    scored = uses_scoring(spec)
     excluded = [local_file(root, spec["review"]), *private]
     if scorer:
         excluded.append(local_file(root, scorer))
@@ -137,7 +138,9 @@ def audit(spec, root, additions=()):
     if brief_name:
         headings = re.findall(r"^#{1,6}\s+([^\n]+)", brief, re.MULTILINE)
         missing_sections = [h for h in SECTIONS if not any(re.search(rf"\b{h}\b", title, re.I) for title in headings)]
-        if missing_sections and not {"问题", "解答", "约束"}.issubset(headings):
+        chinese_headings = set(CORE_HEADINGS) | ({"评分"} if scored else set())
+        if missing_sections and not (chinese_headings.issubset(headings)
+                                     or {"问题", "解答", "约束"}.issubset(headings)):
             findings.append({"area": "contract", "level": "review", "message": "请核对旧题面的目标、交付和限制是否齐全"})
     else:
         required = ["goal", *(["input"] if spec["public"]["files"] else [])]
@@ -156,7 +159,8 @@ def audit(spec, root, additions=()):
             expected_keys(output, files[cases])
     if spec["constraints"]["network"] == "undecided":
         findings.append({"area": "contract", "level": "pending", "message": "待确认选手联网规则"})
-    if not (primary := [c for c in criteria.values() if c["role"] == "primary"]):
+    primary = [c for c in criteria.values() if c["role"] == "primary"]
+    if scored and not primary:
         findings.append({"area": "contract", "level": "pending", "message": "待确定主指标或主要评分规则"})
     if any(c["method"] == "rule" for c in criteria.values()) and not scorer:
         findings.append({"area": "assessment", "level": "pending", "message": "已定义程序评分项，待接入科学评分器"})
@@ -168,7 +172,7 @@ def audit(spec, root, additions=()):
         if claim["verdict"] != "supported":
             findings.append({"area": "science", "level": claim["verdict"], "id": claim["id"],
                              "message": claim["reason"], "next_check": claim["next_check"]})
-    if not review["baselines"] and not any(c["method"] == "rubric" for c in primary):
+    if scored and not review["baselines"] and not any(c["method"] == "rubric" for c in primary):
         findings.append({"area": "science", "level": "pending", "message": "待记录基线或在审题中说明无需数值基线的依据"})
     for check in review["checks"]:
         if check["result"] == "fail":
@@ -184,7 +188,8 @@ def audit(spec, root, additions=()):
         "solver_snapshot_ready": not any(f["area"] == "contract" and f["level"] == "pending" for f in findings),
         "public_sha256": public_hashes,
         "assessment": {
-            "mode": assessment_mode(criteria.values()), "primary_mode": assessment_mode(primary),
+            "mode": assessment_mode(criteria.values()) if scored else "unscored",
+            "primary_mode": assessment_mode(primary) if scored else "unscored",
             "criteria_by_method": {m: [key for key, c in criteria.items() if c["method"] == m] for m in ("rule", "rubric")},
             "scorer": scorer, "recorded_checks": review["checks"],
         },

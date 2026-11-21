@@ -4,9 +4,10 @@
 
 | 命令 | 产物 |
 | --- | --- |
-| `init DIR --id NAME --title TITLE` | 新目录内的 `challenge.json`、组织方 `review.json` 和三栏草稿预览 |
+| `init DIR --id NAME --title TITLE` | 新目录内的 `challenge.json`、组织方 `review.json` 和五栏草稿。计分或排名时加 `--scored` |
 | `init DIR --id NAME --title TITLE --legacy-brief PATH --root ROOT` | 新审题规格，指向共同根目录内已有的 Markdown |
-| `brief SPEC` | 生成三栏选手题面。加 `--add background` 或 `--add diagnostics` 展开对应内容 |
+| `simplify SPEC SECTIONS` | 用 `SECTIONS` JSON 的短文更新各栏，生成五栏题面。`--format spec` 导出精简规格 |
+| `brief SPEC` | 读取旧题面或生成选手题面。生成版可用 `--add background` 或 `--add diagnostics` 展开对应内容 |
 | `audit SPEC` | JSON 核查记录，包含约束缺口、评分方式、来源摘要和科学待核项 |
 | `freeze SPEC NEW_DIR` | 独立 `participant/` 和摘要文件 `snapshot.json` |
 | `check-submission ANSWER_DIR --spec SPEC` | 按当前规格检查答卷。也可用 `--snapshot FROZEN_DIR` 检查同一份冻结输入 |
@@ -19,9 +20,20 @@
 
 ## challenge.json 的最小字段
 
-`schema_version` 为 1。`task_id` 是稳定 ID，`revision` 由作者确定。`sections` 的字段按需填写。生成题面时，`goal` 和 `input` 进入「问题」，`output` 和 `completion` 进入「解答」，`constraints` 和 `scoring` 进入「约束」。提交精度写入交付契约。实验或算法容差写入评分正文。`overview`、`background` 用于解释性背景，必须知道的术语定义写入 `goal` 或 `input`。
+`schema_version` 为 1。`task_id` 是稳定 ID，`revision` 由作者确定。`sections` 的字段按需填写。
 
-生成版默认展示主评分，诊断项可用 `--add diagnostics` 展开。`brief`、`audit`、`freeze`、`judge-packet` 都接受同样的 `--add` 选项。对照试测只改一项补充内容，发卷用相应选项分别冻结并比较材料清单。接入的旧 Markdown 可直接复用原文。要对照其精简版，先把必需内容登记到同一组契约字段，再让 `public.brief` 留空以生成新版。
+| 栏目 | 字段 |
+| --- | --- |
+| 问题 | `goal` 写任务目标和必要术语。`overview`、`background` 可用 `--add background` 展开。 |
+| 输入 | `input` 说明 `public.files` 中各文件及对应关系。 |
+| 输出 | `output` 补充说明。`submission` 生成提交文件、字段、值域和覆盖要求。`completion` 写交齐的检查方法。 |
+| 约束 | `constraints` 正文及结构化的联网和工具规则。 |
+| 精度 | `precision` 写舍入方式与参考精度。CSV 的单位、小数位限制从 `submission` 读取。 |
+| 评分 | `scoring` 写汇总规则与采用的判分容差。`assessment` 提供主指标、可选诊断项与评分器。 |
+
+任务声明 `assessment.scored: true` 或已有评分规则时展示「评分」，默认显示主评分。诊断项可用 `--add diagnostics` 展开。`brief`、`audit`、`freeze`、`judge-packet` 都接受同样的 `--add` 选项。对照试测可用相应选项分别冻结并比较材料清单。
+
+接入的旧 Markdown 由 `brief` 原样读取。精简时先核对原题，在规格中登记提交、约束、评分规则与公开输入，再写一个与 `sections` 同格式的 JSON，例如 `{"goal":"预测每个样品的转变温度。","precision":"参考值沿用实验报告精度。"}`。`simplify` 用给出的字段覆盖原短文，复用原规格的结构化信息，生成的规格将 `public.brief` 置空。原始文件只读。新版先核对必需信息，再按需冻结。
 
 - `public.brief` 留空时生成题面，有值时以已有 Markdown 为准。`public.files` 将选手看到的相对路径映射到原材料路径，每个文件明确登记。包括各轮实际公开的数据和代码。旧版还要人工核对小标题、结论提示、文件引用以及字段约束是否与规格一致。
 - `constraints.network` 取 `offline`、`allowed` 或 `undecided`，`allowed`、`forbidden` 列出可用和禁用的工具与证据。时间、内存或硬件限制只写任务确实采用的额度，放进正文。
